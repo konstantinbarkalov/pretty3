@@ -42,6 +42,13 @@ function printTreeRecursive(nodeKey:string | number | undefined, node:any, level
       type: SingleNodeTypeEnum.Boolean,
       value: node.toLocaleString(),
     }
+  } else if (typeof node === 'symbol') {
+    nodeDescription = {
+      metatype: NodeMetatypeEnum.Single,
+      type: SingleNodeTypeEnum.Symbol,
+      value: node.toLocaleString(),
+      icon: {text:'<S>', centerId: 1},
+    }
   } else if (node === null) {
     nodeDescription = {
       metatype: NodeMetatypeEnum.Single,
@@ -60,8 +67,7 @@ function printTreeRecursive(nodeKey:string | number | undefined, node:any, level
       type: EnumerableNodeTypeEnum.Array,
       subEntries: node.map((sub, subId) => [subId, sub]),
       value: '',
-      symbol: '[ ]',
-    }
+      icon: {text:'[ ]', centerId: 1}}
   } else if (typeof node === 'object' && node) {
     let nodeCustomObjectString;
     if (node.toLocaleString) {
@@ -70,20 +76,26 @@ function printTreeRecursive(nodeKey:string | number | undefined, node:any, level
         nodeCustomObjectString = jsObjectString;
       }
     }
-    if (node.hasOwnProperty) {
+    if (node instanceof Date) {
+      nodeDescription = {
+        metatype: NodeMetatypeEnum.Single,
+        type: SingleNodeTypeEnum.Date,
+        value: node.toLocaleString(),
+        icon: {text:'{D}', centerId: 1},
+      }
+    } else if (node.hasOwnProperty) {
       let nodeValue: string;
       if (nodeCustomObjectString) {
         nodeValue = nodeCustomObjectString;
       } else {
-        nodeValue = ''; // TODO MABE
+        nodeValue = ''; // TODO!!
       }
       nodeDescription = {
         metatype: NodeMetatypeEnum.Enumerable,
         type: EnumerableNodeTypeEnum.Object,
         subEntries: Object.entries(node),
         value: nodeValue,
-        symbol: '{ }',
-      }
+        icon: {text:'{ }', centerId: 1}}
     } else {
       let nodeValue: string;
       if (nodeCustomObjectString) {
@@ -95,7 +107,7 @@ function printTreeRecursive(nodeKey:string | number | undefined, node:any, level
         metatype: NodeMetatypeEnum.Enumerable,
         type: EnumerableNodeTypeEnum.Unknown,
         value: nodeValue,
-        symbol: '{X}',
+        icon: {text:'{X}', centerId: 1},
         subEntries: [],
       }
     }
@@ -104,7 +116,7 @@ function printTreeRecursive(nodeKey:string | number | undefined, node:any, level
       metatype: NodeMetatypeEnum.Single,
       type: SingleNodeTypeEnum.Unknown,
       value: (typeof node).toLocaleUpperCase(),
-      symbol: '<X>',
+      icon: {text:'<X>', centerId: 1},
     }
   }
 
@@ -117,8 +129,8 @@ function printTreeRecursive(nodeKey:string | number | undefined, node:any, level
     }
   }
   let oneliner: string = '';
-  if (nodeDescription.symbol) {
-    oneliner += nodeDescription.symbol;
+  if (nodeDescription.icon) {
+    oneliner += nodeDescription.icon.text;
   }
   oneliner += ' ';
   if (nodeKey !== undefined || !isFirst) {

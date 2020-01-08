@@ -1,3 +1,5 @@
+import { iconT } from "./icon";
+
 export enum NodeMetatypeEnum {
   Single,
   Enumerable
@@ -9,6 +11,7 @@ export enum SingleNodeTypeEnum {
   Boolean,
   Number,
   String,
+  Date,
   Symbol,
   Unknown,
 }
@@ -59,13 +62,13 @@ export type nodeDescriptionT<TNodeMetatypeEnum extends NodeMetatypeEnum, TNodeTy
     metatype: TNodeMetatypeEnum,
     type: TNodeTypeEnum,
     value: string,
-    symbol?: string | undefined,
+    icon?: iconT,
     info?: string | undefined,
   } : TNodeTypeEnum extends EnumerableNodeTypeEnum ? {
     metatype: TNodeMetatypeEnum,
     type: TNodeTypeEnum,
     value: string,
-    symbol?: string | undefined,
+    icon?: iconT,
     info?: string | undefined,
     subEntries: nodeSubEntriesT<TNodeTypeEnum>[],
   }
