@@ -79,3 +79,5 @@ export type anyEnumerableNodeDescriptionT = nodeDescriptionT<NodeMetatypeEnum.En
 export type anyNodeDescriptionT = anySingleNodeDescriptionT | anyEnumerableNodeDescriptionT;
 
 export type anyNodeDescriptionTemplateT = Partial<anyNodeDescriptionT>;
+
+

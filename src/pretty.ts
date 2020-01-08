@@ -1,5 +1,5 @@
 import { EOL } from 'os';
-import { printTreeSettingsT, stringifyTreeOptionsT, printTreeOptionsT, textPatternT, logLineCallbackT, itemTextPatternT } from './types/general';
+import { printTreeSettingsT, stringifyTreeOptionsT, printTreeOptionsT, textPatternT, logLineCallbackT, itemTextPatternT, paddingPrefixT, maxLineWidthT, textPatternStringT, textPatternString } from './types/general';
 import { defaultSettings } from './defaultSettings';
 import { stringToWrappedLines } from './wrap';
 import { anyNodeDescriptionT, NodeMetatypeEnum, SingleNodeTypeEnum, EnumerableNodeTypeEnum } from './types/nodeDescription';
@@ -16,10 +16,21 @@ export function stringifyTree(tree:any, options?:stringifyTreeOptionsT ):string 
 
 export function printTree(tree:any, options?:printTreeOptionsT ):void {
   const settings = Object.assign({}, defaultSettings, options);
-  printTreeRecursive(undefined, tree, 0, {first: '', other: '', width:0}, true, settings);
+  const emptyPaddingPrefix:paddingPrefixT = {first: '', other: ''};
+  const emptyTextPattern:textPatternT = {
+    first:  textPatternString('   '),
+    other: textPatternString('   '),
+  }
+  printTreeRecursive(undefined, tree, 0, emptyPaddingPrefix, emptyTextPattern, true, settings);
 }
 
-function printTreeRecursive(nodeKey:string | number | undefined, node:any, level:number, paddingPrefix: textPatternT, isFirst: boolean, settings:printTreeSettingsT ):void {
+function printTreeRecursive(nodeKey:string | number | undefined,
+                            node:any,
+                            level:number,
+                            basePaddingPrefix: paddingPrefixT,
+                            currentTextPattern: textPatternT,
+                            isFirst: boolean,
+                            settings:printTreeSettingsT ):void {
   if (level > settings.maxLevel) {
     return;
   }
@@ -131,8 +142,8 @@ function printTreeRecursive(nodeKey:string | number | undefined, node:any, level
   let oneliner: string = '';
   if (nodeDescription.icon) {
     oneliner += nodeDescription.icon.text;
+    oneliner += ' ';
   }
-  oneliner += ' ';
   if (nodeKey !== undefined || !isFirst) {
     oneliner += nodeKey;
     oneliner += ': ';
@@ -145,8 +156,19 @@ function printTreeRecursive(nodeKey:string | number | undefined, node:any, level
   if (nodeDescription.info) {
     oneliner += nodeDescription.info;
   }
-  printStringWrapped(oneliner, paddingPrefix, settings.maxLineWidth, settings.logLineCallback);
-
+  const width:widthT = {
+    first: settings.tabSize,
+    other: settings.tabSize,
+  }
+  if (nodeDescription.icon) {
+    width.first -= nodeDescription.icon.centerId;
+  }
+  const currentPaddingPrefix = buildPaddingPrefix(basePaddingPrefix, currentTextPattern, settings.paddingSpace, width);
+  printStringWrapped(oneliner, currentPaddingPrefix, settings.maxLineWidth, settings.maxStringWrapSteps, settings.logLineCallback);
+  const childrenPaddingPrefix = {
+    first: currentPaddingPrefix.other,
+    other: currentPaddingPrefix.other,
+  }
   if (nodeDescription.metatype === NodeMetatypeEnum.Enumerable) {
     const itemsShownCount = Math.min(settings.maxItemsAtLevel, nodeDescription.subEntries.length);
     for (let subNodeIndex = 0; subNodeIndex < itemsShownCount; subNodeIndex++) {
@@ -166,20 +188,18 @@ function printTreeRecursive(nodeKey:string | number | undefined, node:any, level
       } else {
         textPattern = itemPattern.last;
       }
-      const innerPaddingPrefix:textPatternT = {
-        first: paddingPrefix.other + textPattern.first.padEnd(settings.tabSize),
-        other: paddingPrefix.other + textPattern.other.padEnd(settings.tabSize),
-        width: paddingPrefix.width + settings.tabSize,
-      };
-      printTreeRecursive(subNodeKey, subNode, level + 1, innerPaddingPrefix, false, settings);
+      printTreeRecursive(subNodeKey, subNode, level + 1, childrenPaddingPrefix, textPattern, false, settings);
     }
   }
 }
 
-function printStringWrapped(text:string, paddingPrefix:textPatternT, maxLineWidth:number, logLineCallback:logLineCallbackT) {
+function printStringWrapped(text:string, paddingPrefix:paddingPrefixT, maxLineWidth:number, stepsToGo: number, logLineCallback:logLineCallbackT) {
+  const actualMaxLineWidth:maxLineWidthT = {
+    first: maxLineWidth - paddingPrefix.first.length,
+    other: maxLineWidth - paddingPrefix.other.length,
+  };
   let message = '';
-  const actualMaxLineWidth = maxLineWidth - paddingPrefix.width;
-  const lines = stringToWrappedLines(text, actualMaxLineWidth);
+  const lines = stringToWrappedLines(text, actualMaxLineWidth, stepsToGo);
   for (let i = 0; i < lines.length; i++) {
     const isFirst = (i === 0);
     const isLast = (i === lines.length - 1);
@@ -190,4 +210,20 @@ function printStringWrapped(text:string, paddingPrefix:textPatternT, maxLineWidt
   }
   logLineCallback(message);
 }
-
+type widthT = {first:number, other:number};
+function buildPaddingPrefix(basePaddingPrefix: paddingPrefixT, textPattern: textPatternT, paddingSpace:number, width: widthT) {
+  const currentPaddingPrefix:paddingPrefixT = {
+    first: basePaddingPrefix.first + buildPaddingPrefixString(textPattern.first, paddingSpace, width.first),
+    other: basePaddingPrefix.other + buildPaddingPrefixString(textPattern.other, paddingSpace, width.other),
+  };
+  return currentPaddingPrefix;
+}
+function buildPaddingPrefixString(textPatternString: textPatternStringT, paddingSpace: number, width: number):string {
+  let branchWidth = width - paddingSpace;
+  let branchRepeatWidth = branchWidth - 2;
+  if (branchRepeatWidth < 0) {
+    throw new Error('branch is to short for that paddingSpace');
+  }
+  let paddingPrefixString = textPatternString[0] + textPatternString[1].repeat(branchRepeatWidth) + textPatternString[2] + ' '.repeat(paddingSpace);
+  return paddingPrefixString;
+}
