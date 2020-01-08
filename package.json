@@ -1,0 +1,38 @@
+{
+  "name": "pretty3",
+  "version": "0.1.0",
+  "description": "yet another pretty tree with screen-limiting word-wrap feature",
+  "main": "dist/src/index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "build": "npm run tsc && npm run test",
+    "test": "mocha -r ts-node/register test/**/*.test.ts",
+    "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
+  },
+  "author": "Konstantin Barkalov <mail@barkalov.ru>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@types/chai": "^4.2.7",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^13.1.2",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2",
+    "nyc": "^15.0.0",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.4"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "json",
+    "pretty",
+    "tree",
+    "log",
+    "console",
+    "terminal",
+    "tty",
+    "ascii",
+    "word wrap"
+  ]
+}
