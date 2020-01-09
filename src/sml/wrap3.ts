@@ -2,6 +2,8 @@
 import { chunksPerSpanT } from "./types";
 import { StyledBreakableSpan, SpanStyle, CleanBreakStyledSpan, StyledSpan } from "./styledSpan";
 import { BreakableSpan, Span } from "./span";
+import { StyledSpanSheet, StyledSpanLine } from "./styledSpanLine";
+
 
 export function wrapStyledSpans(styledSpans:StyledBreakableSpan[], maxWidth: number, eol: string):(CleanBreakStyledSpan | StyledSpan)[] {
   const wrappedStyledSpans:(CleanBreakStyledSpan | StyledSpan)[] = [];

@@ -1,9 +1,9 @@
-import { StyledSpan, guardUnbreakedStyledSpan, guardCleanBreakStyledSpan } from "./styledSpan";
+import { StyledBreakableSpan, guardStyledSpan, guardCleanBreakStyledSpan } from "./styledSpan";
 import { wrapStyledSpans } from "./wrap2";
 import { SpanStyleSwitchesEnum } from "./styleTypes";
 import { EOL } from 'os';
 
-export function renderStyledSpans(styledSpans:StyledSpan[], maxWidth: number, styleRenderer: styleRendererCallbackT):string {
+export function renderStyledSpans(styledSpans:StyledBreakableSpan[], maxWidth: number, styleRenderer: styleRendererCallbackT):string {
   const wrappedStyledSpans = wrapStyledSpans(styledSpans, maxWidth, EOL);
   let renderedString = '';
   wrappedStyledSpans.forEach((wrappedStyledSpan) => {
@@ -11,11 +11,11 @@ export function renderStyledSpans(styledSpans:StyledSpan[], maxWidth: number, st
   })
   return renderedString;
 }
-type styleRendererCallbackT = (styledSpan: StyledSpan) => string;
-export function devStyleRenderer(styledSpan: StyledSpan):string {
-  if (guardUnbreakedStyledSpan(styledSpan)) {
-    const { style } = styledSpan;
-    const text = styledSpan.span.toString();
+type styleRendererCallbackT = (styledBreakableSpan: StyledBreakableSpan) => string;
+export function devStyleRenderer(styledBreakableSpan: StyledBreakableSpan):string {
+  if (guardStyledSpan(styledBreakableSpan)) {
+    const { style } = styledBreakableSpan;
+    const text = styledBreakableSpan.breakableSpan.toString();
     let foregroundStyleString = '';
     if (style.foreground) {
       foregroundStyleString = `color: rgb(${style.foreground.r}, ${style.foreground.g}, ${style.foreground.b}); `;
@@ -33,11 +33,11 @@ export function devStyleRenderer(styledSpan: StyledSpan):string {
     }
     const styleString = foregroundStyleString  + backgroundStyleString + switchesStyleString;
 
-    return '<span style="' + styleString + '">' + text + '</span>';
-  } else if (guardCleanBreakStyledSpan(styledSpan)) {
+    return '<breakableSpan style="' + styleString + '">' + text + '</breakableSpan>';
+  } else if (guardCleanBreakStyledSpan(styledBreakableSpan)) {
     return '</br>';
   } else {
-    throw new Error('Unknown StyledSpan type');
+    throw new Error('Unknown StyledBreakableSpan type');
   }
 }
 

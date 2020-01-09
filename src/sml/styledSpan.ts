@@ -1,5 +1,5 @@
 import { spanStyleSwitchesT, SpanStyleSwitchesEnum, rgbT } from "./styleTypes";
-import { Span, UnbreakedSpan } from "./span";
+import { BreakableSpan, Span } from "./span";
 
 export class SpanStyleSwitches implements spanStyleSwitchesT {
   // mutable
@@ -26,34 +26,37 @@ export class SpanStyle {
   }
 }
 
-export class StyledSpan<TSpan extends Span = Span> {
+export class StyledBreakableSpan<TBreakableSpan extends BreakableSpan = BreakableSpan> {
   // immmutable span, mutable style
   style:SpanStyle;
-  readonly span: TSpan;
-  constructor(span:TSpan, style?:SpanStyle) {
+  readonly span: TBreakableSpan;
+  constructor(span:TBreakableSpan, style?:SpanStyle) {
     this.span = span;
     this.style = style ? style : SpanStyle.default;
   }
 
 }
 
-export class UnbreakedStyledSpan<TUnbreakedSpan extends UnbreakedSpan = UnbreakedSpan> extends StyledSpan<TUnbreakedSpan> {
-  // immmutable span, mutable style
+export class StyledSpan<TSpan extends Span = Span> extends StyledBreakableSpan<TSpan> {
+  // immmutable breakableSpan, mutable style
+  constructor(span:TSpan, style?:SpanStyle) {
+    super(span, style)
+    if (!StyledSpan.guard<TSpan>(this)) {
+      throw new Error('Span cannot have any EOLs');
+    }
+  }
+  static guard<TSpan extends Span = Span>(styledBreakableSpan: StyledBreakableSpan): styledBreakableSpan is StyledSpan<TSpan> {
+    return styledBreakableSpan instanceof StyledSpan;
+  }
+
 }
 
-export class CleanBreakStyledSpan extends StyledSpan<Span> {
-  // immmutable span, mutable style
+export class CleanBreakStyledSpan extends StyledBreakableSpan<BreakableSpan> {
+  // immmutable breakableSpan, mutable style
   constructor(eol:string) {
-    const span = new Span(eol);
-    super(span);
+    const breakableSpan = new BreakableSpan(eol);
+    super(breakableSpan);
   }
 }
 
-export function guardUnbreakedStyledSpan(styledSpan: StyledSpan): styledSpan is UnbreakedStyledSpan {
-  return styledSpan instanceof UnbreakedStyledSpan;
-}
-
-export function guardCleanBreakStyledSpan(styledSpan: StyledSpan): styledSpan is CleanBreakStyledSpan {
-  return styledSpan instanceof CleanBreakStyledSpan;
-}
 

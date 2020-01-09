@@ -1,12 +1,12 @@
 import { linesT } from "../types/general";
 import { EOL } from "os";
 
-export class Span {
+export class BreakableSpan {
   // immutable design
   readonly lines:linesT;
   readonly width:number;
   constructor(text:string) {
-    this.lines = Span.stringToLines(text);
+    this.lines = BreakableSpan.stringToLines(text);
     this.width = text.length; // TODO unicode size
   }
   toString() {
@@ -21,13 +21,19 @@ export class Span {
   }
 }
 
-export class UnbreakedSpan extends Span {
+export class Span extends BreakableSpan {
   // immutable design
-  readonly unbreaked:true = true
+  readonly unbreaked:true = true;
   constructor(text:string) {
     super(text)
-    if (this.lines.length !== 1) {
-      throw new Error('UnbreakedSpan cannot have anly EOLs');
+    if (!Span.guard(this)) {
+      throw new Error('Span cannot have any EOLs');
     }
+  }
+  public toString() {
+    return this.lines[0];
+  }
+  static guard(breakableSpan:BreakableSpan): breakableSpan is Span {
+    return (breakableSpan instanceof Span) && (breakableSpan.lines.length === 0);
   }
 }

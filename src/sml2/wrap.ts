@@ -1,7 +1,38 @@
+import { StyledBreakableSpan, StyledSpan, CleanBreakStyledSpan, SpanStyle } from "../sml/styledSpan";
+import { StyledSpanSheet, StyledSpanLine } from "../sml/styledSpanLine";
+import { Span } from "../sml/span";
 
-import { chunksPerSpanT } from "./types";
-import { StyledBreakableSpan, SpanStyle, CleanBreakStyledSpan, StyledSpan } from "./styledSpan";
-import { BreakableSpan, Span } from "./span";
+function convertStyledSheetTo(styledBreakableSpans:StyledBreakableSpan[]):StyledSpanSheet {
+  let styledSpanLines:StyledSpanLine[] = [];
+  styledBreakableSpans.forEach((styledBreakableSpan) => {
+    styledBreakableSpan.breakableSpan.lines.forEach((unbreakedLine) => {
+      const span = new Span(unbreakedLine);
+      const styledSpan = new StyledSpan(span, styledBreakableSpan.style);
+      // only one single styleSpan per line because we are splitting one mulityline style
+      const styledSpanLine = new StyledSpanLine([styledSpan], 'hard');
+      styledSpanLines.push(styledSpanLine);
+    });
+  });
+  const styledSpanSheet = new StyledSpanSheet(styledSpanLines);
+  return styledSpanSheet;
+}
+
+
+function rewrapSheet(inputSheet:StyledSpanSheet, maxWidth: number):StyledSpanSheet {
+  inputSheet.styledSpanLines.forEach((styledSpanLine) => {
+    styledSpanLine.styledSpans.forEach((styledSpan) => {
+      const style = styledSpan.style;
+      const width = styledSpan.span.width;
+      const text = styledSpan.span.toString();
+      const chunkPerSpan = spanToChunksPerSpan(styledSpan.span, maxWidth);
+    });
+  });
+  return inputSheet;
+}
+
+
+
+
 
 export function wrapStyledSpans(styledSpans:StyledBreakableSpan[], maxWidth: number, eol: string):(CleanBreakStyledSpan | StyledSpan)[] {
   const wrappedStyledSpans:(CleanBreakStyledSpan | StyledSpan)[] = [];
@@ -42,35 +73,4 @@ export function wrapStyledSpans(styledSpans:StyledBreakableSpan[], maxWidth: num
   wrappedStyledSpans.push(wrappedStyledSpan);
   currentWrappedLine = '';
   return wrappedStyledSpans;
-}
-
-
-function lineToTokens(text:string):string[] {
-  const tokens = text.split(' ');
-  const respacedTokens = tokens.map((token, tokenId) => {
-    // because of [ token ] ' ' [ token ] ' ' [ (maybe empty) token ]
-    const isLast = (tokenId === tokens.length - 1);
-    return token + (isLast ? '' : ' ');
-  });
-  return respacedTokens;
-}
-function tokenToChunks(text:string, maxWidth: number):string[] {
-  const chunks: string[] = [];
-  const stepsTotal = Math.ceil(text.length / maxWidth);
-  for (let stepId = 0; stepId < stepsTotal; stepId++) {
-    let chunk = text.substr(maxWidth * stepId, maxWidth);
-    chunks.push(chunk);
-  }
-  return chunks;
-}
-
-function spanToChunksPerSpan(breakableSpan:BreakableSpan, maxWidth:number):chunksPerSpanT {
-  const chunks = breakableSpan.lines.map((line) => {
-    const tokens = lineToTokens(line);
-    return tokens.map((token) => {
-      const chunks = tokenToChunks(token, maxWidth);
-      return chunks;
-    });
-  });
-  return chunks;
 }
