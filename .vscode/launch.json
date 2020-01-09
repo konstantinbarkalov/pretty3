@@ -26,7 +26,14 @@
       "name": "runme.ts",
       "program": "${workspaceFolder}\\src\\runme.ts",
       "outFiles": [ "${workspaceFolder}\\dist\\**\\*.js" ],
-      //"outFiles": [ "${workspaceFolder}\\**\\*.js" ],
+      "preLaunchTask": "tsc: build - tsconfig.json",
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "runme2.ts",
+      "program": "${workspaceFolder}\\src\\runme2.ts",
+      "outFiles": [ "${workspaceFolder}\\dist\\**\\*.js" ],
       "preLaunchTask": "tsc: build - tsconfig.json",
     },
     {

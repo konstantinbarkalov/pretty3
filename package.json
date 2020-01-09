@@ -34,5 +34,9 @@
     "tty",
     "ascii",
     "word wrap"
-  ]
+  ],
+  "dependencies": {
+    "@types/colors": "^1.2.1",
+    "colors": "^1.4.0"
+  }
 }

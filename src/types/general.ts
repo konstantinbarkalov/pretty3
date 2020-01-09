@@ -1,4 +1,6 @@
-export type linesT = string[];
+export type lineT = Readonly<string>;
+export type linesT = Readonly<lineT[]>;
+export type unbreakedLinesT = Readonly<[lineT]>;
 
 export type itemTextPatternT = {other: textPatternT, last:textPatternT}
 

@@ -4,6 +4,16 @@ import { defaultSettings } from './defaultSettings';
 import { stringToWrappedLines } from './wrap';
 import { anyNodeDescriptionT, NodeMetatypeEnum, SingleNodeTypeEnum, EnumerableNodeTypeEnum } from './types/nodeDescription';
 
+const colors = require('colors/safe');
+// set theme
+colors.setTheme({
+  key: 'brightBlue',
+  value: 'brightWhite',
+  branch: 'grey',
+  icon: 'grey',
+  info: 'green',
+});
+
 export function stringifyTree(tree:any, options?:stringifyTreeOptionsT ):string {
   let outputString = '';
   let eol = (options && options.eol) ? options.eol : defaultSettings.eol;
@@ -139,26 +149,11 @@ function printTreeRecursive(nodeKey:string | number | undefined,
       nodeDescription.info = `${nodeDescription.subEntries.length} entries`;
     }
   }
-  let oneliner: string = '';
-  if (nodeDescription.icon) {
-    oneliner += nodeDescription.icon.text;
-    oneliner += ' ';
-  }
-  if (nodeKey !== undefined || !isFirst) {
-    oneliner += nodeKey;
-    oneliner += ': ';
-
-  }
-  if (nodeDescription.value) {
-    oneliner += nodeDescription.value;
-    oneliner += ' ';
-  }
-  if (nodeDescription.info) {
-    oneliner += nodeDescription.info;
-  }
+  const oneliner:string = renderOneliner(nodeKey, nodeDescription, isFirst);
   const width:widthT = {
     first: settings.tabSize,
-    other: settings.tabSize,
+
+    юб                                       other: settings.tabSize,/*8
   }
   if (nodeDescription.icon) {
     width.first -= nodeDescription.icon.centerId;
@@ -191,6 +186,26 @@ function printTreeRecursive(nodeKey:string | number | undefined,
       printTreeRecursive(subNodeKey, subNode, level + 1, childrenPaddingPrefix, textPattern, false, settings);
     }
   }
+}
+function renderOneliner(nodeKey: string | number | undefined, nodeDescription:anyNodeDescriptionT, isFirst:boolean):string {
+  let oneliner: string = '';
+  if (nodeDescription.icon) {
+    oneliner += colors.icon(nodeDescription.icon.text);
+    oneliner += ' ';
+  }
+  if (nodeKey !== undefined || !isFirst) {
+    oneliner += colors.key(nodeKey);
+    oneliner += ': ';
+
+  }
+  if (nodeDescription.value) {
+    oneliner += colors.value(nodeDescription.value);
+    oneliner += ' ';
+  }
+  if (nodeDescription.info) {
+    oneliner += colors.info(nodeDescription.info);
+  }
+  return oneliner;
 }
 
 function printStringWrapped(text:string, paddingPrefix:paddingPrefixT, maxLineWidth:number, stepsToGo: number, logLineCallback:logLineCallbackT) {
@@ -225,5 +240,5 @@ function buildPaddingPrefixString(textPatternString: textPatternStringT, padding
     throw new Error('branch is to short for that paddingSpace');
   }
   let paddingPrefixString = textPatternString[0] + textPatternString[1].repeat(branchRepeatWidth) + textPatternString[2] + ' '.repeat(paddingSpace);
-  return paddingPrefixString;
+  return colors.branch(paddingPrefixString);
 }
