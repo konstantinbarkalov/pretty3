@@ -1,5 +1,6 @@
 export enum StyleSwitchesEnum {
   Bold,
+  Italic,
   Underline,
 }
 export type styleSwitchesT = {

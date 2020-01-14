@@ -152,8 +152,7 @@ function printTreeRecursive(nodeKey:string | number | undefined,
   const oneliner:string = renderOneliner(nodeKey, nodeDescription, isFirst);
   const width:widthT = {
     first: settings.tabSize,
-
-    юб                                       other: settings.tabSize,/*8
+    other: settings.tabSize,
   }
   if (nodeDescription.icon) {
     width.first -= nodeDescription.icon.centerId;

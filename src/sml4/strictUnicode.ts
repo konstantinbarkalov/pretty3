@@ -1,0 +1,111 @@
+
+import { EOL } from "os";
+
+export class NormalizedUnicodeText extends String {
+  constructor(text:string | String, isSkipChecks: boolean = false) {
+    if (isSkipChecks) {
+      super(text);
+    } else {
+      const normalizedText = text.normalize();
+      super(normalizedText);
+    }
+  }
+  public normalize():string {
+    return this.valueOf();
+  }
+  protected isPrecheckedInstance(text: string | String):boolean {
+    return text instanceof NormalizedUnicodeText;
+  }
+}
+
+export class StrictUnicodeText extends NormalizedUnicodeText {
+  constructor(text:string | String, isSkipChecks: boolean = false) {
+    super(text, isSkipChecks);
+    isSkipChecks = isSkipChecks || this.isPrecheckedInstance(text);
+    if (isSkipChecks) {
+      this.guardStringIsStrictUnicode(this);
+    }
+  }
+
+  protected isPrecheckedInstance(text: string | String):boolean {
+    return text instanceof StrictUnicodeText;
+  }
+
+  public guardStringIsStrictUnicode(normalizedText:NormalizedUnicodeText): void {
+    for (const utf16Code of normalizedText) {
+      const utf16CodePoint = utf16Code.codePointAt(0);
+      if (utf16CodePoint === undefined || utf16CodePoint > 65536) {
+        throw new Error('String is nonstrict unicode, which is unsupported');
+      }
+    }
+  }
+  public splitToLines(): StrictUnicodeLine[] {
+    const lines = this.valueOf().split(EOL).map((lineString: string) => {
+      return new StrictUnicodeLine(lineString, true);
+    });
+    return lines;
+  }
+  public wrap(maxWidth:number, firstLinePadding: number = 0):{wrappedText: StrictUnicodeText, lastLinePadding: number} {
+    const lines = this.splitToLines();
+    const wrapResults = lines.map((line, lineId) => {
+      const isFirst = lineId === 0;
+      const currentLineFirstLinePadding = isFirst ? firstLinePadding : 0;
+      return line.wrap(maxWidth, currentLineFirstLinePadding);
+    });
+    const wrappedTextString = wrapResults.map(({wrappedText}) => {
+      return wrappedText;
+    }).join(EOL);
+    const lastWrappedText = wrapResults[wrapResults.length - 1];
+    const lastLinePadding = lastWrappedText.lastLinePadding;
+    const wrappedText = new StrictUnicodeText(wrappedTextString, true);
+    return {wrappedText, lastLinePadding };
+  }
+}
+
+export class StrictUnicodeLine extends StrictUnicodeText {
+  constructor(text:string | String, isSkipChecks: boolean = false) {
+    super(text, isSkipChecks);
+  }
+  public guardStringIsStrictUnicode(normalizedText:NormalizedUnicodeText): void {
+    if (normalizedText.includes(EOL)) { throw('No EOLs allowed in single StrictUnicodeLine, use StrictUnicodeText instead') }
+    super.guardStringIsStrictUnicode(normalizedText);
+  }
+  private widthCache: number | undefined;
+  public calcWidth():number {
+    if (this.widthCache === undefined) {
+      let iterator = this[Symbol.iterator]();
+      let width = 0;
+      while (!iterator.next().done) { width++; }
+      this.widthCache = width;
+      // or
+      // for ({} of this) { width++ }
+      // or
+      // [...this].length
+    }
+    return this.widthCache;
+  }
+  public wrap(maxWidth:number, firstLinePadding: number = 0):{wrappedText: StrictUnicodeText, lastLinePadding: number} {
+    const lineWidth = this.calcWidth();
+    if (lineWidth <= maxWidth - firstLinePadding) {
+      return {wrappedText: this, lastLinePadding: lineWidth};
+    }
+    let wrappedLineWidth: number = firstLinePadding;
+    let wrappedLine: string = '';
+    const wrappedLines = [];
+    for (const codePoint of this) {
+      wrappedLineWidth++;
+      if (wrappedLineWidth > maxWidth) {
+        wrappedLines.push(wrappedLine);
+        wrappedLine = '';
+        wrappedLineWidth = 0;
+      } else {
+        wrappedLine += codePoint;
+      }
+    }
+    //tail
+    wrappedLines.push(wrappedLine); // TODO maybe i need to check for nonempty wrappedLine
+
+    let wrappedText = new StrictUnicodeText(wrappedLines.join(EOL), true);
+    return {wrappedText, lastLinePadding: wrappedLineWidth};
+  }
+}

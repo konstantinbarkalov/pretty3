@@ -1,10 +1,11 @@
 import { styleSwitchesT, StyleSwitchesEnum } from "./styleTypes";
-import { rgbT } from "../sml/styleTypes";
+import { rgbT } from "./styleTypes";
 
 export class StyleSwitches implements styleSwitchesT {
   // mutable
   static default = new StyleSwitches();
   [StyleSwitchesEnum.Bold]: boolean = false;
+  [StyleSwitchesEnum.Italic]: boolean = false;
   [StyleSwitchesEnum.Underline]: boolean = false;
   constructor(switches?: Partial<styleSwitchesT>) {
     if (switches) {
