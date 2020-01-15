@@ -1,18 +1,31 @@
 import { EOL } from 'os';
 import { printTreeSettingsT, stringifyTreeOptionsT, printTreeOptionsT, textPatternT, logLineCallbackT, itemTextPatternT, paddingPrefixT, maxLineWidthT, textPatternStringT, textPatternString } from './types/general';
 import { defaultSettings } from './defaultSettings';
-import { stringToWrappedLines } from './wrap';
 import { anyNodeDescriptionT, NodeMetatypeEnum, SingleNodeTypeEnum, EnumerableNodeTypeEnum } from './types/nodeDescription';
+import { AtomicTextContainer, NonatomicTextContainer, TextContainer, FlatNonatomicTextContainer } from './sml4/textContainer';
+import { Style } from './sml4/style';
+import { Renderer } from './sml4/renderer/renderer';
+import { AnsiRenderer } from './sml4/renderer/implementation/ansi';
 
-const colors = require('colors/safe');
-// set theme
-colors.setTheme({
-  key: 'brightBlue',
-  value: 'brightWhite',
-  branch: 'grey',
-  icon: 'grey',
-  info: 'green',
-});
+const treeStyleColors = {
+  green: {r: 80, g: 160, b: 80},
+  darkGreen: {r: 64, g: 128, b: 64},
+  blue: {r: 64, g: 64, b: 192},
+  darkGray: {r: 64, g: 64, b: 64},
+  gray: {r: 128, g: 128, b: 128},
+  lightGray: {r: 192, g: 192, b: 192},
+  white: {r: 255, g: 255, b: 255},
+}
+
+const treeStyle = {
+  icon: new Style(treeStyleColors.green),
+  dim: new Style(treeStyleColors.darkGray),
+  key: new Style(treeStyleColors.green),
+  keyDots: new Style(treeStyleColors.darkGreen),
+  value: new Style(treeStyleColors.white),
+  info: new Style(treeStyleColors.blue),
+  branch: new Style(treeStyleColors.darkGray),
+}
 
 export function stringifyTree(tree:any, options?:stringifyTreeOptionsT ):string {
   let outputString = '';
@@ -149,7 +162,7 @@ function printTreeRecursive(nodeKey:string | number | undefined,
       nodeDescription.info = `${nodeDescription.subEntries.length} entries`;
     }
   }
-  const oneliner:string = renderOneliner(nodeKey, nodeDescription, isFirst);
+  const oneliner = buildOneliner(nodeKey, nodeDescription, isFirst);
   const width:widthT = {
     first: settings.tabSize,
     other: settings.tabSize,
@@ -157,8 +170,9 @@ function printTreeRecursive(nodeKey:string | number | undefined,
   if (nodeDescription.icon) {
     width.first -= nodeDescription.icon.centerId;
   }
-  const currentPaddingPrefix = buildPaddingPrefix(basePaddingPrefix, currentTextPattern, settings.paddingSpace, width);
-  printStringWrapped(oneliner, currentPaddingPrefix, settings.maxLineWidth, settings.maxStringWrapSteps, settings.logLineCallback);
+  const renderer = new AnsiRenderer();
+  const currentPaddingPrefix = buildPaddingPrefix(basePaddingPrefix, currentTextPattern, settings.paddingSpace, width, renderer);
+  printTextContainerWrapped(oneliner, currentPaddingPrefix, settings.maxLineWidth, settings.logLineCallback, renderer);
   const childrenPaddingPrefix = {
     first: currentPaddingPrefix.other,
     other: currentPaddingPrefix.other,
@@ -186,38 +200,44 @@ function printTreeRecursive(nodeKey:string | number | undefined,
     }
   }
 }
-function renderOneliner(nodeKey: string | number | undefined, nodeDescription:anyNodeDescriptionT, isFirst:boolean):string {
-  let oneliner: string = '';
+function buildOneliner(nodeKey: string | number | undefined, nodeDescription:anyNodeDescriptionT, isFirst:boolean):NonatomicTextContainer {
+  let space = new AtomicTextContainer(' ');
+  let children:AtomicTextContainer[] = [];
   if (nodeDescription.icon) {
-    oneliner += colors.icon(nodeDescription.icon.text);
-    oneliner += ' ';
+    children.push(new AtomicTextContainer(nodeDescription.icon.text, treeStyle.icon));
+    children.push(space);
   }
   if (nodeKey !== undefined || !isFirst) {
-    oneliner += colors.key(nodeKey);
-    oneliner += ': ';
+    let nodeKeyString = nodeKey?.toString() || '';
+    children.push(new AtomicTextContainer(nodeKeyString, treeStyle.key));
+    children.push(new AtomicTextContainer(':', treeStyle.keyDots));
+    children.push(space);
 
   }
   if (nodeDescription.value) {
-    oneliner += colors.value(nodeDescription.value);
-    oneliner += ' ';
+    children.push(new AtomicTextContainer(nodeDescription.value));
+    children.push(space);
   }
   if (nodeDescription.info) {
-    oneliner += colors.info(nodeDescription.info);
+    children.push(new AtomicTextContainer(nodeDescription.info, treeStyle.info));
+    children.push(space);
   }
-  return oneliner;
+  return new FlatNonatomicTextContainer(children);
 }
 
-function printStringWrapped(text:string, paddingPrefix:paddingPrefixT, maxLineWidth:number, stepsToGo: number, logLineCallback:logLineCallbackT) {
+function printTextContainerWrapped(textContainer:TextContainer, paddingPrefix:paddingPrefixT, maxLineWidth:number, logLineCallback:logLineCallbackT, renderer: Renderer) {
   const actualMaxLineWidth:maxLineWidthT = {
     first: maxLineWidth - paddingPrefix.first.length,
     other: maxLineWidth - paddingPrefix.other.length,
   };
   let message = '';
-  const lines = stringToWrappedLines(text, actualMaxLineWidth, stepsToGo);
-  for (let i = 0; i < lines.length; i++) {
+  const wrapped = textContainer.wrap(actualMaxLineWidth.other, actualMaxLineWidth.other - actualMaxLineWidth.first).wrapped;
+  const renderedTextContainer = renderer.render(wrapped);
+  const renderedTextContainerLines = renderedTextContainer.split(EOL);
+  for (let i = 0; i < renderedTextContainerLines.length; i++) {
     const isFirst = (i === 0);
-    const isLast = (i === lines.length - 1);
-    const line = lines[i];
+    const isLast = (i === renderedTextContainerLines.length - 1);
+    const line = renderedTextContainerLines[i];
     const br = isLast ? '' : EOL;
     const actualPaddingPrefix = isFirst ? paddingPrefix.first : paddingPrefix.other;
     message += actualPaddingPrefix + line + br;
@@ -225,10 +245,11 @@ function printStringWrapped(text:string, paddingPrefix:paddingPrefixT, maxLineWi
   logLineCallback(message);
 }
 type widthT = {first:number, other:number};
-function buildPaddingPrefix(basePaddingPrefix: paddingPrefixT, textPattern: textPatternT, paddingSpace:number, width: widthT) {
+function buildPaddingPrefix(basePaddingPrefix: paddingPrefixT, textPattern: textPatternT, paddingSpace:number, width: widthT, renderer: Renderer) {
+
   const currentPaddingPrefix:paddingPrefixT = {
-    first: basePaddingPrefix.first + buildPaddingPrefixString(textPattern.first, paddingSpace, width.first),
-    other: basePaddingPrefix.other + buildPaddingPrefixString(textPattern.other, paddingSpace, width.other),
+    first: basePaddingPrefix.first + renderer.render(new AtomicTextContainer(buildPaddingPrefixString(textPattern.first, paddingSpace, width.first), treeStyle.branch)),
+    other: basePaddingPrefix.other + renderer.render(new AtomicTextContainer(buildPaddingPrefixString(textPattern.other, paddingSpace, width.other), treeStyle.branch)),
   };
   return currentPaddingPrefix;
 }
@@ -239,5 +260,5 @@ function buildPaddingPrefixString(textPatternString: textPatternStringT, padding
     throw new Error('branch is to short for that paddingSpace');
   }
   let paddingPrefixString = textPatternString[0] + textPatternString[1].repeat(branchRepeatWidth) + textPatternString[2] + ' '.repeat(paddingSpace);
-  return colors.branch(paddingPrefixString);
+  return paddingPrefixString;
 }

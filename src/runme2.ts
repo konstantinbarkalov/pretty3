@@ -15,8 +15,10 @@ import * as fs from 'fs';
 
 import { Style, StyleSwitches } from "./sml4/style";
 import { StyleSwitchesEnum } from "./sml4/styleTypes";
-import { AnsiRenderer } from "./sml4/renderers/ansi";
+import { AnsiRenderer } from "./sml4/renderer/implementation/ansi";
+import { HtmlRenderer } from "./sml4/renderer/implementation/html";
 
+// Open-source software development can bring in diverse perspectives beyond those of a single company. A 2008 report by the Standish Group stated that adoption of open-source software models has resulted in savings of about $60 billion (£48 billion) per year for consumers.'
 const children = [
   new AtomicTextContainer(
     'GitHub is home to over '
@@ -44,16 +46,22 @@ const children = [
     new Style({r: 128, g: 128, b: 128}, undefined, new StyleSwitches())
   ),
 ]
-const renderer = new AnsiRenderer();
+const ansiRenderer = new AnsiRenderer();
+const htmlRenderer = new HtmlRenderer();
 
 const sheet = new NonatomicTextContainer(children);
-const rendered = renderer.render(sheet);
+const rendered = ansiRenderer.render(sheet);
 console.log(rendered);
 
 const {wrapped: wrappedSheet} = sheet.wrap(40);
-const renderedWrapped = renderer.render(wrappedSheet);
-console.log(renderedWrapped);
+const ansiRenderedWrapped = ansiRenderer.render(wrappedSheet);
+console.log(ansiRenderedWrapped);
 
-fs.writeFileSync('./rendered.ansi', renderedWrapped, 'utf8');
+fs.writeFileSync('./rendered.ansi', ansiRenderedWrapped, 'utf8');
 
+
+const htmlRenderedWrapped = htmlRenderer.render(wrappedSheet);
+console.log(htmlRenderedWrapped);
+
+fs.writeFileSync('./rendered.html', htmlRenderedWrapped, 'utf8');
 

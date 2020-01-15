@@ -37,8 +37,6 @@
   ],
   "dependencies": {
     "@types/ansi-styles": "^3.2.1",
-    "@types/colors": "^1.2.1",
-    "ansi-styles": "^4.2.1",
-    "colors": "^1.4.0"
+    "ansi-styles": "^4.2.1"
   }
 }

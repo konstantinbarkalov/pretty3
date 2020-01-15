@@ -5,7 +5,8 @@ export abstract class TextContainer {
   public style?: Style;
   public abstract calcSize():textContainerSizeT;
   public abstract toString():string;
-  public abstract wrap(maxWidth:number): {wrapped: TextContainer, lastLinePadding: number };
+  public abstract wrap(maxWidth:number, firstLinePadding: number): {wrapped: TextContainer, lastLinePadding: number };
+  public abstract flatten(initialStyle?: Style):FlatNonatomicTextContainer;
 }
 type textContainerSizeT = {
   width: {
@@ -54,6 +55,10 @@ export class AtomicTextContainer extends TextContainer {
     const {wrappedText, lastLinePadding} = this.text.wrap(maxWidth, firstLinePadding);
     const wrapped = new AtomicTextContainer(wrappedText, this.style);
     return {wrapped, lastLinePadding}
+  }
+  public flatten(initialStyle?: Style):FlatNonatomicTextContainer {
+    const style = this.style || initialStyle;
+    return new FlatNonatomicTextContainer([new AtomicTextContainer(this.text, style)]);
   }
 }
 type NonatomicChildT = NonatomicTextContainer | AtomicTextContainer;
@@ -112,5 +117,18 @@ export class NonatomicTextContainer extends TextContainer {
     const wrapped = new NonatomicTextContainer(reduceState.children, this.style);
     const lastLinePadding = reduceState.linePadding;
     return {wrapped, lastLinePadding }
+  }
+  public flatten(initialStyle?: Style):FlatNonatomicTextContainer {
+    const style = this.style || initialStyle;
+    const flatChildren = this.children.reduce<AtomicTextContainer[]>((flatChildren, child) => {
+      flatChildren = flatChildren.concat(child.flatten(style).children);
+      return flatChildren;
+    }, []);
+    return new FlatNonatomicTextContainer(flatChildren);
+  }
+}
+export class FlatNonatomicTextContainer extends NonatomicTextContainer {
+  constructor(public children:AtomicTextContainer[]) {
+    super(children, undefined);
   }
 }

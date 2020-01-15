@@ -66,6 +66,11 @@ export class StrictUnicodeLine extends StrictUnicodeText {
   constructor(text:string | String, isSkipChecks: boolean = false) {
     super(text, isSkipChecks);
   }
+
+  protected isPrecheckedInstance(text: string | String):boolean {
+    return text instanceof StrictUnicodeLine;
+  }
+
   public guardStringIsStrictUnicode(normalizedText:NormalizedUnicodeText): void {
     if (normalizedText.includes(EOL)) { throw('No EOLs allowed in single StrictUnicodeLine, use StrictUnicodeText instead') }
     super.guardStringIsStrictUnicode(normalizedText);
@@ -93,14 +98,14 @@ export class StrictUnicodeLine extends StrictUnicodeText {
     let wrappedLine: string = '';
     const wrappedLines = [];
     for (const codePoint of this) {
-      wrappedLineWidth++;
-      if (wrappedLineWidth > maxWidth) {
+      const codePointWidth = 1; // TODO: support for full-width chars
+      if (wrappedLineWidth + codePointWidth > maxWidth) {
         wrappedLines.push(wrappedLine);
         wrappedLine = '';
         wrappedLineWidth = 0;
-      } else {
-        wrappedLine += codePoint;
       }
+      wrappedLineWidth += codePointWidth;
+      wrappedLine += codePoint;
     }
     //tail
     wrappedLines.push(wrappedLine); // TODO maybe i need to check for nonempty wrappedLine

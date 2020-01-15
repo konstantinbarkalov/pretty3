@@ -1,25 +1,10 @@
-import { TextContainer } from "../textContainer";
-import { Renderer } from "../renderer";
-import { Style } from "../style";
+import { Style } from "../../style";
 const ansiStyleLib = require('ansi-styles');
-import { StyleSwitchesEnum } from "../styleTypes";
+import { StyleSwitchesEnum } from "../../styleTypes";
 import { EOL } from "os";
-export class AnsiRenderer extends Renderer {
-  public render(textContainer: TextContainer):string {
-    let rendered:string = '';
-    if (this.guardAtomic(textContainer)) {
-      rendered = textContainer.text.splitToLines().map((line)=>{
-        return this.styleBegin(textContainer.style) + line.toString() + this.styleEnd(textContainer.style);
-      }).join(EOL);
-    } else if (this.guardNonatomic(textContainer)) {
-      rendered = textContainer.children.map((child)=>{
-        return this.render(child);
-      }).join('');
-    } else {
-      throw new Error('unknown textContainer type');
-    }
-    return rendered;
-  }
+import { SimpleRenderer } from "../simpleRenderer";
+export class AnsiRenderer extends SimpleRenderer {
+  protected eol:string = EOL;
   protected styleBegin(style:Style | undefined) {
     let styleString = '';
     if (style) {
