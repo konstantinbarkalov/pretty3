@@ -1,6 +1,6 @@
    { } 10 shown of 11 total 
     ├──╴simpleText: hello my friend 
-    ├─╴{D} nowDate: 17.01.2020, 00:26:24 
+    ├─╴{D} nowDate: 17.01.2020, 02:10:39 
     ├─╴<S> mySymbol: Symbol() 
     ├──╴myLongText: GitHub is home to over 40 million developers working together to host and review code, manage projec
     │   ts, and build software together. Since question was regarding clunkiness of property checking, and one regular u

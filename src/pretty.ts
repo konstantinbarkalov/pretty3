@@ -39,7 +39,10 @@ export function stringifyTree(tree:any, renderer: Renderer, options?:stringifyTr
 
 export function printTree(tree:any, renderer: Renderer, options?:printTreeOptionsT ):void {
   const settings = Object.assign({}, defaultSettings, options);
-  const emptyPaddingPrefix:paddingPrefixT = {first: '', other: ''};
+  const emptyPaddingPrefix:paddingPrefixT = {
+    first: new FlatNonatomicTextContainer<StrictUnicodeLine>([new AtomicTextContainer(new StrictUnicodeLine(''))]),
+    other: new FlatNonatomicTextContainer<StrictUnicodeLine>([new AtomicTextContainer(new StrictUnicodeLine(''))]),
+  };
   const emptyTextPattern:textPatternT = {
     first:  textPatternString('   '),
     other: textPatternString('   '),
@@ -171,12 +174,8 @@ function printTreeRecursive(nodeKey:string | number | undefined,
   if (nodeDescription.icon) {
     width.first -= nodeDescription.icon.centerId;
   }
-  const currentPaddingPrefix = buildPaddingPrefix(basePaddingPrefix, currentTextPattern, settings.paddingSpace, width, renderer);
+  const currentPaddingPrefix = buildPaddingPrefix(basePaddingPrefix, currentTextPattern, settings.paddingSpace, width);
   printTextContainerWrapped(oneliner, currentPaddingPrefix, settings.maxLineWidth, settings.logLineCallback, renderer);
-  const childrenPaddingPrefix = {
-    first: currentPaddingPrefix.other,
-    other: currentPaddingPrefix.other,
-  }
   if (nodeDescription.metatype === NodeMetatypeEnum.Enumerable) {
     const itemsShownCount = Math.min(settings.maxItemsAtLevel, nodeDescription.subEntries.length);
     for (let subNodeIndex = 0; subNodeIndex < itemsShownCount; subNodeIndex++) {
@@ -195,6 +194,10 @@ function printTreeRecursive(nodeKey:string | number | undefined,
         textPattern = itemPattern.other;
       } else {
         textPattern = itemPattern.last;
+      }
+      const childrenPaddingPrefix = {
+        first: currentPaddingPrefix.other,
+        other: currentPaddingPrefix.other,
       }
       printTreeRecursive(subNodeKey, subNode, level + 1, childrenPaddingPrefix, textPattern, false, renderer, settings);
     }
@@ -227,8 +230,8 @@ function buildOneliner(nodeKey: string | number | undefined, nodeDescription:any
 
 function printTextContainerWrapped(textContainer:TextContainer, paddingPrefix:paddingPrefixT, maxLineWidth:number, logLineCallback:logLineCallbackT, renderer:Renderer) {
   const actualMaxLineWidth:maxLineWidthT = {
-    first: maxLineWidth - paddingPrefix.first.length,
-    other: maxLineWidth - paddingPrefix.other.length,
+    first: maxLineWidth - paddingPrefix.first.calcSize().width.first,
+    other: maxLineWidth - paddingPrefix.other.calcSize().width.first,
   };
   const wrapped = textContainer.wrap(actualMaxLineWidth.other, actualMaxLineWidth.other - actualMaxLineWidth.first).wrapped;
   const flat = wrapped.flatten();
@@ -236,17 +239,18 @@ function printTextContainerWrapped(textContainer:TextContainer, paddingPrefix:pa
   const message = flatLines.map((flatLine, flatLineId) => {
     const isFirst = (flatLineId === 0);
     const actualPaddingPrefix = isFirst ? paddingPrefix.first : paddingPrefix.other;
-    return actualPaddingPrefix + renderer.renderFlatLine(flatLine);
+    const joinedLine = new FlatNonatomicTextContainer(actualPaddingPrefix.children.concat(flatLine.children));
+    return renderer.renderFlatLine(joinedLine);
   }).join(renderer.eol);
 
   logLineCallback(message);
 }
 type widthT = {first:number, other:number};
-function buildPaddingPrefix(basePaddingPrefix: paddingPrefixT, textPattern: textPatternT, paddingSpace:number, width: widthT, renderer: Renderer) {
+function buildPaddingPrefix(basePaddingPrefix: paddingPrefixT, textPattern: textPatternT, paddingSpace:number, width: widthT) {
 
   const currentPaddingPrefix:paddingPrefixT = {
-    first: basePaddingPrefix.first + renderer.render(new AtomicTextContainer(new StrictUnicodeLine(buildPaddingPrefixString(textPattern.first, paddingSpace, width.first)), treeStyle.branch)),
-    other: basePaddingPrefix.other + renderer.render(new AtomicTextContainer(new StrictUnicodeLine(buildPaddingPrefixString(textPattern.other, paddingSpace, width.other)), treeStyle.branch)),
+    first: new FlatNonatomicTextContainer(basePaddingPrefix.first.children.concat(new AtomicTextContainer(new StrictUnicodeLine(buildPaddingPrefixString(textPattern.first, paddingSpace, width.first)), treeStyle.branch))),
+    other: new FlatNonatomicTextContainer(basePaddingPrefix.other.children.concat(new AtomicTextContainer(new StrictUnicodeLine(buildPaddingPrefixString(textPattern.other, paddingSpace, width.other)), treeStyle.branch))),
   };
   return currentPaddingPrefix;
 }

@@ -80,7 +80,7 @@ export class NonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnico
     }
     const reduceState = this.children.reduce<reduceStateT>((reduceState, child) => {
       const currentSize = child.calcSize();
-      debugger; // TODO check is 0 or 1 needed for noline
+      // debugger; // TODO check is 0 or 1 needed for noline
       reduceState.linePadding += currentSize.width.first;
 
       if (reduceState.isFirst) {

@@ -1,3 +1,6 @@
+import { FlatNonatomicTextContainer } from "../sml4/textContainer";
+import { StrictUnicodeLine } from "../sml4/strictUnicode";
+
 export type lineT = Readonly<string>;
 export type linesT = Readonly<lineT[]>;
 export type unbreakedLinesT = Readonly<[lineT]>;
@@ -11,8 +14,8 @@ export type textPatternT = {
   other: textPatternStringT
 }
 export type paddingPrefixT = {
-  first: string,
-  other: string,
+  first: FlatNonatomicTextContainer<StrictUnicodeLine>,
+  other: FlatNonatomicTextContainer<StrictUnicodeLine>,
 }
 
 
