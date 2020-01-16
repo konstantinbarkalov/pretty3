@@ -41,6 +41,8 @@ export class StrictUnicodeText extends NormalizedUnicodeText {
     for (const utf16Code of normalizedText) {
       const utf16CodePoint = utf16Code.codePointAt(0);
       if (utf16CodePoint === undefined || utf16CodePoint > 65536) {
+        // TODO: 1. ASAP check limits
+        // TODO: 2. later support compound multi utf16Code
         throw new Error('String is nonstrict unicode, which is unsupported');
       }
     }

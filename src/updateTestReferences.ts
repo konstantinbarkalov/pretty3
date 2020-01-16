@@ -13,14 +13,27 @@ const ansiRenderer = new AnsiRenderer();
 
 for (let i = 1; i <= 4; i++) {
   const input = JSON.parse(fs.readFileSync(path.resolve(testcaseRootPath, `input0${i}.json`), 'utf8'));
-  const plainOutput = pretty.stringifyTree(input, plainRenderer);
+  const plainOutput = pretty.stringifyTree(input, {renderer: plainRenderer});
   fs.writeFileSync(path.resolve(testcaseRootPath, `reference0${i}.txt`), plainOutput, 'utf8');
-  const ansiOutput = pretty.stringifyTree(input, ansiRenderer);
+  const ansiOutput = pretty.stringifyTree(input, {renderer: ansiRenderer});
   fs.writeFileSync(path.resolve(testcaseRootPath, `reference0${i}.ansi`), ansiOutput, 'utf8');
-  const htmlOutput = pretty.stringifyTree(input, htmlRenderer);
+  const htmlOutput = pretty.stringifyTree(input, {renderer: htmlRenderer});
   fs.writeFileSync(path.resolve(testcaseRootPath, `reference0${i}.html`), htmlOutput, 'utf8');
-  console.log(`[i]`);
+  console.log(`[${i}]`);
   console.log(plainOutput);
 }
+import input05 from '../test/input05';
+{
+  const i = 5;
+  const input = input05;
+  const plainOutput = pretty.stringifyTree(input, {renderer: plainRenderer});
+  fs.writeFileSync(path.resolve(testcaseRootPath, `reference0${i}.txt`), plainOutput, 'utf8');
+  const ansiOutput = pretty.stringifyTree(input, {renderer: ansiRenderer});
+  fs.writeFileSync(path.resolve(testcaseRootPath, `reference0${i}.ansi`), ansiOutput, 'utf8');
+  const htmlOutput = pretty.stringifyTree(input, {renderer: htmlRenderer});
+  fs.writeFileSync(path.resolve(testcaseRootPath, `reference0${i}.html`), htmlOutput, 'utf8');
+  console.log(`[${i}]`);
+  console.log(plainOutput);
 
+}
 

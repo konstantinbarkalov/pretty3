@@ -27,17 +27,17 @@ const treeStyle = {
   branch: new Style(treeStyleColors.darkGray),
 }
 
-export function stringifyTree(tree:any, renderer: Renderer, options?:stringifyTreeOptionsT ):string {
+export function stringifyTree(tree:any, options?:stringifyTreeOptionsT ):string {
   let outputString = '';
   let eol = (options && options.eol) ? options.eol : defaultSettings.eol;
   const overridenOptionsLogLineCallback = (line: string) => { outputString += line + eol ; };
   const overridenPrintTreeOptions:printTreeOptionsT = { logLineCallback: overridenOptionsLogLineCallback };
   const printTreeOptions = Object.assign({}, overridenPrintTreeOptions, options);
-  printTree(tree, renderer, printTreeOptions);
+  printTree(tree, printTreeOptions);
   return outputString;
 }
 
-export function printTree(tree:any, renderer: Renderer, options?:printTreeOptionsT ):void {
+export function printTree(tree:any, options?:printTreeOptionsT ):void {
   const settings = Object.assign({}, defaultSettings, options);
   const emptyPaddingPrefix:paddingPrefixT = {
     first: new FlatNonatomicTextContainer<StrictUnicodeLine>([new AtomicTextContainer(new StrictUnicodeLine(''))]),
@@ -47,7 +47,7 @@ export function printTree(tree:any, renderer: Renderer, options?:printTreeOption
     first:  textPatternString('   '),
     other: textPatternString('   '),
   }
-  printTreeRecursive(undefined, tree, 0, emptyPaddingPrefix, emptyTextPattern, true, renderer, settings);
+  printTreeRecursive(undefined, tree, 0, emptyPaddingPrefix, emptyTextPattern, true, settings);
 }
 
 function printTreeRecursive(nodeKey:string | number | undefined,
@@ -56,11 +56,15 @@ function printTreeRecursive(nodeKey:string | number | undefined,
                             basePaddingPrefix: paddingPrefixT,
                             currentTextPattern: textPatternT,
                             isFirst: boolean,
-                            renderer: Renderer,
                             settings:printTreeSettingsT ):void {
   if (level > settings.maxLevel) {
     return;
   }
+  const currentLevelMaxItems =
+    Array.isArray(settings.maxItemsPerLevel)
+      ? settings.maxItemsPerLevel[Math.min(level, settings.maxItemsPerLevel.length - 1)]
+      : settings.maxItemsPerLevel;
+
   let nodeDescription: anyNodeDescriptionT;
   if (typeof node === 'string') {
     nodeDescription = {
@@ -159,7 +163,7 @@ function printTreeRecursive(nodeKey:string | number | undefined,
   }
 
   if (nodeDescription.metatype === NodeMetatypeEnum.Enumerable) {
-    const itemsShownCount = Math.min(settings.maxItemsAtLevel, nodeDescription.subEntries.length);
+    const itemsShownCount = Math.min(currentLevelMaxItems, nodeDescription.subEntries.length);
     if (nodeDescription.subEntries.length > itemsShownCount) {
       nodeDescription.info = `${itemsShownCount} shown of ${nodeDescription.subEntries.length} total`;
     } else {
@@ -175,9 +179,9 @@ function printTreeRecursive(nodeKey:string | number | undefined,
     width.first -= nodeDescription.icon.centerId;
   }
   const currentPaddingPrefix = buildPaddingPrefix(basePaddingPrefix, currentTextPattern, settings.paddingSpace, width);
-  printTextContainerWrapped(oneliner, currentPaddingPrefix, settings.maxLineWidth, settings.logLineCallback, renderer);
+  printTextContainerWrapped(oneliner, currentPaddingPrefix, settings.maxLineWidth, settings.logLineCallback, settings.renderer);
   if (nodeDescription.metatype === NodeMetatypeEnum.Enumerable) {
-    const itemsShownCount = Math.min(settings.maxItemsAtLevel, nodeDescription.subEntries.length);
+    const itemsShownCount = Math.min(currentLevelMaxItems, nodeDescription.subEntries.length);
     for (let subNodeIndex = 0; subNodeIndex < itemsShownCount; subNodeIndex++) {
       const subEntry = nodeDescription.subEntries[subNodeIndex];
       const [subNodeKey, subNode] = subEntry;
@@ -199,7 +203,7 @@ function printTreeRecursive(nodeKey:string | number | undefined,
         first: currentPaddingPrefix.other,
         other: currentPaddingPrefix.other,
       }
-      printTreeRecursive(subNodeKey, subNode, level + 1, childrenPaddingPrefix, textPattern, false, renderer, settings);
+      printTreeRecursive(subNodeKey, subNode, level + 1, childrenPaddingPrefix, textPattern, false, settings);
     }
   }
 }

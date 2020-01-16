@@ -1,6 +1,6 @@
-{ } 3 entries
- ├   a: 1 
- ├   b: multiline text appears here with different
- │  kind
- │  of line-breaks, all of them are supported and translated to os.EOL 
- ╰   c: 2 
+   { } 3 entries 
+    ├──╴a: 1 
+    ├──╴b: multiline text appears here with different
+kind
+    │   of line-breaks, all of them are supported and translated to os.EOL 
+    ╰──╴c: 2 

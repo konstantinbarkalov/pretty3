@@ -1,10 +1,12 @@
 import { EOL } from 'os';
 import { printTreeSettingsT, textPatternString} from './types/general';
+import { AutodetectRenderer } from './text/renderer/implementation';
 
 export const defaultSettings: printTreeSettingsT = {
+  renderer: new AutodetectRenderer(),
   maxLevel: 6,
-  maxItemsAtLevel: 10,
-  maxLineWidth: 120,
+  maxItemsPerLevel: [30, 10],
+  maxLineWidth: 80,
   arrayItemTextPattern: {other: {first: textPatternString('├─╸'), other: textPatternString('│  ')}, last: {first: textPatternString('└─╸'), other: textPatternString('   ')}},
   objectItemTextPattern: {other: {first: textPatternString('├─╴'), other: textPatternString('│  ')}, last: {first: textPatternString('╰─╴'), other: textPatternString('   ')}},
   maxStringWrapSteps: Infinity,

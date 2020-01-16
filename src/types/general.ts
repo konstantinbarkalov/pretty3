@@ -1,5 +1,6 @@
 import { FlatNonatomicTextContainer } from "../text/textContainer";
 import { StrictUnicodeLine } from "../text/strictUnicode";
+import { Renderer } from "../text/renderer/abstract/renderer";
 
 export type lineT = Readonly<string>;
 export type linesT = Readonly<lineT[]>;
@@ -35,8 +36,9 @@ export function guardTextPatternString(text: string):text is textPatternStringT 
 
 
 export type stringifyTreeSettingsT = {
+  renderer: Renderer,
   maxLevel: number,
-  maxItemsAtLevel: number,
+  maxItemsPerLevel: number[] | number,
   maxLineWidth: number,
   arrayItemTextPattern: itemTextPatternT,
   objectItemTextPattern: itemTextPatternT,
