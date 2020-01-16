@@ -1,7 +1,7 @@
-import { TextContainer, FlatNonatomicTextContainer } from "../textContainer";
+import { TextContainer, FlatNonatomicTextContainer } from "../../textContainer";
 import { Renderer } from "./renderer";
-import { StrictUnicodeLine } from "../strictUnicode";
-import { Style } from "../style";
+import { StrictUnicodeLine } from "../../strictUnicode";
+import { Style } from "../../style";
 
 export abstract class SimpleRenderer extends Renderer {
 

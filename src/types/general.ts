@@ -1,5 +1,5 @@
-import { FlatNonatomicTextContainer } from "../sml4/textContainer";
-import { StrictUnicodeLine } from "../sml4/strictUnicode";
+import { FlatNonatomicTextContainer } from "../text/textContainer";
+import { StrictUnicodeLine } from "../text/strictUnicode";
 
 export type lineT = Readonly<string>;
 export type linesT = Readonly<lineT[]>;

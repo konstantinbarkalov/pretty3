@@ -2,7 +2,7 @@ import { Style } from "../../style";
 const ansiStyleLib = require('ansi-styles');
 import { StyleSwitchesEnum } from "../../styleTypes";
 import { EOL } from "os";
-import { SimpleRenderer } from "../simpleRenderer";
+import { SimpleRenderer } from "../abstract/simpleRenderer";
 export class AnsiRenderer extends SimpleRenderer {
   public eol:string = EOL;
   protected styleBegin(style:Style | undefined) {

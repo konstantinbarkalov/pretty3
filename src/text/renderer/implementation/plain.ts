@@ -1,5 +1,5 @@
 import { EOL } from "os";
-import { SimpleRenderer } from "../simpleRenderer";
+import { SimpleRenderer } from "../abstract/simpleRenderer";
 import { FlatNonatomicTextContainer } from "../../textContainer";
 import { StrictUnicodeLine } from "../../strictUnicode";
 

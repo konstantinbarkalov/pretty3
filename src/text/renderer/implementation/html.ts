@@ -1,6 +1,6 @@
 import { Style } from "../../style";
 import { StyleSwitchesEnum } from "../../styleTypes";
-import { SimpleRenderer } from "../simpleRenderer";
+import { SimpleRenderer } from "../abstract/simpleRenderer";
 import { FlatNonatomicTextContainer } from "../../textContainer";
 import { EOL } from "os";
 export class HtmlRenderer extends SimpleRenderer {

@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import pretty from '../src/index';
 import * as path from 'path';
 import * as fs from 'fs';
-import { PlainRenderer } from '../src/sml4/renderer/implementation/plain';
+import { PlainRenderer } from '../src/text/renderer/implementation/plain';
 
 
 const testcaseRootPath = path.resolve(__dirname);

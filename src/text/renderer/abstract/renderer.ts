@@ -1,5 +1,5 @@
-import { TextContainer, FlatNonatomicTextContainer } from "../textContainer";
-import { StrictUnicodeLine } from "../strictUnicode";
+import { TextContainer, FlatNonatomicTextContainer } from "../../textContainer";
+import { StrictUnicodeLine } from "../../strictUnicode";
 
 export abstract class Renderer {
   public abstract render(textContainer: TextContainer):string;

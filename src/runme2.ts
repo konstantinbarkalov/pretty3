@@ -1,4 +1,4 @@
-import { AtomicTextContainer, NonatomicTextContainer } from "./sml4/textContainer";
+import { AtomicTextContainer, NonatomicTextContainer } from "./text/textContainer";
 
 // const abc1 = new AtomicTextContainer('hello my dear friend, how do you do?');
 // const abc2 = new AtomicTextContainer('Стандарт состоит из двух основных частей: универсального набора символов (англ. Universal character set, UCS) и семейства кодировок (англ. Unicode transformation format, UTF). Универсальный набор символов перечисляет допустимые по стандарту Юникод символы и присваивает каждому символу код в виде неотрицательного целого числа, записываемого обычно в шестнадцатеричной форме с префиксом U+, например, U+040F. Семейство кодировок определяет способы преобразования кодов символов для передачи в потоке или в файле.');
@@ -13,11 +13,11 @@ import { AtomicTextContainer, NonatomicTextContainer } from "./sml4/textContaine
 //import { EOL } from 'os';
 import * as fs from 'fs';
 
-import { Style, StyleSwitches } from "./sml4/style";
-import { StyleSwitchesEnum } from "./sml4/styleTypes";
-import { AnsiRenderer } from "./sml4/renderer/implementation/ansi";
-import { HtmlRenderer } from "./sml4/renderer/implementation/html";
-import { StrictUnicodeText } from "./sml4/strictUnicode";
+import { Style, StyleSwitches } from "./text/style";
+import { StyleSwitchesEnum } from "./text/styleTypes";
+import { AnsiRenderer } from "./text/renderer/implementation/ansi";
+import { HtmlRenderer } from "./text/renderer/implementation/html";
+import { StrictUnicodeText } from "./text/strictUnicode";
 import { EOL } from "os";
 
 // Open-source software development can bring in diverse perspectives beyond those of a single company. A 2008 report by the Standish Group stated that adoption of open-source software models has resulted in savings of about $60 billion (£48 billion) per year for consumers.'

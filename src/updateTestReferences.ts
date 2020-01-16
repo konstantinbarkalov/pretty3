@@ -1,9 +1,9 @@
 import pretty from '../src/index';
 import * as fs from 'fs';
 import * as path from 'path';
-import { AnsiRenderer } from './sml4/renderer/implementation/ansi';
-import { HtmlRenderer } from './sml4/renderer/implementation/html';
-import { PlainRenderer } from './sml4/renderer/implementation/plain';
+import { AnsiRenderer } from './text/renderer/implementation/ansi';
+import { HtmlRenderer } from './text/renderer/implementation/html';
+import { PlainRenderer } from './text/renderer/implementation/plain';
 
 const testcaseRootPath = path.resolve(__dirname, '../../test');
 

@@ -2,10 +2,10 @@
 import { printTreeSettingsT, stringifyTreeOptionsT, printTreeOptionsT, textPatternT, logLineCallbackT, itemTextPatternT, paddingPrefixT, maxLineWidthT, textPatternStringT, textPatternString } from './types/general';
 import { defaultSettings } from './defaultSettings';
 import { anyNodeDescriptionT, NodeMetatypeEnum, SingleNodeTypeEnum, EnumerableNodeTypeEnum } from './types/nodeDescription';
-import { AtomicTextContainer, TextContainer, FlatNonatomicTextContainer } from './sml4/textContainer';
-import { Style } from './sml4/style';
-import { Renderer } from './sml4/renderer/renderer';
-import { StrictUnicodeLine, StrictUnicodeText } from './sml4/strictUnicode';
+import { AtomicTextContainer, TextContainer, FlatNonatomicTextContainer } from './text/textContainer';
+import { Style } from './text/style';
+import { Renderer } from './text/renderer/abstract/renderer';
+import { StrictUnicodeLine, StrictUnicodeText } from './text/strictUnicode';
 
 const treeStyleColors = {
   green: {r: 80, g: 160, b: 80},
