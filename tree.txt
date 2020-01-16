@@ -1,30 +1,68 @@
-   { } 10 shown of 11 total 
-    ├──╴simpleText: hello my friend 
-    ├─╴{D} nowDate: 17.01.2020, 02:10:39 
-    ├─╴<S> mySymbol: Symbol() 
+   { } 13 entries 
+    ├──╴simpleText: Hello my friend! 
+    ├─╴{ } objectedText: Friend of mine, hello. 15 shown of 22 total 
+    │   ├──╴0: F 
+    │   ├──╴1: r 
+    │   ├──╴2: i 
+    │   ├──╴3: e 
+    │   ├──╴4: n 
+    │   ├──╴5: d 
+    │   ├──╴6:   
+    │   ├──╴7: o 
+    │   ├──╴8: f 
+    │   ├──╴9:   
+    │   ├──╴10: m 
+    │   ├──╴11: i 
+    │   ├──╴12: n 
+    │   ├──╴13: e 
+    │   ╰──╴14: , 
+    ├─╴{D} nowDate: 17.01.2020, 03:18:36 
+    ├─╴<S> someSymbol: Symbol(Fortune) 
     ├──╴myLongText: GitHub is home to over 40 million developers working together to host and review code, manage projec
     │   ts, and build software together. Since question was regarding clunkiness of property checking, and one regular u
     │   secase for that being validation of function argument options objects, thought I'd mention a library-free short 
     │   way of testing existence of multiple properties. Disclaimer: It does require ECMAScript 5 (but IMO anyone still 
     │   using IE8 deserves a broken web). 
-    ├─╴{ } myMap: [object Map] 0 entries 
-    ├─╴[ ] myArray: 5 entries 
+    ├─╴{ } capitalCityMap: [object Map] 0 entries 
+    ├─╴[ ] regularArray: 5 entries 
     │   ├──╸0: 0 
     │   ├──╸1: 0,25 
     │   ├──╸2: 0,5 
     │   ├─╸{ } 3: 1 entries 
-    │   │   ╰──╴wow: surprize! 
+    │   │   ╰──╴wow: surprize! there is is an object among numbers 
     │   └──╸4: 0,75 
-    ├─╴{ } myTypedArray: 0,64,128,192 4 entries 
-    │   ├──╴0: 0 
-    │   ├──╴1: 64 
-    │   ├──╴2: 128 
-    │   ╰──╴3: 192 
-    ├─╴{ } myWeakMap: [object WeakMap] 0 entries 
-    ├─╴{ } mySet: [object Set] 0 entries 
-    ╰──╴myLongUnbreakebleText: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 
+    ├─╴{ } powersOfTwoTypedArray: 1,2,4,8,16,32,64,128 8 entries 
+    │   ├──╴0: 1 
+    │   ├──╴1: 2 
+    │   ├──╴2: 4 
+    │   ├──╴3: 8 
+    │   ├──╴4: 16 
+    │   ├──╴5: 32 
+    │   ├──╴6: 64 
+    │   ╰──╴7: 128 
+    ├─╴{ } phrasedWeakMap: [object WeakMap] 0 entries 
+    ├─╴{ } jackpotSet: [object Set] 0 entries 
+    ├─╴{ } olympicIterable: The olimpic motto is:Citius, Altius, Fortius! 1 entries 
+    │   ╰──╴message: Citius, Altius, Fortius! 
+    ├──╴longUnbreakebleText: yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    │   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    │   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    │   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    │   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    │   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaarrr! 
+    ╰─╴{ } arbitraryLib: 15 shown of 94 total 
+        ├─╴<X> appendFile: FUNCTION 
+        ├─╴<X> appendFileSync: FUNCTION 
+        ├─╴<X> access: FUNCTION 
+        ├─╴<X> accessSync: FUNCTION 
+        ├─╴<X> chown: FUNCTION 
+        ├─╴<X> chownSync: FUNCTION 
+        ├─╴<X> chmod: FUNCTION 
+        ├─╴<X> chmodSync: FUNCTION 
+        ├─╴<X> close: FUNCTION 
+        ├─╴<X> closeSync: FUNCTION 
+        ├─╴<X> copyFile: FUNCTION 
+        ├─╴<X> copyFileSync: FUNCTION 
+        ├─╴<X> createReadStream: FUNCTION 
+        ├─╴<X> createWriteStream: FUNCTION 
+        ╰─╴<X> exists: FUNCTION 
