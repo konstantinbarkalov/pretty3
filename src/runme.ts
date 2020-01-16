@@ -1,8 +1,11 @@
 import pretty from '../src/index';
 import * as fs from 'fs';
+import { AnsiRenderer } from './sml4/renderer/implementation/ansi';
+import { HtmlRenderer } from './sml4/renderer/implementation/html';
+import { PlainRenderer } from './sml4/renderer/implementation/plain';
 
 let weakHepler = {};
-const daInput = {
+const tree = {
   simpleText: 'hello my friend',
   nowDate: new Date(),
   mySymbol: Symbol(),
@@ -15,7 +18,15 @@ const daInput = {
   myLongUnbreakebleText: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
   thaLib: fs,
 }
-const daOutput = pretty.stringifyTree(daInput);
-console.log(daOutput);
+const ansiRenderer = new AnsiRenderer();
+const htmlRenderer = new HtmlRenderer();
+const plainRenderer = new PlainRenderer();
+const ansiOutput = pretty.stringifyTree(tree, ansiRenderer);
+const htmlOutput = pretty.stringifyTree(tree, htmlRenderer);
+const plainOutput = pretty.stringifyTree(tree, plainRenderer);
+
+fs.writeFileSync('tree.html', htmlOutput, 'utf8');
+fs.writeFileSync('tree.txt', plainOutput, 'utf8');
+console.log(ansiOutput);
 
 

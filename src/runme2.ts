@@ -17,32 +17,34 @@ import { Style, StyleSwitches } from "./sml4/style";
 import { StyleSwitchesEnum } from "./sml4/styleTypes";
 import { AnsiRenderer } from "./sml4/renderer/implementation/ansi";
 import { HtmlRenderer } from "./sml4/renderer/implementation/html";
+import { StrictUnicodeText } from "./sml4/strictUnicode";
+import { EOL } from "os";
 
 // Open-source software development can bring in diverse perspectives beyond those of a single company. A 2008 report by the Standish Group stated that adoption of open-source software models has resulted in savings of about $60 billion (£48 billion) per year for consumers.'
 const children = [
   new AtomicTextContainer(
-    'GitHub is home to over '
+    new StrictUnicodeText('GitHub is home to over '),
   ),
   new AtomicTextContainer(
-    '40 million',
+    new StrictUnicodeText('40 million'),
     new Style({r: 210, g: 220, b: 255}, {r: 0, g: 64, b: 32}, new StyleSwitches())
   ),
   new AtomicTextContainer(
-    ' developers working together to host and review code, manage projects, and '
+    new StrictUnicodeText(' developers working together to host and review code, manage projects, and ')
   ),
   new AtomicTextContainer(
-    'build software together. ',
+    new StrictUnicodeText('build software together. '),
     new Style(undefined, undefined, new StyleSwitches({[StyleSwitchesEnum.Bold]: true}))
   ),
-  // new AtomicTextContainer(
-  //   'Since question was ' + EOL + 'regarding clunkiness ' + EOL + 'of property checking, and one regular usecase for that being validation of function argument options objects, thought I\'d mention a library-free short way of testing existence of multiple properties. '
-  // ),
   new AtomicTextContainer(
-    'Disclaimer: ',
-    new Style({r: 128, g: 128, b: 128}, undefined, new StyleSwitches({[StyleSwitchesEnum.Bold]: true}))
+    new StrictUnicodeText('Since question was ' + EOL + 'regarding clunkiness ' + EOL + 'of property checking, and one regular usecase for that being validation of function argument options objects, thought I\'d mention a library-free short way of testing existence of multiple properties. '),
   ),
   new AtomicTextContainer(
-    'It does require ECMAScript 5 (but IMO anyone still using IE8 deserves a broken web)',
+    new StrictUnicodeText('Disclaimer: '),
+    new Style({r: 128, g: 128, b: 128}, undefined, new StyleSwitches({[StyleSwitchesEnum.Bold]: true})),
+  ),
+  new AtomicTextContainer(
+    new StrictUnicodeText('It does require ECMAScript 5 (but IMO anyone still using IE8 deserves a broken web)'),
     new Style({r: 128, g: 128, b: 128}, undefined, new StyleSwitches())
   ),
 ]

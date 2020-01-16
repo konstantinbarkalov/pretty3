@@ -1,16 +1,16 @@
-import { EOL } from 'os';
+
 import { printTreeSettingsT, stringifyTreeOptionsT, printTreeOptionsT, textPatternT, logLineCallbackT, itemTextPatternT, paddingPrefixT, maxLineWidthT, textPatternStringT, textPatternString } from './types/general';
 import { defaultSettings } from './defaultSettings';
 import { anyNodeDescriptionT, NodeMetatypeEnum, SingleNodeTypeEnum, EnumerableNodeTypeEnum } from './types/nodeDescription';
-import { AtomicTextContainer, NonatomicTextContainer, TextContainer, FlatNonatomicTextContainer } from './sml4/textContainer';
+import { AtomicTextContainer, TextContainer, FlatNonatomicTextContainer } from './sml4/textContainer';
 import { Style } from './sml4/style';
 import { Renderer } from './sml4/renderer/renderer';
-import { AnsiRenderer } from './sml4/renderer/implementation/ansi';
+import { StrictUnicodeLine, StrictUnicodeText } from './sml4/strictUnicode';
 
 const treeStyleColors = {
   green: {r: 80, g: 160, b: 80},
   darkGreen: {r: 64, g: 128, b: 64},
-  blue: {r: 64, g: 64, b: 192},
+  blue: {r: 160, g: 160, b: 220},
   darkGray: {r: 64, g: 64, b: 64},
   gray: {r: 128, g: 128, b: 128},
   lightGray: {r: 192, g: 192, b: 192},
@@ -27,24 +27,24 @@ const treeStyle = {
   branch: new Style(treeStyleColors.darkGray),
 }
 
-export function stringifyTree(tree:any, options?:stringifyTreeOptionsT ):string {
+export function stringifyTree(tree:any, renderer: Renderer, options?:stringifyTreeOptionsT ):string {
   let outputString = '';
   let eol = (options && options.eol) ? options.eol : defaultSettings.eol;
   const overridenOptionsLogLineCallback = (line: string) => { outputString += line + eol ; };
   const overridenPrintTreeOptions:printTreeOptionsT = { logLineCallback: overridenOptionsLogLineCallback };
   const printTreeOptions = Object.assign({}, overridenPrintTreeOptions, options);
-  printTree(tree, printTreeOptions);
+  printTree(tree, renderer, printTreeOptions);
   return outputString;
 }
 
-export function printTree(tree:any, options?:printTreeOptionsT ):void {
+export function printTree(tree:any, renderer: Renderer, options?:printTreeOptionsT ):void {
   const settings = Object.assign({}, defaultSettings, options);
   const emptyPaddingPrefix:paddingPrefixT = {first: '', other: ''};
   const emptyTextPattern:textPatternT = {
     first:  textPatternString('   '),
     other: textPatternString('   '),
   }
-  printTreeRecursive(undefined, tree, 0, emptyPaddingPrefix, emptyTextPattern, true, settings);
+  printTreeRecursive(undefined, tree, 0, emptyPaddingPrefix, emptyTextPattern, true, renderer, settings);
 }
 
 function printTreeRecursive(nodeKey:string | number | undefined,
@@ -53,6 +53,7 @@ function printTreeRecursive(nodeKey:string | number | undefined,
                             basePaddingPrefix: paddingPrefixT,
                             currentTextPattern: textPatternT,
                             isFirst: boolean,
+                            renderer: Renderer,
                             settings:printTreeSettingsT ):void {
   if (level > settings.maxLevel) {
     return;
@@ -170,7 +171,6 @@ function printTreeRecursive(nodeKey:string | number | undefined,
   if (nodeDescription.icon) {
     width.first -= nodeDescription.icon.centerId;
   }
-  const renderer = new AnsiRenderer();
   const currentPaddingPrefix = buildPaddingPrefix(basePaddingPrefix, currentTextPattern, settings.paddingSpace, width, renderer);
   printTextContainerWrapped(oneliner, currentPaddingPrefix, settings.maxLineWidth, settings.logLineCallback, renderer);
   const childrenPaddingPrefix = {
@@ -196,60 +196,57 @@ function printTreeRecursive(nodeKey:string | number | undefined,
       } else {
         textPattern = itemPattern.last;
       }
-      printTreeRecursive(subNodeKey, subNode, level + 1, childrenPaddingPrefix, textPattern, false, settings);
+      printTreeRecursive(subNodeKey, subNode, level + 1, childrenPaddingPrefix, textPattern, false, renderer, settings);
     }
   }
 }
-function buildOneliner(nodeKey: string | number | undefined, nodeDescription:anyNodeDescriptionT, isFirst:boolean):NonatomicTextContainer {
-  let space = new AtomicTextContainer(' ');
+function buildOneliner(nodeKey: string | number | undefined, nodeDescription:anyNodeDescriptionT, isFirst:boolean):FlatNonatomicTextContainer<StrictUnicodeText> {
+  let space = new AtomicTextContainer(new StrictUnicodeLine(' '));
   let children:AtomicTextContainer[] = [];
   if (nodeDescription.icon) {
-    children.push(new AtomicTextContainer(nodeDescription.icon.text, treeStyle.icon));
+    children.push(new AtomicTextContainer(new StrictUnicodeLine(nodeDescription.icon.text), treeStyle.icon));
     children.push(space);
   }
   if (nodeKey !== undefined || !isFirst) {
     let nodeKeyString = nodeKey?.toString() || '';
-    children.push(new AtomicTextContainer(nodeKeyString, treeStyle.key));
-    children.push(new AtomicTextContainer(':', treeStyle.keyDots));
+    children.push(new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), treeStyle.key));
+    children.push(new AtomicTextContainer(new StrictUnicodeLine(':'), treeStyle.keyDots));
     children.push(space);
 
   }
   if (nodeDescription.value) {
-    children.push(new AtomicTextContainer(nodeDescription.value));
+    children.push(new AtomicTextContainer(new StrictUnicodeText(nodeDescription.value)));
     children.push(space);
   }
   if (nodeDescription.info) {
-    children.push(new AtomicTextContainer(nodeDescription.info, treeStyle.info));
+    children.push(new AtomicTextContainer(new StrictUnicodeLine(nodeDescription.info), treeStyle.info));
     children.push(space);
   }
   return new FlatNonatomicTextContainer(children);
 }
 
-function printTextContainerWrapped(textContainer:TextContainer, paddingPrefix:paddingPrefixT, maxLineWidth:number, logLineCallback:logLineCallbackT, renderer: Renderer) {
+function printTextContainerWrapped(textContainer:TextContainer, paddingPrefix:paddingPrefixT, maxLineWidth:number, logLineCallback:logLineCallbackT, renderer:Renderer) {
   const actualMaxLineWidth:maxLineWidthT = {
     first: maxLineWidth - paddingPrefix.first.length,
     other: maxLineWidth - paddingPrefix.other.length,
   };
-  let message = '';
   const wrapped = textContainer.wrap(actualMaxLineWidth.other, actualMaxLineWidth.other - actualMaxLineWidth.first).wrapped;
-  const renderedTextContainer = renderer.render(wrapped);
-  const renderedTextContainerLines = renderedTextContainer.split(EOL);
-  for (let i = 0; i < renderedTextContainerLines.length; i++) {
-    const isFirst = (i === 0);
-    const isLast = (i === renderedTextContainerLines.length - 1);
-    const line = renderedTextContainerLines[i];
-    const br = isLast ? '' : EOL;
+  const flat = wrapped.flatten();
+  const flatLines = flat.splitToFlatLines();
+  const message = flatLines.map((flatLine, flatLineId) => {
+    const isFirst = (flatLineId === 0);
     const actualPaddingPrefix = isFirst ? paddingPrefix.first : paddingPrefix.other;
-    message += actualPaddingPrefix + line + br;
-  }
+    return actualPaddingPrefix + renderer.renderFlatLine(flatLine);
+  }).join(renderer.eol);
+
   logLineCallback(message);
 }
 type widthT = {first:number, other:number};
 function buildPaddingPrefix(basePaddingPrefix: paddingPrefixT, textPattern: textPatternT, paddingSpace:number, width: widthT, renderer: Renderer) {
 
   const currentPaddingPrefix:paddingPrefixT = {
-    first: basePaddingPrefix.first + renderer.render(new AtomicTextContainer(buildPaddingPrefixString(textPattern.first, paddingSpace, width.first), treeStyle.branch)),
-    other: basePaddingPrefix.other + renderer.render(new AtomicTextContainer(buildPaddingPrefixString(textPattern.other, paddingSpace, width.other), treeStyle.branch)),
+    first: basePaddingPrefix.first + renderer.render(new AtomicTextContainer(new StrictUnicodeLine(buildPaddingPrefixString(textPattern.first, paddingSpace, width.first)), treeStyle.branch)),
+    other: basePaddingPrefix.other + renderer.render(new AtomicTextContainer(new StrictUnicodeLine(buildPaddingPrefixString(textPattern.other, paddingSpace, width.other)), treeStyle.branch)),
   };
   return currentPaddingPrefix;
 }

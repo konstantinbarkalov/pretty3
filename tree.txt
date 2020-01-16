@@ -1,0 +1,30 @@
+   { } 10 shown of 11 total 
+    ├──╴simpleText: hello my friend 
+    ├─╴{D} nowDate: 17.01.2020, 00:26:24 
+    ├─╴<S> mySymbol: Symbol() 
+    ├──╴myLongText: GitHub is home to over 40 million developers working together to host and review code, manage projec
+    │   ts, and build software together. Since question was regarding clunkiness of property checking, and one regular u
+    │   secase for that being validation of function argument options objects, thought I'd mention a library-free short 
+    │   way of testing existence of multiple properties. Disclaimer: It does require ECMAScript 5 (but IMO anyone still 
+    │   using IE8 deserves a broken web). 
+    ├─╴{ } myMap: [object Map] 0 entries 
+    ├─╴[ ] myArray: 5 entries 
+    │   ├──╸0: 0 
+    │   ├──╸1: 0,25 
+    │   ├──╸2: 0,5 
+    │   ├─╸{ } 3: 1 entries 
+    │   │   ╰──╴wow: surprize! 
+    │   └──╸4: 0,75 
+    ├─╴{ } myTypedArray: 0,64,128,192 4 entries 
+    │   ├──╴0: 0 
+    │   ├──╴1: 64 
+    │   ├──╴2: 128 
+    │   ╰──╴3: 192 
+    ├─╴{ } myWeakMap: [object WeakMap] 0 entries 
+    ├─╴{ } mySet: [object Set] 0 entries 
+    ╰──╴myLongUnbreakebleText: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 

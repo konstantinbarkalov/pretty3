@@ -16,6 +16,12 @@ export class NormalizedUnicodeText extends String {
   protected isPrecheckedInstance(text: string | String):boolean {
     return text instanceof NormalizedUnicodeText;
   }
+  static combine(...items:NormalizedUnicodeText[]):NormalizedUnicodeText {
+    const combinedString = items.reduce((combinedString, item) => {
+      return combinedString + item.toString();
+    }, '');
+    return new NormalizedUnicodeText(combinedString);
+  }
 }
 
 export class StrictUnicodeText extends NormalizedUnicodeText {
@@ -59,6 +65,10 @@ export class StrictUnicodeText extends NormalizedUnicodeText {
     const lastLinePadding = lastWrappedText.lastLinePadding;
     const wrappedText = new StrictUnicodeText(wrappedTextString, true);
     return {wrappedText, lastLinePadding };
+  }
+  static combine(...items:StrictUnicodeText[]) {
+    const combinedNormalized = super.combine(...items);
+    return new StrictUnicodeText(combinedNormalized);
   }
 }
 
@@ -113,4 +123,10 @@ export class StrictUnicodeLine extends StrictUnicodeText {
     let wrappedText = new StrictUnicodeText(wrappedLines.join(EOL), true);
     return {wrappedText, lastLinePadding: wrappedLineWidth};
   }
+  static combine(...items:StrictUnicodeLine[]) {
+    const combinedText = super.combine(...items);
+    return new StrictUnicodeLine(combinedText);
+  }
 }
+
+export type AnyStrictUnicodeT = StrictUnicodeLine | StrictUnicodeText;

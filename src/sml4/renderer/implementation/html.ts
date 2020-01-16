@@ -2,11 +2,14 @@ import { Style } from "../../style";
 import { StyleSwitchesEnum } from "../../styleTypes";
 import { SimpleRenderer } from "../simpleRenderer";
 import { FlatNonatomicTextContainer } from "../../textContainer";
+import { EOL } from "os";
 export class HtmlRenderer extends SimpleRenderer {
   public renderFlat(flatTextContainer: FlatNonatomicTextContainer) {
+    var a = super.renderFlat(flatTextContainer);
+    a = a;
     return this.textBegin + super.renderFlat(flatTextContainer) + this.textEnd;
   }
-  protected eol:string = '<br/>';
+  public eol:string = '<br/>' + EOL;
   protected styleBegin(style:Style | undefined) {
     let styleString = '';
     if (style) {
@@ -36,6 +39,16 @@ export class HtmlRenderer extends SimpleRenderer {
       styleString ='</span>';
     }
     return styleString;
+  }
+  protected escapeText(text: string):string {
+    const tagsToEscape:{[key: string]: string | undefined} = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;'
+    };
+    return text.replace(/[&<>]/g, (tag:string) => {
+      return tagsToEscape[tag] || tag;
+    });
   }
   protected textBegin = '<span style="font-family: monospace; ">';
   protected textEnd = '</span>';

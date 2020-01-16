@@ -4,7 +4,7 @@ import { StyleSwitchesEnum } from "../../styleTypes";
 import { EOL } from "os";
 import { SimpleRenderer } from "../simpleRenderer";
 export class AnsiRenderer extends SimpleRenderer {
-  protected eol:string = EOL;
+  public eol:string = EOL;
   protected styleBegin(style:Style | undefined) {
     let styleString = '';
     if (style) {
@@ -46,5 +46,8 @@ export class AnsiRenderer extends SimpleRenderer {
       }
     }
     return styleString;
+  }
+  protected escapeText(text: string):string {
+    return text;
   }
 }
