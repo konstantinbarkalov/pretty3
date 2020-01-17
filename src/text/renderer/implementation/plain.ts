@@ -1,14 +1,14 @@
-import { EOL } from "os";
-import { SimpleRenderer } from "../abstract/simpleRenderer";
-import { FlatNonatomicTextContainer } from "../../textContainer";
-import { StrictUnicodeLine } from "../../strictUnicode";
+import { EOL } from 'os';
+import { SimpleRenderer } from '../abstract/simpleRenderer';
+import { FlatNonatomicTextContainer } from '../../textContainer';
+import { StrictUnicodeLine } from '../../strictUnicode';
 
 export class PlainRenderer extends SimpleRenderer {
   protected styleBegin(): string {
-    return ''
+    return '';
   }
   protected styleEnd(): string {
-    return ''
+    return '';
   }
   public eol: string = EOL;
   public renderFlatLine(flatLineContainer: FlatNonatomicTextContainer<StrictUnicodeLine>): string {

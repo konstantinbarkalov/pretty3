@@ -1,16 +1,16 @@
-import { TextContainer, FlatNonatomicTextContainer } from "../../textContainer";
-import { Renderer } from "./renderer";
-import { StrictUnicodeLine } from "../../strictUnicode";
-import { Style } from "../../style";
+import { TextContainer, FlatNonatomicTextContainer } from '../../textContainer';
+import { Renderer } from './renderer';
+import { StrictUnicodeLine } from '../../strictUnicode';
+import { Style } from '../../style';
 
 export abstract class SimpleRenderer extends Renderer {
 
-  public render(textContainer: TextContainer):string {
+  public render(textContainer: TextContainer): string {
     const flat = textContainer.flatten();
     return this.renderFlat(flat);
   }
 
-  public renderFlat(flatTextContainer: FlatNonatomicTextContainer):string {
+  public renderFlat(flatTextContainer: FlatNonatomicTextContainer): string {
     const rendered = flatTextContainer.children.map((atomicChild) => {
       const flatLines = atomicChild.splitToFlatLines();
       return this.renderFlatLines(flatLines);
@@ -18,20 +18,20 @@ export abstract class SimpleRenderer extends Renderer {
     return rendered;
   }
 
-  public renderFlatLines(flatLines: FlatNonatomicTextContainer<StrictUnicodeLine>[]):string {
+  public renderFlatLines(flatLines: FlatNonatomicTextContainer<StrictUnicodeLine>[]): string {
     return flatLines.map((flatLine)=>{
       return this.renderFlatLine(flatLine);
     }).join(this.eol);
   }
 
-  public renderFlatLine(flatLineContainer: FlatNonatomicTextContainer<StrictUnicodeLine>):string {
+  public renderFlatLine(flatLineContainer: FlatNonatomicTextContainer<StrictUnicodeLine>): string {
     return flatLineContainer.children.map((child) => {
       return this.styleBegin(child.style) + this.escapeText(child.toString()) + this.styleEnd(child.style);
     }).join('');
   }
 
-  protected abstract escapeText(text: string):string;
-  protected abstract styleBegin(style:Style | undefined): string;
-  protected abstract styleEnd(style:Style | undefined): string;
-  public abstract eol:string;
+  protected abstract escapeText(text: string): string;
+  protected abstract styleBegin(style: Style | undefined): string;
+  protected abstract styleEnd(style: Style | undefined): string;
+  public abstract eol: string;
 }
