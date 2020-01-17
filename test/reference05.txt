@@ -10,7 +10,8 @@
     │   ├──╴6:   
     │   ├──╴7: o 
     │   ├──╴8: f 
-    │   ╰──╴9:   
+    │   ├──╴9:   
+    │   ╰──╴...
     ├─╴{D} maynardBirthDate: 17.04.1964, 07:00:00 
     ├─╴<S> someSymbol: Symbol(Fortune) 
     ├──╴longText: GitHub is home to over 40 million developers working together 
@@ -52,7 +53,8 @@
     │   ├──╸6: 60 
     │   ├──╸7: 70 
     │   ├──╸8: 80 
-    │   └──╸9: 90 
+    │   ├──╸9: 90 
+    │   └──╸...
     ├─╴[ ] proxiedLongArray: 10 shown of 1000 total 
     │   ├──╸0: 0 
     │   ├──╸1: 10 
@@ -63,7 +65,8 @@
     │   ├──╸6: 60 
     │   ├──╸7: 70 
     │   ├──╸8: 80 
-    │   └──╸9: 90 
+    │   ├──╸9: 90 
+    │   └──╸...
     ├─╴{ } funError: RangeError: Pizza size is too big 0 entries 
     ├──╴longUnbreakebleText: yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     │   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -84,4 +87,5 @@
         ├─╴<X> chmod: FUNCTION 
         ├─╴<X> chmodSync: FUNCTION 
         ├─╴<X> close: FUNCTION 
-        ╰─╴<X> closeSync: FUNCTION 
+        ├─╴<X> closeSync: FUNCTION 
+        ╰──╴...
