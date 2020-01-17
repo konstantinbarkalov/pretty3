@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/npm/v/pretty3) [![Coverage](https://img.shields.io/codecov/c/github/konstantinbarkalov/pretty3)](https://codecov.io/github/konstantinbarkalov/pretty3) ![Minified size](https://img.shields.io/bundlephobia/minzip/pretty3) [![Last commit](https://img.shields.io/github/last-commit/konstantinbarkalov/pretty3)](https://github.com/konstantinbarkalov/pretty3) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/konstantinbarkalov/pretty3/blob/master/LICENSE)
+[![Version](https://img.shields.io/npm/v/pretty3)](https://www.npmjs.com/package/pretty3) [![Coverage](https://img.shields.io/codecov/c/github/konstantinbarkalov/pretty3)](https://codecov.io/github/konstantinbarkalov/pretty3) ![Minified size](https://img.shields.io/bundlephobia/minzip/pretty3) [![Last commit](https://img.shields.io/github/last-commit/konstantinbarkalov/pretty3)](https://github.com/konstantinbarkalov/pretty3) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/konstantinbarkalov/pretty3/blob/master/LICENSE)
 # 🌳 pretty3
 
 
