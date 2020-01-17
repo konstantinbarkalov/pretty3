@@ -6,10 +6,11 @@
   "repository": "github:konstantinbarkalov/pretty3",
   "scripts": {
     "tsc": "tsc",
-    "build": "npm run tsc && npm run test",
+    "build": "npm run tsc",
     "test": "mocha -r ts-node/register test/**/*.test.ts",
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
-    "prepublish": "npm run build && npm run coverage"
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run coverage"
   },
   "author": "Konstantin Barkalov <mail@barkalov.ru>",
   "license": "MIT",
