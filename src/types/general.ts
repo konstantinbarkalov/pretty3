@@ -38,7 +38,6 @@ export type stringifyTreeSettingsT = {
   tabSize: number;
   paddingSpace: number;
   eol: string;
-  maxStringWrapSteps: number;
 }
 
 export type stringifyTreeOptionsT = Partial<stringifyTreeSettingsT>;

@@ -1,7 +1,9 @@
-![Version](https://img.shields.io/badge/version-0.2.2%20alpha-red.svg?cacheSeconds=2592000) ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/konstantinbarkalov/pretty3/blob/master/LICENSE)
+![Version](https://img.shields.io/badge/version-0.2.2%20alpha-red.svg?cacheSeconds=2592000) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/konstantinbarkalov/pretty3/blob/master/LICENSE)
 # 🌳 pretty3
 
 > Universal tree logger done right. With colors, unicode support and word-wrapping. Typesctipt friendly.
+
+# Warning: module an early alpha not ready for use yet. Beta release is planned on February 2020
 
 ## Install
 
@@ -35,6 +37,52 @@ const options = {
   ...
 }
 pretty.printTree(data, options);
+```
+###### javasctipt
+```javascript
+const options = {
+  renderer: new AutodetectRenderer(),
+  maxLevel: 6,
+  maxItemsPerLevel: [30, 10],
+  maxLineWidth: 80,
+  arrayItemTextPattern: {
+    other: {
+      first: pretty.textPatternString('├─╸'),
+      other: pretty.textPatternString('│  ') },
+    last: {
+      first: pretty.textPatternString('└─╸'),
+      other: pretty.textPatternString('   ') }
+  },
+  objectItemTextPattern: {
+    other: {
+      first: pretty.textPatternString('├─╴'),
+      other: pretty.textPatternString('│  ') },
+    last: {
+      first: pretty.textPatternString('╰─╴'),
+      other: pretty.textPatternString('   ') }
+  },
+  tabSize: 4,
+  paddingSpace: 0,
+  eol: '\n',
+  logLineCallback: (line) => {
+    console.log(line);
+  }
+};
+```
+###### typescript
+```typescript
+type options = Partial<{
+  renderer: Renderer;
+  maxLevel: number;
+  maxItemsPerLevel: number[] | number;
+  maxLineWidth: number;
+  arrayItemTextPattern: itemTextPatternT;
+  objectItemTextPattern: itemTextPatternT;
+  tabSize: number;
+  paddingSpace: number;
+  eol: string;
+  logLineCallback: (line: string) => void;
+}>;
 ```
 
 ## Contributing

@@ -7,9 +7,22 @@ const defaultSettings: printTreeSettingsT = {
   maxLevel: 6,
   maxItemsPerLevel: [30, 10],
   maxLineWidth: 80,
-  arrayItemTextPattern: {other: {first: textPatternString('├─╸'), other: textPatternString('│  ')}, last: {first: textPatternString('└─╸'), other: textPatternString('   ')}},
-  objectItemTextPattern: {other: {first: textPatternString('├─╴'), other: textPatternString('│  ')}, last: {first: textPatternString('╰─╴'), other: textPatternString('   ')}},
-  maxStringWrapSteps: Infinity,
+  arrayItemTextPattern: {
+    other: {
+      first: textPatternString('├─╸'),
+      other: textPatternString('│  ') },
+    last: {
+      first: textPatternString('└─╸'),
+      other: textPatternString('   ') }
+  },
+  objectItemTextPattern: {
+    other: {
+      first: textPatternString('├─╴'),
+      other: textPatternString('│  ') },
+    last: {
+      first: textPatternString('╰─╴'),
+      other: textPatternString('   ') }
+  },
   logLineCallback: (line: string) => {
     console.log(line);
   },
