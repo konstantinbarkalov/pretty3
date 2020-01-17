@@ -1,5 +1,6 @@
-![Version](https://img.shields.io/badge/version-0.2.2%20alpha-red.svg?cacheSeconds=2592000) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/konstantinbarkalov/pretty3/blob/master/LICENSE)
+![Version](https://img.shields.io/npm/v/pretty3) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/konstantinbarkalov/pretty3/blob/master/LICENSE)
 # 🌳 pretty3
+
 
 > Universal tree logger done right. With colors, unicode support and word-wrapping. Typesctipt friendly.
 
@@ -38,7 +39,7 @@ const options = {
 }
 pretty.printTree(data, options);
 ```
-###### javasctipt
+##### javasctipt
 ```javascript
 const options = {
   renderer: new AutodetectRenderer(),
@@ -69,7 +70,7 @@ const options = {
   }
 };
 ```
-###### typescript
+##### typescript
 ```typescript
 type options = Partial<{
   renderer: Renderer;
