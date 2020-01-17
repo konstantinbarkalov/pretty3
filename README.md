@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-0.2.2 alpha-red.svg?cacheSeconds=2592000) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](#)
+![Version](https://img.shields.io/badge/version-0.2.2-alpha-red.svg?cacheSeconds=2592000) ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/konstantinbarkalov/pretty3/blob/master/LICENSE)
 # 🌳 pretty3
 
 > Universal tree logger done right. With colors, unicode support and word-wrapping. Typesctipt friendly.
