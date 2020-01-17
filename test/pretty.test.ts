@@ -3,8 +3,6 @@ import pretty from '../src/index';
 import * as path from 'path';
 import * as fs from 'fs';
 import { PlainRenderer } from '../src/text/renderer/implementation/plain';
-
-
 const testcaseRootPath = path.resolve(__dirname);
 
 const plainRenderer = new PlainRenderer();
@@ -44,5 +42,3 @@ describe('pretty stringifing rich tree to string variable', () => {
     expect(output).to.be.equal(reference);
   });
 });
-
-

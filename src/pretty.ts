@@ -1,11 +1,11 @@
 
-import { printTreeSettingsT, stringifyTreeOptionsT, printTreeOptionsT, textPatternT, logLineCallbackT, itemTextPatternT, paddingPrefixT, maxLineWidthT, textPatternStringT, textPatternString } from './types/general';
-import { defaultSettings } from './defaultSettings';
-import { anyNodeDescriptionT, NodeMetatypeEnum, SingleNodeTypeEnum, EnumerableNodeTypeEnum } from './types/nodeDescription';
-import { AtomicTextContainer, TextContainer, FlatNonatomicTextContainer } from './text/textContainer';
-import { Style } from './text/style';
+import defaultSettings from './defaultSettings';
 import { Renderer } from './text/renderer/abstract/renderer';
 import { StrictUnicodeLine, StrictUnicodeText } from './text/strictUnicode';
+import { Style } from './text/style';
+import { AtomicTextContainer, FlatNonatomicTextContainer, TextContainer } from './text/textContainer';
+import { itemTextPatternT, logLineCallbackT, maxLineWidthT, paddingPrefixT, printTreeOptionsT, printTreeSettingsT, stringifyTreeOptionsT, textPatternString, textPatternStringT, textPatternT } from './types/general';
+import { anyNodeDescriptionT, EnumerableNodeTypeEnum, NodeMetatypeEnum, SingleNodeTypeEnum } from './types/nodeDescription';
 
 const treeStyleColors = {
   green: {r: 80, g: 160, b: 80},
@@ -207,6 +207,7 @@ function printTreeRecursive(nodeKey:string | number | undefined,
     }
   }
 }
+
 function buildOneliner(nodeKey: string | number | undefined, nodeDescription:anyNodeDescriptionT, isFirst:boolean):FlatNonatomicTextContainer<StrictUnicodeText> {
   let space = new AtomicTextContainer(new StrictUnicodeLine(' '));
   let children:AtomicTextContainer[] = [];
@@ -249,6 +250,7 @@ function printTextContainerWrapped(textContainer:TextContainer, paddingPrefix:pa
 
   logLineCallback(message);
 }
+
 type widthT = {first:number, other:number};
 function buildPaddingPrefix(basePaddingPrefix: paddingPrefixT, textPattern: textPatternT, paddingSpace:number, width: widthT) {
 
@@ -258,6 +260,7 @@ function buildPaddingPrefix(basePaddingPrefix: paddingPrefixT, textPattern: text
   };
   return currentPaddingPrefix;
 }
+
 function buildPaddingPrefixString(textPatternString: textPatternStringT, paddingSpace: number, width: number):string {
   let branchWidth = width - paddingSpace;
   let branchRepeatWidth = branchWidth - 2;

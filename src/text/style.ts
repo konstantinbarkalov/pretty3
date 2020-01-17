@@ -1,5 +1,4 @@
-import { styleSwitchesT, StyleSwitchesEnum } from "./styleTypes";
-import { rgbT } from "./styleTypes";
+import { rgbT, StyleSwitchesEnum, styleSwitchesT } from "./styleTypes";
 
 export class StyleSwitches implements styleSwitchesT {
   static default = new StyleSwitches();

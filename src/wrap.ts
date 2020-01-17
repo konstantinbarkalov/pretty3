@@ -1,4 +1,5 @@
 import { linesT, maxLineWidthT } from './types/general';
+
 export function wrapLines(lines: linesT, maxLineWidth: maxLineWidthT, stepsToGo: number): linesT {
   const wrappedLines: string[] = [];
   lines.forEach((line) => {
@@ -20,6 +21,7 @@ export function wrapLines(lines: linesT, maxLineWidth: maxLineWidthT, stepsToGo:
   });
   return wrappedLines;
 }
+
 export function stringToLines(text:string):linesT {
   // to be less sensitive on input
   // and to allow cross-OS compatibility
@@ -27,11 +29,11 @@ export function stringToLines(text:string):linesT {
   const lines = text.split(/\r\n|\n/);
   return lines;
 }
+
 export function stringToWrappedLines(text:string, maxLineWidth:maxLineWidthT, stepsToGo: number):linesT {
   const lines = stringToLines(text);
   return wrapLines(lines, maxLineWidth, stepsToGo);
 }
-
 
 function tokensToTokensChunks(tokens:string[], maxLineWidth:maxLineWidthT, stepsToGo: number):{tokensChunks: string[][], remains: string, stepsDone: number} {
   let tokensChunks:string[][] = [];

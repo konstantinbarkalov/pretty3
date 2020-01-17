@@ -1,25 +1,16 @@
-import { AtomicTextContainer, NonatomicTextContainer } from "./text/textContainer";
-
+import { AtomicTextContainer, NonatomicTextContainer } from '../text/textContainer';
 // const abc1 = new AtomicTextContainer('hello my dear friend, how do you do?');
 // const abc2 = new AtomicTextContainer('Стандарт состоит из двух основных частей: универсального набора символов (англ. Universal character set, UCS) и семейства кодировок (англ. Unicode transformation format, UTF). Универсальный набор символов перечисляет допустимые по стандарту Юникод символы и присваивает каждому символу код в виде неотрицательного целого числа, записываемого обычно в шестнадцатеричной форме с префиксом U+, например, U+040F. Семейство кодировок определяет способы преобразования кодов символов для передачи в потоке или в файле.');
 // console.log(abc1);
 // console.log(abc2.wrap(40).wrapped.toString());
-
-
-
-
-
-
 //import { EOL } from 'os';
 import * as fs from 'fs';
-
-import { Style, StyleSwitches } from "./text/style";
-import { StyleSwitchesEnum } from "./text/styleTypes";
-import { AnsiRenderer } from "./text/renderer/implementation/ansi";
-import { HtmlRenderer } from "./text/renderer/implementation/html";
-import { StrictUnicodeText } from "./text/strictUnicode";
-import { EOL } from "os";
-
+import { Style, StyleSwitches } from '../text/style';
+import { StyleSwitchesEnum } from '../text/styleTypes';
+import { AnsiRenderer } from '../text/renderer/implementation/ansi';
+import { HtmlRenderer } from '../text/renderer/implementation/html';
+import { StrictUnicodeText } from '../text/strictUnicode';
+import { EOL } from 'os';
 // Open-source software development can bring in diverse perspectives beyond those of a single company. A 2008 report by the Standish Group stated that adoption of open-source software models has resulted in savings of about $60 billion (£48 billion) per year for consumers.'
 const children = [
   new AtomicTextContainer(
@@ -47,23 +38,16 @@ const children = [
     new StrictUnicodeText('It does require ECMAScript 5 (but IMO anyone still using IE8 deserves a broken web)'),
     new Style({r: 128, g: 128, b: 128}, undefined, new StyleSwitches())
   ),
-]
+];
 const ansiRenderer = new AnsiRenderer();
 const htmlRenderer = new HtmlRenderer();
-
 const sheet = new NonatomicTextContainer(children);
 const rendered = ansiRenderer.render(sheet);
 console.log(rendered);
-
 const {wrapped: wrappedSheet} = sheet.wrap(40);
 const ansiRenderedWrapped = ansiRenderer.render(wrappedSheet);
 console.log(ansiRenderedWrapped);
-
 fs.writeFileSync('./rendered.ansi', ansiRenderedWrapped, 'utf8');
-
-
 const htmlRenderedWrapped = htmlRenderer.render(wrappedSheet);
 console.log(htmlRenderedWrapped);
-
 fs.writeFileSync('./rendered.html', htmlRenderedWrapped, 'utf8');
-

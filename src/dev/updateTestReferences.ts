@@ -1,16 +1,13 @@
-import pretty from '../src/index';
+import pretty from '../index';
 import * as fs from 'fs';
 import * as path from 'path';
-import { AnsiRenderer } from './text/renderer/implementation/ansi';
-import { HtmlRenderer } from './text/renderer/implementation/html';
-import { PlainRenderer } from './text/renderer/implementation/plain';
-
+import { AnsiRenderer } from '../text/renderer/implementation/ansi';
+import { HtmlRenderer } from '../text/renderer/implementation/html';
+import { PlainRenderer } from '../text/renderer/implementation/plain';
 const testcaseRootPath = path.resolve(__dirname, '../../test');
-
 const plainRenderer = new PlainRenderer();
 const htmlRenderer = new HtmlRenderer();
 const ansiRenderer = new AnsiRenderer();
-
 for (let i = 1; i <= 4; i++) {
   const input = JSON.parse(fs.readFileSync(path.resolve(testcaseRootPath, `input0${i}.json`), 'utf8'));
   const plainOutput = pretty.stringifyTree(input, {renderer: plainRenderer});
@@ -22,7 +19,7 @@ for (let i = 1; i <= 4; i++) {
   console.log(`[${i}]`);
   console.log(plainOutput);
 }
-import input05 from '../test/input05';
+import input05 from '../../test/input05';
 {
   const i = 5;
   const input = input05;
@@ -34,6 +31,4 @@ import input05 from '../test/input05';
   fs.writeFileSync(path.resolve(testcaseRootPath, `reference0${i}.html`), htmlOutput, 'utf8');
   console.log(`[${i}]`);
   console.log(plainOutput);
-
 }
-

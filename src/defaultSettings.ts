@@ -1,8 +1,8 @@
 import { EOL } from 'os';
-import { printTreeSettingsT, textPatternString} from './types/general';
 import { AutodetectRenderer } from './text/renderer/implementation';
+import { printTreeSettingsT, textPatternString } from './types/general';
 
-export const defaultSettings: printTreeSettingsT = {
+const defaultSettings: printTreeSettingsT = {
   renderer: new AutodetectRenderer(),
   maxLevel: 6,
   maxItemsPerLevel: [30, 10],
@@ -17,3 +17,5 @@ export const defaultSettings: printTreeSettingsT = {
   paddingSpace: 0,
   eol: EOL
 };
+
+export default defaultSettings;

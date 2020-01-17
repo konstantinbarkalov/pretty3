@@ -77,7 +77,4 @@ export type nodeDescriptionT<TNodeMetatypeEnum extends NodeMetatypeEnum, TNodeTy
 export type anySingleNodeDescriptionT = nodeDescriptionT<NodeMetatypeEnum.Single, SingleNodeTypeEnum>;
 export type anyEnumerableNodeDescriptionT = nodeDescriptionT<NodeMetatypeEnum.Enumerable, EnumerableNodeTypeEnum>;
 export type anyNodeDescriptionT = anySingleNodeDescriptionT | anyEnumerableNodeDescriptionT;
-
 export type anyNodeDescriptionTemplateT = Partial<anyNodeDescriptionT>;
-
-
