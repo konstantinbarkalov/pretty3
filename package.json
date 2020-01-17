@@ -12,14 +12,18 @@
   "author": "Konstantin Barkalov <mail@barkalov.ru>",
   "license": "UNLICENSED",
   "devDependencies": {
+    "@types/ansi-styles": "^3.2.1",
     "@types/chai": "^4.2.7",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^13.1.2",
+    "@types/node": "^13.1.7",
+    "@typescript-eslint/eslint-plugin": "^2.16.0",
+    "@typescript-eslint/parser": "^2.16.0",
     "chai": "^4.2.0",
+    "eslint": "^6.8.0",
     "mocha": "^6.2.2",
     "nyc": "^15.0.0",
     "ts-node": "^8.5.4",
-    "typescript": "^3.7.4"
+    "typescript": "^3.7.5"
   },
   "directories": {
     "test": "test"
@@ -36,10 +40,6 @@
     "word wrap"
   ],
   "dependencies": {
-    "@types/ansi-styles": "^3.2.1",
-    "@typescript-eslint/eslint-plugin": "^2.16.0",
-    "@typescript-eslint/parser": "^2.16.0",
-    "ansi-styles": "^4.2.1",
-    "eslint": "^6.8.0"
+    "ansi-styles": "^4.2.1"
   }
 }
