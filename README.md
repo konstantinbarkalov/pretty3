@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/npm/v/pretty3) [![Coverage](https://img.shields.io/codecov/c/github/konstantinbarkalov/pretty3)](https://codecov.io/github/konstantinbarkalov/pretty3) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/konstantinbarkalov/pretty3/blob/master/LICENSE)
+![Version](https://img.shields.io/npm/v/pretty3) [![Coverage](https://img.shields.io/codecov/c/github/konstantinbarkalov/pretty3)](https://codecov.io/github/konstantinbarkalov/pretty3) ![Minified size](https://img.shields.io/bundlephobia/minzip/pretty3) [![Last commit](https://img.shields.io/github/last-commit/konstantinbarkalov/pretty3)](https://github.com/konstantinbarkalov/pretty3) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/konstantinbarkalov/pretty3/blob/master/LICENSE)
 # 🌳 pretty3
 
 
@@ -22,21 +22,14 @@ pretty.printTree(data);
 ## Features
 
 - Rich support for **all javasctipt types**, including `TypedArray`, `Map`, `Proxy` and `Symbol`
-
 - Gracefull fit and **word-wrap** long/multiline data into limited-width console. Tree stucture does not breaks.
-
 - Accurate **Unicode**  width calucating for proper word-wrap.
-
 - Colors support not only in terminal, but in a **browser** `console.log()` too. Render to html is also supported.
 
 ## Advanced usage
 
 
 ```javascript
-import pretty from 'pretty3';
-const options = {
-  ...
-}
 pretty.printTree(data, options);
 ```
 ##### javasctipt
