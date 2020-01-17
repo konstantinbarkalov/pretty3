@@ -1,7 +1,7 @@
 {
   "name": "pretty3",
   "version": "0.2.1",
-  "description": "yet another pretty tree with screen-limiting word-wrap feature",
+  "description": "Universal tree logger done right. With colors, unicode support and word-wrapping. Typesctipt friendly.",
   "main": "dist/src/index.js",
   "scripts": {
     "tsc": "tsc",

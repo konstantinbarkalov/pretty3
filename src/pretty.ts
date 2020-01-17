@@ -1,4 +1,3 @@
-
 import defaultSettings from './defaultSettings';
 import { Renderer } from './text/renderer/abstract/renderer';
 import { StrictUnicodeLine, StrictUnicodeText } from './text/strictUnicode';
@@ -15,7 +14,7 @@ const treeStyleColors = {
   gray: {r: 128, g: 128, b: 128},
   lightGray: {r: 192, g: 192, b: 192},
   white: {r: 255, g: 255, b: 255},
-}
+};
 
 const treeStyle = {
   icon: new Style(treeStyleColors.green),
@@ -25,38 +24,39 @@ const treeStyle = {
   value: new Style(treeStyleColors.white),
   info: new Style(treeStyleColors.blue),
   branch: new Style(treeStyleColors.darkGray),
-}
+};
 
-export function stringifyTree(tree:any, options?:stringifyTreeOptionsT ):string {
+export function stringifyTree(tree: any, options?: stringifyTreeOptionsT ): string {
   let outputString = '';
-  let eol = (options && options.eol) ? options.eol : defaultSettings.eol;
-  const overridenOptionsLogLineCallback = (line: string) => { outputString += line + eol ; };
-  const overridenPrintTreeOptions:printTreeOptionsT = { logLineCallback: overridenOptionsLogLineCallback };
+  const eol = (options && options.eol) ? options.eol : defaultSettings.eol;
+  const overridenOptionsLogLineCallback: logLineCallbackT = (line: string) => { outputString += line + eol ; };
+  const overridenPrintTreeOptions: printTreeOptionsT = { logLineCallback: overridenOptionsLogLineCallback };
   const printTreeOptions = Object.assign({}, overridenPrintTreeOptions, options);
   printTree(tree, printTreeOptions);
   return outputString;
 }
 
-export function printTree(tree:any, options?:printTreeOptionsT ):void {
+export function printTree(tree: any, options?: printTreeOptionsT ): void {
   const settings = Object.assign({}, defaultSettings, options);
-  const emptyPaddingPrefix:paddingPrefixT = {
+  const emptyPaddingPrefix: paddingPrefixT = {
     first: new FlatNonatomicTextContainer<StrictUnicodeLine>([new AtomicTextContainer(new StrictUnicodeLine(''))]),
     other: new FlatNonatomicTextContainer<StrictUnicodeLine>([new AtomicTextContainer(new StrictUnicodeLine(''))]),
   };
-  const emptyTextPattern:textPatternT = {
+  const emptyTextPattern: textPatternT = {
     first:  textPatternString('   '),
     other: textPatternString('   '),
-  }
+  };
   printTreeRecursive(undefined, tree, 0, emptyPaddingPrefix, emptyTextPattern, true, settings);
 }
 
-function printTreeRecursive(nodeKey:string | number | undefined,
-                            node:any,
-                            level:number,
-                            basePaddingPrefix: paddingPrefixT,
-                            currentTextPattern: textPatternT,
-                            isFirst: boolean,
-                            settings:printTreeSettingsT ):void {
+function printTreeRecursive(
+  nodeKey: string | number | undefined,
+  node: any,
+  level: number,
+  basePaddingPrefix: paddingPrefixT,
+  currentTextPattern: textPatternT,
+  isFirst: boolean,
+  settings: printTreeSettingsT ): void {
   if (level > settings.maxLevel) {
     return;
   }
@@ -71,49 +71,49 @@ function printTreeRecursive(nodeKey:string | number | undefined,
       metatype: NodeMetatypeEnum.Single,
       type: SingleNodeTypeEnum.String,
       value: node,
-    }
+    };
   } else if (typeof node === 'number') {
     nodeDescription = {
       metatype: NodeMetatypeEnum.Single,
       type: SingleNodeTypeEnum.Number,
       value: parseFloat(node.toPrecision(6)).toLocaleString(),
-    }
+    };
   } else if (typeof node === 'boolean') {
     nodeDescription = {
       metatype: NodeMetatypeEnum.Single,
       type: SingleNodeTypeEnum.Boolean,
       value: node.toLocaleString(),
-    }
+    };
   } else if (typeof node === 'symbol') {
     nodeDescription = {
       metatype: NodeMetatypeEnum.Single,
       type: SingleNodeTypeEnum.Symbol,
       value: node.toLocaleString(),
       icon: {text:'<S>', centerId: 1},
-    }
+    };
   } else if (node === null) {
     nodeDescription = {
       metatype: NodeMetatypeEnum.Single,
       type: SingleNodeTypeEnum.Null,
       value: 'NULL',
-    }
+    };
   } else if (node === undefined) {
     nodeDescription = {
       metatype: NodeMetatypeEnum.Single,
       type: SingleNodeTypeEnum.Undefined,
       value: 'UNDEFINED',
-    }
+    };
   } else if (Array.isArray(node)) {
     nodeDescription = {
       metatype: NodeMetatypeEnum.Enumerable,
       type: EnumerableNodeTypeEnum.Array,
       subEntries: node.map((sub, subId) => [subId, sub]),
       value: '',
-      icon: {text:'[ ]', centerId: 1}}
+      icon: {text:'[ ]', centerId: 1}};
   } else if (typeof node === 'object' && node) {
     let nodeCustomObjectString;
     if (node.toLocaleString) {
-      let jsObjectString = node.toLocaleString();
+      const jsObjectString = node.toLocaleString();
       if (jsObjectString !== '[object Object]') {
         nodeCustomObjectString = jsObjectString;
       }
@@ -124,7 +124,7 @@ function printTreeRecursive(nodeKey:string | number | undefined,
         type: SingleNodeTypeEnum.Date,
         value: node.toLocaleString(),
         icon: {text:'{D}', centerId: 1},
-      }
+      };
     } else if (node.hasOwnProperty) {
       let nodeValue: string;
       if (nodeCustomObjectString) {
@@ -137,7 +137,7 @@ function printTreeRecursive(nodeKey:string | number | undefined,
         type: EnumerableNodeTypeEnum.Object,
         subEntries: Object.entries(node),
         value: nodeValue,
-        icon: {text:'{ }', centerId: 1}}
+        icon: {text:'{ }', centerId: 1}};
     } else {
       let nodeValue: string;
       if (nodeCustomObjectString) {
@@ -151,7 +151,7 @@ function printTreeRecursive(nodeKey:string | number | undefined,
         value: nodeValue,
         icon: {text:'{X}', centerId: 1},
         subEntries: [],
-      }
+      };
     }
   } else {
     nodeDescription = {
@@ -159,7 +159,7 @@ function printTreeRecursive(nodeKey:string | number | undefined,
       type: SingleNodeTypeEnum.Unknown,
       value: (typeof node).toLocaleUpperCase(),
       icon: {text:'<X>', centerId: 1},
-    }
+    };
   }
 
   if (nodeDescription.metatype === NodeMetatypeEnum.Enumerable) {
@@ -171,10 +171,10 @@ function printTreeRecursive(nodeKey:string | number | undefined,
     }
   }
   const oneliner = buildOneliner(nodeKey, nodeDescription, isFirst);
-  const width:widthT = {
+  const width: widthT = {
     first: settings.tabSize,
     other: settings.tabSize,
-  }
+  };
   if (nodeDescription.icon) {
     width.first -= nodeDescription.icon.centerId;
   }
@@ -202,21 +202,21 @@ function printTreeRecursive(nodeKey:string | number | undefined,
       const childrenPaddingPrefix = {
         first: currentPaddingPrefix.other,
         other: currentPaddingPrefix.other,
-      }
+      };
       printTreeRecursive(subNodeKey, subNode, level + 1, childrenPaddingPrefix, textPattern, false, settings);
     }
   }
 }
 
-function buildOneliner(nodeKey: string | number | undefined, nodeDescription:anyNodeDescriptionT, isFirst:boolean):FlatNonatomicTextContainer<StrictUnicodeText> {
-  let space = new AtomicTextContainer(new StrictUnicodeLine(' '));
-  let children:AtomicTextContainer[] = [];
+function buildOneliner(nodeKey: string | number | undefined, nodeDescription: anyNodeDescriptionT, isFirst: boolean): FlatNonatomicTextContainer<StrictUnicodeText> {
+  const space = new AtomicTextContainer(new StrictUnicodeLine(' '));
+  const children: AtomicTextContainer[] = [];
   if (nodeDescription.icon) {
     children.push(new AtomicTextContainer(new StrictUnicodeLine(nodeDescription.icon.text), treeStyle.icon));
     children.push(space);
   }
   if (nodeKey !== undefined || !isFirst) {
-    let nodeKeyString = nodeKey?.toString() || '';
+    const nodeKeyString = nodeKey?.toString() || '';
     children.push(new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), treeStyle.key));
     children.push(new AtomicTextContainer(new StrictUnicodeLine(':'), treeStyle.keyDots));
     children.push(space);
@@ -233,8 +233,8 @@ function buildOneliner(nodeKey: string | number | undefined, nodeDescription:any
   return new FlatNonatomicTextContainer(children);
 }
 
-function printTextContainerWrapped(textContainer:TextContainer, paddingPrefix:paddingPrefixT, maxLineWidth:number, logLineCallback:logLineCallbackT, renderer:Renderer) {
-  const actualMaxLineWidth:maxLineWidthT = {
+function printTextContainerWrapped(textContainer: TextContainer, paddingPrefix: paddingPrefixT, maxLineWidth: number, logLineCallback: logLineCallbackT, renderer: Renderer): void {
+  const actualMaxLineWidth: maxLineWidthT = {
     first: maxLineWidth - paddingPrefix.first.calcSize().width.first,
     other: maxLineWidth - paddingPrefix.other.calcSize().width.first,
   };
@@ -251,22 +251,22 @@ function printTextContainerWrapped(textContainer:TextContainer, paddingPrefix:pa
   logLineCallback(message);
 }
 
-type widthT = {first:number, other:number};
-function buildPaddingPrefix(basePaddingPrefix: paddingPrefixT, textPattern: textPatternT, paddingSpace:number, width: widthT) {
+type widthT = {first: number; other: number};
+function buildPaddingPrefix(basePaddingPrefix: paddingPrefixT, textPattern: textPatternT, paddingSpace: number, width: widthT): paddingPrefixT {
 
-  const currentPaddingPrefix:paddingPrefixT = {
+  const currentPaddingPrefix: paddingPrefixT = {
     first: new FlatNonatomicTextContainer(basePaddingPrefix.first.children.concat(new AtomicTextContainer(new StrictUnicodeLine(buildPaddingPrefixString(textPattern.first, paddingSpace, width.first)), treeStyle.branch))),
     other: new FlatNonatomicTextContainer(basePaddingPrefix.other.children.concat(new AtomicTextContainer(new StrictUnicodeLine(buildPaddingPrefixString(textPattern.other, paddingSpace, width.other)), treeStyle.branch))),
   };
   return currentPaddingPrefix;
 }
 
-function buildPaddingPrefixString(textPatternString: textPatternStringT, paddingSpace: number, width: number):string {
-  let branchWidth = width - paddingSpace;
-  let branchRepeatWidth = branchWidth - 2;
+function buildPaddingPrefixString(textPatternString: textPatternStringT, paddingSpace: number, width: number): string {
+  const branchWidth = width - paddingSpace;
+  const branchRepeatWidth = branchWidth - 2;
   if (branchRepeatWidth < 0) {
     throw new Error('branch is to short for that paddingSpace');
   }
-  let paddingPrefixString = textPatternString[0] + textPatternString[1].repeat(branchRepeatWidth) + textPatternString[2] + ' '.repeat(paddingSpace);
+  const paddingPrefixString = textPatternString[0] + textPatternString[1].repeat(branchRepeatWidth) + textPatternString[2] + ' '.repeat(paddingSpace);
   return paddingPrefixString;
 }

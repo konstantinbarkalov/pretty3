@@ -11,7 +11,7 @@ const defaultSettings: printTreeSettingsT = {
   objectItemTextPattern: {other: {first: textPatternString('├─╴'), other: textPatternString('│  ')}, last: {first: textPatternString('╰─╴'), other: textPatternString('   ')}},
   maxStringWrapSteps: Infinity,
   logLineCallback: (line: string) => {
-    console.log(line)
+    console.log(line);
   },
   tabSize: 4,
   paddingSpace: 0,
