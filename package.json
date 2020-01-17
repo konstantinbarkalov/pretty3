@@ -10,7 +10,7 @@
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
   },
   "author": "Konstantin Barkalov <mail@barkalov.ru>",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "devDependencies": {
     "@types/ansi-styles": "^3.2.1",
     "@types/chai": "^4.2.7",
