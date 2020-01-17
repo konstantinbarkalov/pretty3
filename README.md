@@ -3,7 +3,7 @@
 
 > Universal tree logger done right. With colors, unicode support and word-wrapping. Typesctipt friendly.
 
-# Warning: module an early alpha not ready for use yet. Beta release is planned on February 2020
+# Warning: module is in early alpha and not ready for use yet. Beta release is planned on February 2020
 
 ## Install
 
@@ -18,7 +18,7 @@ npm install pretty3
 import pretty from 'pretty3';
 pretty.printTree(data);
 ```
-## Key features:
+## Features
 
 - Rich support for **all javasctipt types**, including `TypedArray`, `Map`, `Proxy` and `Symbol`
 
