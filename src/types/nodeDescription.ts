@@ -1,4 +1,4 @@
-import { iconT } from "./icon";
+import { iconT } from './icon';
 
 export enum NodeMetatypeEnum {
   Single,
@@ -40,6 +40,7 @@ type subEntryKeyT<TEnumerableNodeTypeEnum extends EnumerableNodeTypeEnum> =
   TEnumerableNodeTypeEnum extends EnumerableNodeTypeEnum.Object ?
   string :
   TEnumerableNodeTypeEnum extends EnumerableNodeTypeEnum.Unknown ?
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any :
   never;
 
@@ -59,18 +60,18 @@ type nodeSubEntriesT<TEnumerableNodeTypeEnum extends EnumerableNodeTypeEnum> =
 
 export type nodeDescriptionT<TNodeMetatypeEnum extends NodeMetatypeEnum, TNodeTypeEnum extends NodeTypeEnumT<TNodeMetatypeEnum>> =
   TNodeTypeEnum extends SingleNodeTypeEnum ? {
-    metatype: TNodeMetatypeEnum,
-    type: TNodeTypeEnum,
-    value: string,
-    icon?: iconT,
-    info?: string | undefined,
+    metatype: TNodeMetatypeEnum;
+    type: TNodeTypeEnum;
+    value: string;
+    icon?: iconT;
+    info?: string | undefined;
   } : TNodeTypeEnum extends EnumerableNodeTypeEnum ? {
-    metatype: TNodeMetatypeEnum,
-    type: TNodeTypeEnum,
-    value: string,
-    icon?: iconT,
-    info?: string | undefined,
-    subEntries: nodeSubEntriesT<TNodeTypeEnum>[],
+    metatype: TNodeMetatypeEnum;
+    type: TNodeTypeEnum;
+    value: string;
+    icon?: iconT;
+    info?: string | undefined;
+    subEntries: nodeSubEntriesT<TNodeTypeEnum>[];
   }
  : never;
 

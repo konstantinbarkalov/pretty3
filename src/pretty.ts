@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import defaultSettings from './defaultSettings';
 import { Renderer } from './text/renderer/abstract/renderer';
 import { StrictUnicodeLine, StrictUnicodeText } from './text/strictUnicode';
@@ -57,13 +58,14 @@ function printTreeRecursive(
   currentTextPattern: textPatternT,
   isFirst: boolean,
   settings: printTreeSettingsT ): void {
-  if (level > settings.maxLevel) {
-    return;
-  }
+
   const currentLevelMaxItems =
-    Array.isArray(settings.maxItemsPerLevel)
-      ? settings.maxItemsPerLevel[Math.min(level, settings.maxItemsPerLevel.length - 1)]
-      : settings.maxItemsPerLevel;
+    (level >= settings.maxLevel)
+      ? 0
+      : Array.isArray(settings.maxItemsPerLevel)
+        ? settings.maxItemsPerLevel[Math.min(level, settings.maxItemsPerLevel.length - 1)]
+        : settings.maxItemsPerLevel;
+
 
   let nodeDescription: anyNodeDescriptionT;
   if (typeof node === 'string') {
@@ -182,18 +184,18 @@ function printTreeRecursive(
   printTextContainerWrapped(oneliner, currentPaddingPrefix, settings.maxLineWidth, settings.logLineCallback, settings.renderer);
   if (nodeDescription.metatype === NodeMetatypeEnum.Enumerable) {
     const itemsShownCount = Math.min(currentLevelMaxItems, nodeDescription.subEntries.length);
+    let itemPattern: itemTextPatternT;
+    const isArray = (nodeDescription.type === EnumerableNodeTypeEnum.Array);
+    if (isArray) {
+      itemPattern = settings.arrayItemTextPattern;
+    } else {
+      itemPattern = settings.objectItemTextPattern;
+    }
     for (let subNodeIndex = 0; subNodeIndex < itemsShownCount; subNodeIndex++) {
       const subEntry = nodeDescription.subEntries[subNodeIndex];
       const [subNodeKey, subNode] = subEntry;
-      const isArray = (nodeDescription.type === EnumerableNodeTypeEnum.Array);
-      let itemPattern: itemTextPatternT;
-      if (isArray) {
-        itemPattern = settings.arrayItemTextPattern;
-      } else {
-        itemPattern = settings.objectItemTextPattern;
-      }
       let textPattern: textPatternT;
-      const isLast = subNodeIndex === itemsShownCount - 1;
+      const isLast = subNodeIndex === nodeDescription.subEntries.length - 1;
       if (!isLast) {
         textPattern = itemPattern.other;
       } else {
@@ -205,7 +207,29 @@ function printTreeRecursive(
       };
       printTreeRecursive(subNodeKey, subNode, level + 1, childrenPaddingPrefix, textPattern, false, settings);
     }
+    // elipsis at tail
+    if (nodeDescription.subEntries.length > itemsShownCount) {
+      const textPattern = itemPattern.last;
+      const childrenPaddingPrefix = {
+        first: currentPaddingPrefix.other,
+        other: currentPaddingPrefix.other,
+      };
+      printEliplsisLine(childrenPaddingPrefix, textPattern, settings);
+    }
   }
+}
+
+function printEliplsisLine(
+  basePaddingPrefix: paddingPrefixT,
+  currentTextPattern: textPatternT,
+  settings: printTreeSettingsT ): void {
+  const width: widthT = {
+    first: settings.tabSize,
+    other: settings.tabSize,
+  };
+  const currentPaddingPrefix = buildPaddingPrefix(basePaddingPrefix, currentTextPattern, settings.paddingSpace, width);
+  const elipsisTextContainer = new AtomicTextContainer(new StrictUnicodeLine('...'));
+  printTextContainerWrapped(elipsisTextContainer, currentPaddingPrefix, settings.maxLineWidth, settings.logLineCallback, settings.renderer);
 }
 
 function buildOneliner(nodeKey: string | number | undefined, nodeDescription: anyNodeDescriptionT, isFirst: boolean): FlatNonatomicTextContainer<StrictUnicodeText> {

@@ -1,4 +1,4 @@
 export type iconT = {
-  text: string,
-  centerId: number
+  text: string;
+  centerId: number;
 }
