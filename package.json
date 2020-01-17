@@ -1,6 +1,6 @@
 {
   "name": "pretty3",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "yet another pretty tree with screen-limiting word-wrap feature",
   "main": "dist/src/index.js",
   "scripts": {
