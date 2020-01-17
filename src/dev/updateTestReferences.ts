@@ -19,7 +19,7 @@ for (let i = 1; i <= 4; i++) {
   console.log(`[${i}]`);
   console.log(plainOutput);
 }
-import input05 from '../../test/input05';
+import input05 from './input05';
 {
   const i = 5;
   const input = input05;

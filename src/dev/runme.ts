@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import { AnsiRenderer } from '../text/renderer/implementation/ansi';
 import { HtmlRenderer } from '../text/renderer/implementation/html';
 import { PlainRenderer } from '../text/renderer/implementation/plain';
-import tree from '../../test/input05';
+import tree from './input05';
 const ansiRenderer = new AnsiRenderer();
 const htmlRenderer = new HtmlRenderer();
 const plainRenderer = new PlainRenderer();
