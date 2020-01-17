@@ -8,7 +8,8 @@
     "tsc": "tsc",
     "build": "npm run tsc && npm run test",
     "test": "mocha -r ts-node/register test/**/*.test.ts",
-    "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
+    "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
+    "prepublish": "npm run build && npm run coverage"
   },
   "author": "Konstantin Barkalov <mail@barkalov.ru>",
   "license": "MIT",
