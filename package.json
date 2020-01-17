@@ -8,7 +8,7 @@
     "tsc": "tsc",
     "build": "npm run tsc",
     "test": "mocha -r ts-node/register test/**/*.test.ts",
-    "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
+    "coverage": "nyc -r lcov -e .ts -x test npm run test",
     "prepare": "npm run build",
     "prepublishOnly": "npm run coverage"
   },
