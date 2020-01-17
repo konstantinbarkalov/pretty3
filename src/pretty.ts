@@ -29,7 +29,7 @@ const treeStyle = {
 
 export function stringifyTree(tree: any, options?: stringifyTreeOptionsT ): string {
   let outputString = '';
-  const eol = (options && options.eol) ? options.eol : defaultSettings.eol;
+  const eol = (options && options.renderer) ? options.renderer.eol : defaultSettings.renderer.eol;
   const overridenOptionsLogLineCallback: logLineCallbackT = (line: string) => { outputString += line + eol ; };
   const overridenPrintTreeOptions: printTreeOptionsT = { logLineCallback: overridenOptionsLogLineCallback };
   const printTreeOptions = Object.assign({}, overridenPrintTreeOptions, options);
