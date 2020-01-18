@@ -5,3 +5,5 @@ node_modules
 coverage
 src/dev
 dist/dev
+/push.bat
+/push.sh
