@@ -9,6 +9,7 @@
     "build": "npm run tsc",
     "test": "mocha -r ts-node/register test/**/*.test.ts",
     "coverage": "nyc -r lcov -e .ts -x test npm run test",
+    "push": "npm run build && npm run coverage && git push",
     "prepare": "npm run build",
     "prepublishOnly": "npm run coverage"
   },
