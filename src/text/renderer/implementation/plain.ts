@@ -14,7 +14,7 @@ export class PlainRenderer extends SimpleRenderer {
   public renderFlatLine(flatLineContainer: FlatNonatomicTextContainer<StrictUnicodeLine>): string {
     return flatLineContainer.toString();
   }
-  protected escapeText(text: string):string {
+  protected escapeText(text: string): string {
     return text;
   }
 }
