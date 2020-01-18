@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/ban-types */
 
-import { EOL } from "os";
+import { EOL } from 'os';
 
 export class NormalizedUnicodeText extends String {
-  constructor(text:string | String, isSkipChecks: boolean = false) {
+  constructor(text: string | String, isSkipChecks = false) {
     if (isSkipChecks) {
       super(text);
     } else {
@@ -10,13 +11,13 @@ export class NormalizedUnicodeText extends String {
       super(normalizedText);
     }
   }
-  public normalize():string {
+  public normalize(): string {
     return this.valueOf();
   }
-  protected isPrecheckedInstance(text: string | String):boolean {
+  protected isPrecheckedInstance(text: string | String): boolean {
     return text instanceof NormalizedUnicodeText;
   }
-  static combine(...items:NormalizedUnicodeText[]):NormalizedUnicodeText {
+  static combine(...items: NormalizedUnicodeText[]): NormalizedUnicodeText {
     const combinedString = items.reduce((combinedString, item) => {
       return combinedString + item.toString();
     }, '');
@@ -25,7 +26,7 @@ export class NormalizedUnicodeText extends String {
 }
 
 export class StrictUnicodeText extends NormalizedUnicodeText {
-  constructor(text:string | String, isSkipChecks: boolean = false) {
+  constructor(text: string | String, isSkipChecks = false) {
     super(text, isSkipChecks);
     isSkipChecks = isSkipChecks || this.isPrecheckedInstance(text);
     if (isSkipChecks) {
@@ -33,11 +34,11 @@ export class StrictUnicodeText extends NormalizedUnicodeText {
     }
   }
 
-  protected isPrecheckedInstance(text: string | String):boolean {
+  protected isPrecheckedInstance(text: string | String): boolean {
     return text instanceof StrictUnicodeText;
   }
 
-  public guardStringIsStrictUnicode(normalizedText:NormalizedUnicodeText): void {
+  public guardStringIsStrictUnicode(normalizedText: NormalizedUnicodeText): void {
     for (const utf16Code of normalizedText) {
       const utf16CodePoint = utf16Code.codePointAt(0);
       if (utf16CodePoint === undefined || utf16CodePoint > 65536) {
@@ -53,7 +54,7 @@ export class StrictUnicodeText extends NormalizedUnicodeText {
     });
     return lines;
   }
-  public wrap(maxWidth:number, firstLinePadding: number = 0):{wrappedText: StrictUnicodeText, lastLinePadding: number} {
+  public wrap(maxWidth: number, firstLinePadding = 0): {wrappedText: StrictUnicodeText; lastLinePadding: number} {
     const lines = this.splitToLines();
     const wrapResults = lines.map((line, lineId) => {
       const isFirst = lineId === 0;
@@ -68,29 +69,29 @@ export class StrictUnicodeText extends NormalizedUnicodeText {
     const wrappedText = new StrictUnicodeText(wrappedTextString, true);
     return {wrappedText, lastLinePadding };
   }
-  static combine(...items:StrictUnicodeText[]) {
+  static combine(...items: StrictUnicodeText[]): StrictUnicodeText {
     const combinedNormalized = super.combine(...items);
     return new StrictUnicodeText(combinedNormalized);
   }
 }
 
 export class StrictUnicodeLine extends StrictUnicodeText {
-  constructor(text:string | String, isSkipChecks: boolean = false) {
+  constructor(text: string | String, isSkipChecks = false) {
     super(text, isSkipChecks);
   }
 
-  protected isPrecheckedInstance(text: string | String):boolean {
+  protected isPrecheckedInstance(text: string | String): boolean {
     return text instanceof StrictUnicodeLine;
   }
 
-  public guardStringIsStrictUnicode(normalizedText:NormalizedUnicodeText): void {
-    if (normalizedText.includes(EOL)) { throw('No EOLs allowed in single StrictUnicodeLine, use StrictUnicodeText instead') }
+  public guardStringIsStrictUnicode(normalizedText: NormalizedUnicodeText): void {
+    if (normalizedText.includes(EOL)) { throw('No EOLs allowed in single StrictUnicodeLine, use StrictUnicodeText instead'); }
     super.guardStringIsStrictUnicode(normalizedText);
   }
   private widthCache: number | undefined;
-  public calcWidth():number {
+  public calcWidth(): number {
     if (this.widthCache === undefined) {
-      let iterator = this[Symbol.iterator]();
+      const iterator = this[Symbol.iterator]();
       let width = 0;
       while (!iterator.next().done) { width++; }
       this.widthCache = width;
@@ -101,13 +102,13 @@ export class StrictUnicodeLine extends StrictUnicodeText {
     }
     return this.widthCache;
   }
-  public wrap(maxWidth:number, firstLinePadding: number = 0):{wrappedText: StrictUnicodeText, lastLinePadding: number} {
+  public wrap(maxWidth: number, firstLinePadding = 0): {wrappedText: StrictUnicodeText; lastLinePadding: number} {
     const lineWidth = this.calcWidth();
     if (lineWidth <= maxWidth - firstLinePadding) {
       return {wrappedText: this, lastLinePadding: lineWidth};
     }
     let wrappedLineWidth: number = firstLinePadding;
-    let wrappedLine: string = '';
+    let wrappedLine = '';
     const wrappedLines = [];
     for (const codePoint of this) {
       const codePointWidth = 1; // TODO: support for full-width chars
@@ -122,10 +123,10 @@ export class StrictUnicodeLine extends StrictUnicodeText {
     //tail
     wrappedLines.push(wrappedLine); // TODO maybe i need to check for nonempty wrappedLine
 
-    let wrappedText = new StrictUnicodeText(wrappedLines.join(EOL), true);
+    const wrappedText = new StrictUnicodeText(wrappedLines.join(EOL), true);
     return {wrappedText, lastLinePadding: wrappedLineWidth};
   }
-  static combine(...items:StrictUnicodeLine[]) {
+  static combine(...items: StrictUnicodeLine[]): StrictUnicodeLine {
     const combinedText = super.combine(...items);
     return new StrictUnicodeLine(combinedText);
   }

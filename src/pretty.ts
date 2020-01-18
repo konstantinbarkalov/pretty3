@@ -36,7 +36,17 @@ export function stringifyTree(tree: any, options?: stringifyTreeOptionsT ): stri
   printTree(tree, printTreeOptions);
   return outputString;
 }
-
+/**
+ * Print formatted tree representation of any javacript data. Use options
+ * to customize output. Cycle-referencing is allowed, while capping output
+ * with finite options.maxLevel and options.maxItemsPerLevel.
+ * Use options.logLineCallback for custom console.log handler, or
+ * pretty.stringifyTree to render tree to a [string].
+ *
+ * @export
+ * @param {*} tree
+ * @param {printTreeOptionsT} [options]
+ */
 export function printTree(tree: any, options?: printTreeOptionsT ): void {
   const settings = Object.assign({}, defaultSettings, options);
   const emptyPaddingPrefix: paddingPrefixT = {

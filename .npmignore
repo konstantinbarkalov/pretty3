@@ -7,3 +7,4 @@ src/dev
 dist/dev
 /push.bat
 /push.sh
+docs
