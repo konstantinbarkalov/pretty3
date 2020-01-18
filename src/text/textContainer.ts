@@ -8,6 +8,7 @@ export abstract class TextContainer<T extends AnyStrictUnicodeT = AnyStrictUnico
   public abstract toString(): string;
   public abstract wrap(maxWidth: number, firstLinePadding: number): {wrapped: TextContainer<StrictUnicodeText>; lastLinePadding: number };
   public abstract flatten(initialStyle?: Style): FlatNonatomicTextContainer<T>;
+  public abstract splitToFlatLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[];
 }
 type textContainerSizeT = {
   width: {
@@ -128,6 +129,9 @@ export class NonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnico
       return flatChildren;
     }, []);
     return new FlatNonatomicTextContainer(flatChildren);
+  }
+  public splitToFlatLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[] {
+    return this.flatten().splitToFlatLines();
   }
 }
 

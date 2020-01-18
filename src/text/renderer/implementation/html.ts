@@ -1,12 +1,8 @@
 import { Style } from '../../style';
 import { StyleSwitchesEnum } from '../../styleTypes';
 import { SimpleRenderer } from '../abstract/simpleRenderer';
-import { FlatNonatomicTextContainer } from '../../textContainer';
 import { EOL } from 'os';
 export class HtmlRenderer extends SimpleRenderer {
-  public renderFlat(flatTextContainer: FlatNonatomicTextContainer): string {
-    return this.textBegin + super.renderFlat(flatTextContainer) + this.textEnd;
-  }
   public eol: string = '<br/>' + EOL;
   protected styleBegin(style: Style | undefined): string {
     let styleString = '';
@@ -48,6 +44,9 @@ export class HtmlRenderer extends SimpleRenderer {
       return tagsToEscape[tag] || tag;
     });
   }
-  protected textBegin = '<span style="font-family: monospace; ">';
-  protected textEnd = '</span>';
+  public wrapDocument(document: string): string {
+    return this.documentBegin + document + this.documentEnd;
+  }
+  protected documentBegin = '<span style="font-family: monospace; ">';
+  protected documentEnd = '</span>';
 }
