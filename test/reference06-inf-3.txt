@@ -1,0 +1,61 @@
+   [ ] 3 shown of 6 total 
+    ├─╸[ ] 0: 3 shown of 6 total 
+    │   ├─╸[ ] 0: 3 shown of 6 total 
+    │   │   ├─╸[ ] 0: 3 shown of 6 total 
+    │   │   │   ├─╸[ ] 0: 3 shown of 6 total 
+    │   │   │   │   ├──╸0: node #0 value 
+    │   │   │   │   ├──╸1: node #1 value 
+    │   │   │   │   ├──╸2: node #2 value 
+    │   │   │   │   └──╸...
+    │   │   │   ├─╸{ } 1: 3 shown of 6 total 
+    │   │   │   │   ├──╴node #6 key: node #6 value 
+    │   │   │   │   ├──╴node #7 key: node #7 value 
+    │   │   │   │   ├──╴node #8 key: node #8 value 
+    │   │   │   │   ╰──╴...
+    │   │   │   ├─╸{ } 2: [object Set] 0 entries 
+    │   │   │   └──╸...
+    │   │   ├─╸{ } 1: 3 shown of 6 total 
+    │   │   │   ├─╴{ } node #36 key: 3 shown of 6 total 
+    │   │   │   │   ├──╴node #36 key: node #36 value 
+    │   │   │   │   ├──╴node #37 key: node #37 value 
+    │   │   │   │   ├──╴node #38 key: node #38 value 
+    │   │   │   │   ╰──╴...
+    │   │   │   ├─╴{ } node #42 key: [object Set] 0 entries 
+    │   │   │   ├─╴{ } node #48 key: [object Map] 0 entries 
+    │   │   │   ╰──╴...
+    │   │   ├─╸{ } 2: [object Set] 0 entries 
+    │   │   └──╸...
+    │   ├─╸{ } 1: 3 shown of 6 total 
+    │   │   ├─╴{ } node #216 key: 3 shown of 6 total 
+    │   │   │   ├─╴{ } node #216 key: 3 shown of 6 total 
+    │   │   │   │   ├──╴node #216 key: node #216 value 
+    │   │   │   │   ├──╴node #217 key: node #217 value 
+    │   │   │   │   ├──╴node #218 key: node #218 value 
+    │   │   │   │   ╰──╴...
+    │   │   │   ├─╴{ } node #222 key: [object Set] 0 entries 
+    │   │   │   ├─╴{ } node #228 key: [object Map] 0 entries 
+    │   │   │   ╰──╴...
+    │   │   ├─╴{ } node #252 key: [object Set] 0 entries 
+    │   │   ├─╴{ } node #288 key: [object Map] 0 entries 
+    │   │   ╰──╴...
+    │   ├─╸{ } 2: [object Set] 0 entries 
+    │   └──╸...
+    ├─╸{ } 1: 3 shown of 6 total 
+    │   ├─╴{ } node #1296 key: 3 shown of 6 total 
+    │   │   ├─╴{ } node #1296 key: 3 shown of 6 total 
+    │   │   │   ├─╴{ } node #1296 key: 3 shown of 6 total 
+    │   │   │   │   ├──╴node #1296 key: node #1296 value 
+    │   │   │   │   ├──╴node #1297 key: node #1297 value 
+    │   │   │   │   ├──╴node #1298 key: node #1298 value 
+    │   │   │   │   ╰──╴...
+    │   │   │   ├─╴{ } node #1302 key: [object Set] 0 entries 
+    │   │   │   ├─╴{ } node #1308 key: [object Map] 0 entries 
+    │   │   │   ╰──╴...
+    │   │   ├─╴{ } node #1332 key: [object Set] 0 entries 
+    │   │   ├─╴{ } node #1368 key: [object Map] 0 entries 
+    │   │   ╰──╴...
+    │   ├─╴{ } node #1512 key: [object Set] 0 entries 
+    │   ├─╴{ } node #1728 key: [object Map] 0 entries 
+    │   ╰──╴...
+    ├─╸{ } 2: [object Set] 0 entries 
+    └──╸...
