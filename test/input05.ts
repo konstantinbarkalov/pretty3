@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from 'fs';
 
 class ExpampleIterator implements Iterator<string> {
   message: string[];
@@ -9,15 +9,15 @@ class ExpampleIterator implements Iterator<string> {
     return {
       value: this.message.pop()!,
       done: (this.message.length === 0),
-    }
+    };
   }
 }
 class ExpampleIterable implements Iterable<string> {
-  constructor(private message:string) { };
+  constructor(private message: string) { }
   [Symbol.iterator](): Iterator<string> {
     return new ExpampleIterator(this.message);
   }
-  toString() {
+  toString(): string {
     return 'The olimpic motto is:' + this.message;
   }
 }
@@ -43,5 +43,15 @@ export default {
   proxiedLongArray: new Proxy(longArray, {}),
   funError: new RangeError('Pizza size is too big'),
   longUnbreakebleText: 'yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaarrr!',
+  silence: '',
+  '': 'wth no key',
+  666:'with number key',
+  [777]:'with number key too',
+  [Symbol('Luck')]:'with luck symbol key',
+  emptyObject: {},
+  fate: null,
+  rock: true,
+  rap: false,
+  whyWeAreHere: undefined,
   arbitraryLib: fs,
-}
+};

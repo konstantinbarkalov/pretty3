@@ -1,4 +1,21 @@
-   { } 6 entries 
+   { } 25 entries 
+    ├──╴666: with number key 
+    ├──╴777: with number key too 
+    ├──╴simpleText: Hello my friend! 
+    ├─╴{ } objectedText: Friend of mine, hello. 10 shown of 22 total 
+    │   ├──╴0: F 
+    │   ├──╴1: r 
+    │   ├──╴2: i 
+    │   ├──╴3: e 
+    │   ├──╴4: n 
+    │   ├──╴5: d 
+    │   ├──╴6:   
+    │   ├──╴7: o 
+    │   ├──╴8: f 
+    │   ├──╴9:   
+    │   ╰──╴...
+    ├─╴{D} maynardBirthDate: 17.04.1964, 07:00:00 
+    ├─╴<S> someSymbol: Symbol(Fortune) 
     ├──╴longText: GitHub is home to over 40 million developers working together 
     │   to host and review code, manage projects, and build software together. S
     │   ince question was regarding clunkiness of property checking, and one reg
@@ -6,8 +23,6 @@
     │   cts, thought I'd mention a library-free short way of testing existence o
     │   f multiple properties. Disclaimer: It does require ECMAScript 5 (but IMO
     │    anyone still using IE8 deserves a broken web). 
-    ├─╴{D} maynardBirthDate: 17.04.1964, 07:00:00 
-    ├─╴<S> someSymbol: Symbol(Fortune) 
     ├─╴{ } capitalCityMap: [object Map] 0 entries 
     ├─╴[ ] regularArray: 5 entries 
     │   ├──╸0: 0 
@@ -16,4 +31,70 @@
     │   ├─╸{ } 3: 1 entries 
     │   │   ╰──╴wow: surprize! there is is an object among numbers 
     │   └──╸4: 0,75 
-    ╰─╴{ } funError: RangeError: Pizza size is too big 0 entries 
+    ├─╴{ } powersOfTwoTypedArray: 1,2,4,8,16,32,64,128 8 entries 
+    │   ├──╴0: 1 
+    │   ├──╴1: 2 
+    │   ├──╴2: 4 
+    │   ├──╴3: 8 
+    │   ├──╴4: 16 
+    │   ├──╴5: 32 
+    │   ├──╴6: 64 
+    │   ╰──╴7: 128 
+    ├─╴{ } phrasedWeakMap: [object WeakMap] 0 entries 
+    ├─╴{ } jackpotSet: [object Set] 0 entries 
+    ├─╴{ } olympicIterable: The olimpic motto is:Citius, Altius, Fortius! 1 entr
+    │   ies 
+    │   ╰──╴message: Citius, Altius, Fortius! 
+    ├─╴[ ] longArray: 10 shown of 1000 total 
+    │   ├──╸0: 0 
+    │   ├──╸1: 10 
+    │   ├──╸2: 20 
+    │   ├──╸3: 30 
+    │   ├──╸4: 40 
+    │   ├──╸5: 50 
+    │   ├──╸6: 60 
+    │   ├──╸7: 70 
+    │   ├──╸8: 80 
+    │   ├──╸9: 90 
+    │   └──╸...
+    ├─╴[ ] proxiedLongArray: 10 shown of 1000 total 
+    │   ├──╸0: 0 
+    │   ├──╸1: 10 
+    │   ├──╸2: 20 
+    │   ├──╸3: 30 
+    │   ├──╸4: 40 
+    │   ├──╸5: 50 
+    │   ├──╸6: 60 
+    │   ├──╸7: 70 
+    │   ├──╸8: 80 
+    │   ├──╸9: 90 
+    │   └──╸...
+    ├─╴{ } funError: RangeError: Pizza size is too big 0 entries 
+    ├──╴longUnbreakebleText: yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    │   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    │   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    │   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    │   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    │   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    │   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    │   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    │   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaarrr! 
+    ├──╴silence: 
+    ├──╴: wth no key 
+    ├─╴{ } emptyObject: 0 entries 
+    ├──╴fate: NULL 
+    ├──╴rock: true 
+    ├──╴rap: false 
+    ├──╴whyWeAreHere: UNDEFINED 
+    ╰─╴{ } arbitraryLib: 10 shown of 93 total 
+        ├─╴<X> appendFile: FUNCTION 
+        ├─╴<X> appendFileSync: FUNCTION 
+        ├─╴<X> access: FUNCTION 
+        ├─╴<X> accessSync: FUNCTION 
+        ├─╴<X> chown: FUNCTION 
+        ├─╴<X> chownSync: FUNCTION 
+        ├─╴<X> chmod: FUNCTION 
+        ├─╴<X> chmodSync: FUNCTION 
+        ├─╴<X> close: FUNCTION 
+        ├─╴<X> closeSync: FUNCTION 
+        ╰──╴...
