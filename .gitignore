@@ -4,4 +4,6 @@ coverage
 dist
 /push.bat
 /push.sh
+/doc.bat
+/doc.sh
 docs
