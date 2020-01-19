@@ -1,13 +1,13 @@
 import { StrictUnicodeLine, StrictUnicodeChar } from '../text/strictUnicode';
 import { MetaNodeI, LinePatternI, BranchPatternI, BasicPatternI, patternModeKeyT } from './metaTypes';
-import { TextContainer, AtomicTextContainer, NonatomicTextContainer } from '../text/textContainer';
+import { AnyTextContainer, AtomicTextContainer, NonatomicTextContainer } from '../text/textContainer';
 import { Renderer } from '../text/renderer/abstract/renderer';
 
 
 export class MetaNode implements MetaNodeI {
 
   public children: MetaNodeI[] = [];
-  constructor(public leaf: TextContainer, public nodePattern: LinePatternI, public childPattern: BranchPatternI, public armWidth: number) { }
+  constructor(public leaf: AnyTextContainer, public nodePattern: LinePatternI, public childPattern: BranchPatternI, public armWidth: number) { }
 }
 
 export class BranchPattern implements BranchPatternI {

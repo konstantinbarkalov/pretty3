@@ -1,11 +1,11 @@
 import { StrictUnicodeLine, StrictUnicodeText } from '../text/strictUnicode';
-import { TextContainer } from '../text/textContainer';
+import { AnyTextContainer } from '../text/textContainer';
 
 export interface MetaNodeI {
   children: MetaNodeI[];
   nodePattern: LinePatternI;
   childPattern: BranchPatternI;
-  leaf: TextContainer;
+  leaf: AnyTextContainer;
 }
 export type patternModeKeyT = 'first' | 'last' | 'other';
 

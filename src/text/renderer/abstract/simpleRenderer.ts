@@ -1,11 +1,11 @@
-import { TextContainer, FlatNonatomicTextContainer } from '../../textContainer';
+import { AnyTextContainer, FlatNonatomicTextContainer } from '../../textContainer';
 import { Renderer } from './renderer';
 import { StrictUnicodeLine } from '../../strictUnicode';
 import { Style } from '../../style';
 
 export abstract class SimpleRenderer extends Renderer {
 
-  public render(textContainer: TextContainer): string {
+  public render(textContainer: AnyTextContainer): string {
     const flat = textContainer.flatten();
     return this.renderFlat(flat);
   }

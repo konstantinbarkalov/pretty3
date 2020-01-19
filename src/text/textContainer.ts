@@ -2,14 +2,6 @@
 import { AnyStrictUnicodeT, StrictUnicodeLine, StrictUnicodeText } from './strictUnicode';
 import { Style } from './style';
 
-export abstract class TextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> {
-  public style?: Style;
-  public abstract calcSize(): textContainerSizeT;
-  public abstract toString(): string;
-  public abstract wrap(maxWidth: number, firstLinePadding: number): {wrapped: TextContainer<StrictUnicodeText>; lastLinePadding: number };
-  public abstract flatten(initialStyle?: Style): FlatNonatomicTextContainer<T>;
-  public abstract splitToFlatLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[];
-}
 type textContainerSizeT = {
   width: {
     first: number;
@@ -18,7 +10,17 @@ type textContainerSizeT = {
   };
   heigth: number;
 }
-export class AtomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> extends TextContainer<T> {
+
+export abstract class TextContainerBase<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> {
+  public style?: Style;
+  public abstract calcSize(): textContainerSizeT;
+  public abstract toString(): string;
+  public abstract wrap(maxWidth: number, firstLinePadding: number): {wrapped: AnyTextContainer<StrictUnicodeText>; lastLinePadding: number };
+  public abstract flatten(initialStyle?: Style): FlatNonatomicTextContainer<T>;
+  public abstract splitToFlatLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[];
+}
+export type AnyTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> = AtomicTextContainer<T> | NonatomicTextContainer<T> | FlatNonatomicTextContainer<T>;
+export class AtomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> extends TextContainerBase<T> {
   public readonly size: textContainerSizeT;
   constructor(public readonly text: T, public style?: Style) {
     super();
@@ -65,9 +67,8 @@ export class AtomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT
     });
   }
 }
-type NonatomicChildT<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> = NonatomicTextContainer<T> | AtomicTextContainer<T>;
-export class NonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> extends TextContainer<T> {
-  constructor(public children: NonatomicChildT<T>[], public style?: Style) {
+export class NonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> extends TextContainerBase<T> {
+  constructor(public children: AnyTextContainer<T>[], public style?: Style) {
     super();
   }
   calcSize(): textContainerSizeT {
@@ -106,7 +107,7 @@ export class NonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnico
     return this.children.reduce((text, child) => { return text + child.toString(); }, '');
   }
   public wrap(maxWidth: number, firstLinePadding = 0): {wrapped: NonatomicTextContainer<StrictUnicodeText>; lastLinePadding: number} {
-    type reduceStateT = {children: NonatomicChildT<StrictUnicodeText>[]; linePadding: number};
+    type reduceStateT = {children: AnyTextContainer<StrictUnicodeText>[]; linePadding: number};
     const reduceState = this.children.reduce<reduceStateT>((reduceState, child) => {
       const wrapResult = child.wrap(maxWidth, reduceState.linePadding);
       if (wrapResult.wrapped.calcSize().heigth === 0) {
@@ -134,7 +135,6 @@ export class NonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnico
     return this.flatten().splitToFlatLines();
   }
 }
-
 export class FlatNonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> extends NonatomicTextContainer<T> {
   constructor(public children: AtomicTextContainer<T>[]) {
     super(children, undefined);

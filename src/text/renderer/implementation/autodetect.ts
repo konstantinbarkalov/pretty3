@@ -1,9 +1,9 @@
-import { FlatNonatomicTextContainer, TextContainer } from "../../textContainer";
-import { StrictUnicodeLine, AnyStrictUnicodeT } from "../../strictUnicode";
-import { Renderer } from "../abstract/renderer";
-import { PlainRenderer } from "./plain";
-import { AnsiRenderer } from "./ansi";
-import { HtmlRenderer } from "./html";
+import { FlatNonatomicTextContainer, AnyTextContainer } from '../../textContainer';
+import { StrictUnicodeLine, AnyStrictUnicodeT } from '../../strictUnicode';
+import { Renderer } from '../abstract/renderer';
+import { PlainRenderer } from './plain';
+import { AnsiRenderer } from './ansi';
+import { HtmlRenderer } from './html';
 
 type featuresT = {
   width: number,
@@ -42,7 +42,7 @@ export class AutodetectRenderer extends Renderer {
       }
     }
   }
-  public render(textContainer: TextContainer<AnyStrictUnicodeT>): string {
+  public render(textContainer: AnyTextContainer<AnyStrictUnicodeT>): string {
     return this.renderer.render(textContainer);
   }
   public renderFlat(flatTextContainer: FlatNonatomicTextContainer<AnyStrictUnicodeT>): string {

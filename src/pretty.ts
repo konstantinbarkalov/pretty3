@@ -3,7 +3,7 @@ import defaultSettings from './defaultSettings';
 import { Renderer } from './text/renderer/abstract/renderer';
 import { StrictUnicodeLine, StrictUnicodeText } from './text/strictUnicode';
 import { Style } from './text/style';
-import { AtomicTextContainer, FlatNonatomicTextContainer, TextContainer } from './text/textContainer';
+import { AtomicTextContainer, FlatNonatomicTextContainer, AnyTextContainer } from './text/textContainer';
 import { itemTextPatternT, logLineCallbackT, maxLineWidthT, paddingPrefixT, printTreeOptionsT, printTreeSettingsT, stringifyTreeOptionsT, textPatternString, textPatternStringT, textPatternT } from './types/general';
 import { anyNodeDescriptionT, EnumerableNodeTypeEnum, NodeMetatypeEnum, SingleNodeTypeEnum } from './types/nodeDescription';
 
@@ -294,7 +294,7 @@ function buildOneliner(nodeKey: string | number | undefined, nodeDescription: an
   return new FlatNonatomicTextContainer(children);
 }
 
-function printTextContainerWrapped(textContainer: TextContainer, paddingPrefix: paddingPrefixT, maxLineWidth: number, logLineCallback: logLineCallbackT, renderer: Renderer): void {
+function printTextContainerWrapped(textContainer: AnyTextContainer, paddingPrefix: paddingPrefixT, maxLineWidth: number, logLineCallback: logLineCallbackT, renderer: Renderer): void {
   const actualMaxLineWidth: maxLineWidthT = {
     first: maxLineWidth - paddingPrefix.first.calcSize().width.first,
     other: maxLineWidth - paddingPrefix.other.calcSize().width.first,
