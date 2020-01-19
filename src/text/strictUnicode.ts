@@ -4,7 +4,8 @@ import { EOL } from 'os';
 
 export class NormalizedUnicodeText extends String {
   constructor(text: string | String, isSkipChecks = false) {
-    if (isSkipChecks) {
+    const isNormalizedInstance = NormalizedUnicodeText.isNormalizedInstance(text);
+    if (isSkipChecks || isNormalizedInstance) {
       super(text);
     } else {
       const normalizedText = text.normalize();
@@ -14,7 +15,7 @@ export class NormalizedUnicodeText extends String {
   public normalize(): string {
     return this.valueOf();
   }
-  protected isPrecheckedInstance(text: string | String): boolean {
+  static isNormalizedInstance(text: string | String): boolean {
     return text instanceof NormalizedUnicodeText;
   }
   static combine(...items: NormalizedUnicodeText[]): NormalizedUnicodeText {
@@ -88,7 +89,7 @@ export class StrictUnicodeLine extends StrictUnicodeText {
     if (normalizedText.includes(EOL)) { throw('No EOLs allowed in single StrictUnicodeLine, use StrictUnicodeText instead'); }
     super.guardStringIsStrictUnicode(normalizedText);
   }
-  private widthCache: number | undefined;
+  protected widthCache: number | undefined;
   public calcWidth(): number {
     if (this.widthCache === undefined) {
       const iterator = this[Symbol.iterator]();
@@ -132,4 +133,24 @@ export class StrictUnicodeLine extends StrictUnicodeText {
   }
 }
 
-export type AnyStrictUnicodeT = StrictUnicodeLine | StrictUnicodeText;
+export class StrictUnicodeChar extends StrictUnicodeLine {
+
+  protected isPrecheckedInstance(text: string | String): boolean {
+    return text instanceof StrictUnicodeChar;
+  }
+
+  public guardStringIsStrictUnicode(normalizedText: StrictUnicodeLine): void {
+    if (normalizedText.calcWidth() !== 1) { throw('char width must be strictly 1'); }
+    super.guardStringIsStrictUnicode(normalizedText);
+  }
+  protected widthCache = 1;
+  public calcWidth(): number {
+    return this.widthCache;
+  }
+
+  static combine(...items: StrictUnicodeChar[]): StrictUnicodeLine {
+    return super.combine(...items);
+  }
+}
+
+export type AnyStrictUnicodeT = StrictUnicodeChar | StrictUnicodeLine | StrictUnicodeText;

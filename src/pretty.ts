@@ -26,7 +26,26 @@ const treeStyle = {
   info: new Style(treeStyleColors.blue),
   branch: new Style(treeStyleColors.darkGray),
 };
-
+/**
+ * Render formatted tree-representation of any javacript data to string.
+ * Use options to customize output.
+ *
+ * @remarks
+ *
+ * Works same as `pretty.printTree`, but use predefined `logLineCallback`
+ * for dumping output to `string`. Consider Using `pretty.printTree` if
+ * you need a per-line callback model, or if you just want a simple oneliner
+ * with default `options.logLineCallback`
+ *
+ * Cycle-referencing is allowed, while capping output
+ * with finite `options.maxLevel` and `options.maxItemsPerLevel`.
+ *
+ * @export
+ * @param {*} tree any jabasctript entity
+ * @param {stringifyTreeOptionsT} [options]
+ * @see stringifyTreeOptionsT
+ * @returns {string}
+ */
 export function stringifyTree(tree: any, options?: stringifyTreeOptionsT ): string {
   let outputString = '';
   const eol = (options && options.renderer) ? options.renderer.eol : defaultSettings.renderer.eol;
@@ -36,15 +55,23 @@ export function stringifyTree(tree: any, options?: stringifyTreeOptionsT ): stri
   printTree(tree, printTreeOptions);
   return outputString;
 }
+
 /**
- * Print formatted tree representation of any javacript data. Use options
- * to customize output. Cycle-referencing is allowed, while capping output
- * with finite options.maxLevel and options.maxItemsPerLevel.
- * Use options.logLineCallback for custom console.log handler, or
- * pretty.stringifyTree to render tree to a [string].
+ * Print formatted tree-representation of any javacript data. Use options
+ * to customize output.
+ *
+ * @remarks
+ *
+ * Use `options.logLineCallback` for custom `console.log` handler, or
+ * `pretty.stringifyTree` to render tree to a `string`.
+ *
+ * @remarks
+ *
+ * Cycle-referencing is allowed, while capping output
+ * with finite `options.maxLevel` and `options.maxItemsPerLevel`.
  *
  * @export
- * @param {*} tree
+ * @param {*} tree any jabasctript entity
  * @param {printTreeOptionsT} [options]
  */
 export function printTree(tree: any, options?: printTreeOptionsT ): void {
