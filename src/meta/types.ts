@@ -3,33 +3,33 @@ import { AnyTextContainer, AtomicTextContainer } from '../text/textContainer';
 
 export interface MetaNodeI {
   children: MetaNodeI[];
-  nodePattern: ChildDependedArmPatternI;
+  pattern: ChildDependentArmPatternI;
   leaf: AnyTextContainer;
 }
 
 export type armT = StrictUnicodeLine;
 
-export interface LineDependedArmI {
+export interface LineDependentArmI {
   firstLine: armT;
   otherLine: armT;
   lastLine: armT;
 }
 
-export interface ChildDependedArmI {
-  firstChild: LineDependedArmI;
-  otherChild: LineDependedArmI;
-  lastChild: LineDependedArmI;
+export interface ChildDependentArmI {
+  firstChild: LineDependentArmI;
+  otherChild: LineDependentArmI;
+  lastChild: LineDependentArmI;
 }
 
 export type styledArmT = AtomicTextContainer<StrictUnicodeLine>;
 
-export interface LineDependedStyledArmI {
+export interface LineDependentStyledArmI {
   firstLine: styledArmT;
   otherLine: styledArmT;
   lastLine: styledArmT;
 }
 
-export interface LineDependedStyledArmsI {
+export interface LineDependentStyledArmsI {
   firstLine: styledArmT[];
   otherLine: styledArmT[];
   lastLine: styledArmT[];
@@ -39,19 +39,19 @@ export interface ArmPatternI {
   firstChar: StrictUnicodeChar;
   otherChar: StrictUnicodeChar;
   lastChar: StrictUnicodeChar;
-  generateUnstyledArm(armWidth: number): armT;
+  generateArm(armWidth: number): armT;
 }
 
-export interface LineDependedArmPatternI {
+export interface LineDependentArmPatternI {
   firstLine: ArmPatternI;
   otherLine: ArmPatternI;
   lastLine: ArmPatternI;
-  generateLineDependedUnstyledArm(armWidth: number): LineDependedArmI;
+  generateLineDependentArm(armWidth: number): LineDependentArmI;
 }
 
-export interface ChildDependedArmPatternI {
-  firstChild: LineDependedArmPatternI;
-  otherChild: LineDependedArmPatternI;
-  lastChild: LineDependedArmPatternI;
-  generateChildDependedUnstyledArm(armWidth: number): ChildDependedArmI;
+export interface ChildDependentArmPatternI {
+  firstChild: LineDependentArmPatternI;
+  otherChild: LineDependentArmPatternI;
+  lastChild: LineDependentArmPatternI;
+  generateChildDependentArm(armWidth: number): ChildDependentArmI;
 }
