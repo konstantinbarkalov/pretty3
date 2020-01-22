@@ -3,54 +3,55 @@ import { AnyTextContainer, AtomicTextContainer } from '../text/textContainer';
 
 export interface MetaNodeI {
   children: MetaNodeI[];
-  nodePattern: UniversalArmPatternI;
+  nodePattern: ChildDependedArmPatternI;
   leaf: AnyTextContainer;
 }
 
-export type unstyledArmT = StrictUnicodeLine;
+export type armT = StrictUnicodeLine;
 
-export interface ConditionalUnstyledArmI {
-  first: unstyledArmT;
-  other: unstyledArmT;
-  last: unstyledArmT;
-}
-export interface UniversalUnstyledArmI {
-  first: ConditionalUnstyledArmI;
-  other: ConditionalUnstyledArmI;
-  last: ConditionalUnstyledArmI;
+export interface LineDependedArmI {
+  firstLine: armT;
+  otherLine: armT;
+  lastLine: armT;
 }
 
-export type armT = AtomicTextContainer<StrictUnicodeLine>;
-
-export interface ConditionalArmI {
-  first: armT;
-  other: armT;
-  last: armT;
+export interface ChildDependedArmI {
+  firstChild: LineDependedArmI;
+  otherChild: LineDependedArmI;
+  lastChild: LineDependedArmI;
 }
 
-export interface ConditionalArmsI {
-  first: armT[];
-  other: armT[];
-  last: armT[];
+export type styledArmT = AtomicTextContainer<StrictUnicodeLine>;
+
+export interface LineDependedStyledArmI {
+  firstLine: styledArmT;
+  otherLine: styledArmT;
+  lastLine: styledArmT;
+}
+
+export interface LineDependedStyledArmsI {
+  firstLine: styledArmT[];
+  otherLine: styledArmT[];
+  lastLine: styledArmT[];
 }
 
 export interface ArmPatternI {
-  first: StrictUnicodeChar;
-  other: StrictUnicodeChar;
-  last: StrictUnicodeChar;
-  generateUnstyledArm(armWidth: number): unstyledArmT;
+  firstChar: StrictUnicodeChar;
+  otherChar: StrictUnicodeChar;
+  lastChar: StrictUnicodeChar;
+  generateUnstyledArm(armWidth: number): armT;
 }
 
-export interface ConditionalArmPatternI {
-  first: ArmPatternI;
-  other: ArmPatternI;
-  last: ArmPatternI;
-  generateConditionalUnstyledArm(armWidth: number): ConditionalUnstyledArmI;
+export interface LineDependedArmPatternI {
+  firstLine: ArmPatternI;
+  otherLine: ArmPatternI;
+  lastLine: ArmPatternI;
+  generateLineDependedUnstyledArm(armWidth: number): LineDependedArmI;
 }
 
-export interface UniversalArmPatternI {
-  first: ConditionalArmPatternI;
-  other: ConditionalArmPatternI;
-  last: ConditionalArmPatternI;
-  generateUniversalUnstyledArm(armWidth: number): UniversalUnstyledArmI;
+export interface ChildDependedArmPatternI {
+  firstChild: LineDependedArmPatternI;
+  otherChild: LineDependedArmPatternI;
+  lastChild: LineDependedArmPatternI;
+  generateChildDependedUnstyledArm(armWidth: number): ChildDependedArmI;
 }

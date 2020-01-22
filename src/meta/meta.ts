@@ -1,5 +1,5 @@
 import { StrictUnicodeLine, StrictUnicodeChar } from '../text/strictUnicode';
-import { MetaNodeI, ConditionalArmPatternI, ConditionalArmsI, ArmPatternI, armT, ConditionalUnstyledArmI, unstyledArmT, UniversalArmPatternI, UniversalUnstyledArmI } from './metaTypes';
+import { MetaNodeI, LineDependedArmPatternI, LineDependedStyledArmsI, ArmPatternI, styledArmT, LineDependedArmI, armT, ChildDependedArmPatternI, ChildDependedArmI } from './metaTypes';
 import { AnyTextContainer, AtomicTextContainer, FlatNonatomicTextContainer } from '../text/textContainer';
 import { Renderer } from '../text/renderer/abstract/renderer';
 import { PlainRenderer } from '../text/renderer/implementation';
@@ -9,22 +9,22 @@ import { EOL } from 'os';
 export class MetaNode implements MetaNodeI {
 
   public children: MetaNodeI[] = [];
-  constructor(public leaf: AnyTextContainer, public nodePattern: UniversalArmPatternI, public armWidth: number) { }
+  constructor(public leaf: AnyTextContainer, public nodePattern: ChildDependedArmPatternI, public armWidth: number) { }
 }
 
-export class ConditionalArms implements ConditionalArmsI {
-  constructor(public first: armT[], public other: armT[], public last: armT[]) { }
+export class LineDependedArms implements LineDependedStyledArmsI {
+  constructor(public firstLine: styledArmT[], public otherLine: styledArmT[], public lastLine: styledArmT[]) { }
 }
-export class ConditionalUnstyledArm implements ConditionalUnstyledArmI {
-  constructor(public first: unstyledArmT, public other: unstyledArmT, public last: unstyledArmT) { }
+export class LineDependedUnstyledArm implements LineDependedArmI {
+  constructor(public firstLine: armT, public otherLine: armT, public lastLine: armT) { }
 }
-export class UniversalUnstyledArm implements UniversalUnstyledArmI {
-  constructor(public first: ConditionalUnstyledArmI, public other: ConditionalUnstyledArmI, public last: ConditionalUnstyledArmI) { }
+export class ChildDependedUnstyledArm implements ChildDependedArmI {
+  constructor(public firstChild: LineDependedArmI, public otherChild: LineDependedArmI, public lastChild: LineDependedArmI) { }
 }
 
 export class ArmPattern implements ArmPatternI {
 
-  constructor(public first: StrictUnicodeChar, public other: StrictUnicodeChar, public last: StrictUnicodeChar) { }
+  constructor(public firstChar: StrictUnicodeChar, public otherChar: StrictUnicodeChar, public lastChar: StrictUnicodeChar) { }
   /**
    * Generates line with drawn arm like: `╰───╸`
    * with repeating `this.other` character to fit `this.armWidth`
@@ -50,61 +50,61 @@ export class ArmPattern implements ArmPatternI {
   generateUnstyledArm(armWidth: number): StrictUnicodeLine {
     let generated = '';
     if (armWidth > 1) {
-      generated += this.first.toString();
+      generated += this.firstChar.toString();
     }
     if (armWidth > 2) {
-      generated += this.other.toString().repeat(armWidth - 2);
+      generated += this.otherChar.toString().repeat(armWidth - 2);
     }
     if (armWidth > 0) {
-      generated += this.last.toString();
+      generated += this.lastChar.toString();
     }
     return new StrictUnicodeLine(generated, true);
   }
 }
 
-export class ConditionalArmPattern implements ConditionalArmPatternI {
-  constructor(public first: ArmPatternI, public other: ArmPatternI, public last: ArmPatternI) { }
-  generateConditionalUnstyledArm(armWidth: number): ConditionalUnstyledArmI {
-    const conditionalUnstyledArm: ConditionalUnstyledArm = new ConditionalUnstyledArm (
-      this.first.generateUnstyledArm(armWidth),
-      this.other.generateUnstyledArm(armWidth),
-      this.last.generateUnstyledArm(armWidth),
+export class LineDependedArmPattern implements LineDependedArmPatternI {
+  constructor(public firstLine: ArmPatternI, public otherLine: ArmPatternI, public lastLine: ArmPatternI) { }
+  generateLineDependedUnstyledArm(armWidth: number): LineDependedArmI {
+    const lineDependedUnstyledArm: LineDependedUnstyledArm = new LineDependedUnstyledArm (
+      this.firstLine.generateUnstyledArm(armWidth),
+      this.otherLine.generateUnstyledArm(armWidth),
+      this.lastLine.generateUnstyledArm(armWidth),
     );
-    return conditionalUnstyledArm;
+    return lineDependedUnstyledArm;
   }
 }
 
-export class UniversalArmPattern implements UniversalArmPatternI {
-  constructor(public first: ConditionalArmPatternI, public other: ConditionalArmPatternI, public last: ConditionalArmPatternI) { }
-  generateUniversalUnstyledArm(armWidth: number): UniversalUnstyledArmI {
-    const universalUnstyledArm: UniversalUnstyledArm = new UniversalUnstyledArm (
-      this.first.generateConditionalUnstyledArm(armWidth),
-      this.other.generateConditionalUnstyledArm(armWidth),
-      this.last.generateConditionalUnstyledArm(armWidth),
+export class ChildDependedArmPattern implements ChildDependedArmPatternI {
+  constructor(public firstChild: LineDependedArmPatternI, public otherChild: LineDependedArmPatternI, public lastChild: LineDependedArmPatternI) { }
+  generateChildDependedUnstyledArm(armWidth: number): ChildDependedArmI {
+    const childDependedUnstyledArm: ChildDependedUnstyledArm = new ChildDependedUnstyledArm (
+      this.firstChild.generateLineDependedUnstyledArm(armWidth),
+      this.otherChild.generateLineDependedUnstyledArm(armWidth),
+      this.lastChild.generateLineDependedUnstyledArm(armWidth),
     );
-    return universalUnstyledArm;
+    return childDependedUnstyledArm;
   }
 }
 
-function renderMetaNodeRecursive(node: MetaNodeI, parentConditionalArms: ConditionalArmsI, maxWidth: number, armWidth: number, firstLinePadding: number, renderer: Renderer): void {
+function renderMetaNodeRecursive(node: MetaNodeI, parentLineDependedArms: LineDependedStyledArmsI, maxWidth: number, armWidth: number, firstLinePadding: number, renderer: Renderer): void {
   const hasChildren = (node.children.length > 0);
   const wrappedLeaf = node.leaf.wrap(maxWidth, firstLinePadding).wrapped;
   const leafFlatLines = wrappedLeaf.splitToFlatLines();
   leafFlatLines.forEach((leafFlatLine, leafFlatLineId) => {
-    let parentArms: armT[];
+    let parentArms: styledArmT[];
     const isFirstLineOfLeaf = leafFlatLineId === 0;
     const isLastLineOfLeaf = leafFlatLineId === leafFlatLines.length - 1;
 
     if (isFirstLineOfLeaf) {
-      parentArms = parentConditionalArms.first;
+      parentArms = parentLineDependedArms.firstLine;
     } else if (isLastLineOfLeaf) {
       if (hasChildren) {
-        parentArms = parentConditionalArms.other;
+        parentArms = parentLineDependedArms.otherLine;
       } else {
-        parentArms = parentConditionalArms.last;
+        parentArms = parentLineDependedArms.lastLine;
       }
     } else {
-      parentArms = parentConditionalArms.other;
+      parentArms = parentLineDependedArms.otherLine;
     }
 
     const atomicsToRender = parentArms.concat(leafFlatLine.children);
@@ -113,56 +113,44 @@ function renderMetaNodeRecursive(node: MetaNodeI, parentConditionalArms: Conditi
     console.log(rendered);
   });
   node.children.forEach((childNode, childNodeId)=>{
-    let сonditionalArmPattern: ConditionalArmPatternI;
-    let conditionalArms: ConditionalArmsI;
+    let сonditionalArmPattern: LineDependedArmPatternI;
+    let lineDependedArms: LineDependedStyledArmsI;
     const isFirstChild = childNodeId === 0;
     const isLastChild = childNodeId === node.children.length - 1;
     if (isLastChild) {
-      сonditionalArmPattern = new ConditionalArmPattern(
-        node.nodePattern.last.first,
-        node.nodePattern.last.other,
-        node.nodePattern.last.last,
-      );
-      conditionalArms = new ConditionalArms(
-        parentConditionalArms.other,
-        parentConditionalArms.other,
-        parentConditionalArms.last
+      сonditionalArmPattern = node.nodePattern.lastChild;
+      lineDependedArms = new LineDependedArms(
+        parentLineDependedArms.otherLine,
+        parentLineDependedArms.otherLine,
+        parentLineDependedArms.lastLine
       );
     } else if (isFirstChild) {
-      сonditionalArmPattern = new ConditionalArmPattern(
-        node.nodePattern.first.first,
-        node.nodePattern.first.other,
-        node.nodePattern.first.other,
-      );
-      conditionalArms = new ConditionalArms(
-        parentConditionalArms.other,
-        parentConditionalArms.other,
-        parentConditionalArms.other
+      сonditionalArmPattern = node.nodePattern.firstChild;
+      lineDependedArms = new LineDependedArms(
+        parentLineDependedArms.otherLine,
+        parentLineDependedArms.otherLine,
+        parentLineDependedArms.otherLine
       );
     } else {
-      сonditionalArmPattern = new ConditionalArmPattern(
-        node.nodePattern.other.first,
-        node.nodePattern.other.other,
-        node.nodePattern.other.other,
-      );
-      conditionalArms = new ConditionalArms(
-        parentConditionalArms.other,
-        parentConditionalArms.other,
-        parentConditionalArms.other
+      сonditionalArmPattern = node.nodePattern.otherChild;
+      lineDependedArms = new LineDependedArms(
+        parentLineDependedArms.otherLine,
+        parentLineDependedArms.otherLine,
+        parentLineDependedArms.otherLine
       );
     }
 
-    const conditionalUnstyledArm = сonditionalArmPattern.generateConditionalUnstyledArm(armWidth);
-    const conditionalArm = {
-      first: new AtomicTextContainer(conditionalUnstyledArm.first), // TODO: style here
-      other: new AtomicTextContainer(conditionalUnstyledArm.other), // TODO: style here
-      last: new AtomicTextContainer(conditionalUnstyledArm.last), // TODO: style here
+    const lineDependedUnstyledArm = сonditionalArmPattern.generateLineDependedUnstyledArm(armWidth);
+    const lineDependedArm = {
+      first: new AtomicTextContainer(lineDependedUnstyledArm.firstLine), // TODO: style here
+      other: new AtomicTextContainer(lineDependedUnstyledArm.otherLine), // TODO: style here
+      last: new AtomicTextContainer(lineDependedUnstyledArm.lastLine), // TODO: style here
     };
-    conditionalArms.first = conditionalArms.first.concat(conditionalArm.first);
-    conditionalArms.other = conditionalArms.other.concat(conditionalArm.other);
-    conditionalArms.last = conditionalArms.last.concat(conditionalArm.last);
+    lineDependedArms.firstLine = lineDependedArms.firstLine.concat(lineDependedArm.first);
+    lineDependedArms.otherLine = lineDependedArms.otherLine.concat(lineDependedArm.other);
+    lineDependedArms.lastLine = lineDependedArms.lastLine.concat(lineDependedArm.last);
 
-    renderMetaNodeRecursive(childNode, conditionalArms, maxWidth, armWidth, firstLinePadding, renderer);
+    renderMetaNodeRecursive(childNode, lineDependedArms, maxWidth, armWidth, firstLinePadding, renderer);
   });
 }
 function easyCreateArmPattern(chars: string): ArmPattern {
@@ -174,51 +162,46 @@ function easyCreateArmPattern(chars: string): ArmPattern {
   const armPattern = new ArmPattern(...basicСhars);
   return armPattern;
 }
-function easyCreateConditionalArmPattern(firstChars: string, otherChars: string, lastChars: string): ConditionalArmPattern {
-  const conditionalArmPattern = new ConditionalArmPattern(
+function easyCreateLineDependedArmPattern(firstChars: string, otherChars: string, lastChars: string): LineDependedArmPattern {
+  const lineDependedArmPattern = new LineDependedArmPattern(
     easyCreateArmPattern(firstChars),
     easyCreateArmPattern(otherChars),
     easyCreateArmPattern(lastChars),
   );
-  return conditionalArmPattern;
+  return lineDependedArmPattern;
 }
-function easyCreateUniversalArmPattern(chars: string[]): UniversalArmPattern {
-  const universalArmPattern = new UniversalArmPattern(
-    easyCreateConditionalArmPattern(chars[0], chars[1], chars[2]),
-    easyCreateConditionalArmPattern(chars[3], chars[4], chars[5]),
-    easyCreateConditionalArmPattern(chars[6], chars[7], chars[8]),
+function easyCreateChildDependedArmPattern(chars: string[]): ChildDependedArmPattern {
+  const childDependedArmPattern = new ChildDependedArmPattern(
+    easyCreateLineDependedArmPattern(chars[0], chars[1], chars[2]),
+    easyCreateLineDependedArmPattern(chars[3], chars[4], chars[5]),
+    easyCreateLineDependedArmPattern(chars[6], chars[7], chars[8]),
   );
-  return universalArmPattern;
+  return childDependedArmPattern;
 }
-function easyCreateNode(text: string, nodePattern: UniversalArmPattern): MetaNode {
+function easyCreateNode(text: string, nodePattern: ChildDependedArmPattern): MetaNode {
   const leaf = new AtomicTextContainer(new StrictUnicodeLine(text));
   const metaNode = new MetaNode(leaf, nodePattern, 4);
   return metaNode;
 }
-//const testCPatternA = easyCreateConditionalArmPattern('├─>', '├─╸', '└─╸');
-//const testCPatternB = easyCreateConditionalArmPattern('├─╴', '├─╴', '╰─╴');
-//const testCPatternC = easyCreateConditionalArmPattern('╔═F', '╠═O', '╚═L');
 
-const testCPatternA = easyCreateUniversalArmPattern([
+const testCPattern = easyCreateChildDependedArmPattern([
   '├─>', '│  ', '│  ',
   '├─╸', '│  ', '│  ',
   '└─<', '   ', '   ']);
-const testCPatternB = testCPatternA;
-const testCPatternC = testCPatternA;
-const testMetaNodeA = easyCreateNode('alla', testCPatternA);
-testMetaNodeA.children.push(easyCreateNode('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', testCPatternB));
-testMetaNodeA.children.push(easyCreateNode(`ally dot ${EOL} d ddf sdfg sd g`, testCPatternC));
-testMetaNodeA.children.push(easyCreateNode('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', testCPatternB));
+const testMetaNodeA = easyCreateNode('alla', testCPattern);
+testMetaNodeA.children.push(easyCreateNode('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', testCPattern));
+testMetaNodeA.children.push(easyCreateNode(`ally dot ${EOL} d ddf sdfg sd g`, testCPattern));
+testMetaNodeA.children.push(easyCreateNode('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', testCPattern));
 
-const testMetaNodeB = easyCreateNode('bella', testCPatternB);
-testMetaNodeB.children.push(easyCreateNode('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', testCPatternB));
-testMetaNodeB.children.push(easyCreateNode(`ally dot ${EOL} d ddf sdfg sd g`, testCPatternC));
-testMetaNodeB.children.push(easyCreateNode('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', testCPatternB));
+const testMetaNodeB = easyCreateNode('bella', testCPattern);
+testMetaNodeB.children.push(easyCreateNode('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', testCPattern));
+testMetaNodeB.children.push(easyCreateNode(`ally dot ${EOL} d ddf sdfg sd g`, testCPattern));
+testMetaNodeB.children.push(easyCreateNode('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', testCPattern));
 
-const testMetaTree = easyCreateNode('alabama story goes here: er fopgp oidpsfgoisdf gfgsd qwecsddf fmkg-olvlkmk dgrg', testCPatternC);
+const testMetaTree = easyCreateNode('alabama story goes here: er fopgp oidpsfgoisdf gfgsd qwecsddf fmkg-olvlkmk dgrg', testCPattern);
 testMetaTree.children.push(testMetaNodeA);
 testMetaTree.children.push(testMetaNodeB);
 const renderer = new PlainRenderer();
-const emptyConditionalArms = new ConditionalArms([],[],[]);
-renderMetaNodeRecursive(testMetaTree, emptyConditionalArms, 40, 8, 0, renderer);
+const emptyLineDependedArms = new LineDependedArms([],[],[]);
+renderMetaNodeRecursive(testMetaTree, emptyLineDependedArms, 40, 8, 0, renderer);
 console.log('--- fin ---');

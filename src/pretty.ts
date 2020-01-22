@@ -37,11 +37,13 @@ const treeStyle = {
  * you need a per-line callback model, or if you just want a simple oneliner
  * with default `options.logLineCallback`
  *
+ * @remarks
+ *
  * Cycle-referencing is allowed, while capping output
  * with finite `options.maxLevel` and `options.maxItemsPerLevel`.
  *
  * @export
- * @param {*} tree any jabasctript entity
+ * @param {*} tree any javasctript entity
  * @param {stringifyTreeOptionsT} [options]
  * @see stringifyTreeOptionsT
  * @returns {string}
@@ -71,7 +73,7 @@ export function stringifyTree(tree: any, options?: stringifyTreeOptionsT ): stri
  * with finite `options.maxLevel` and `options.maxItemsPerLevel`.
  *
  * @export
- * @param {*} tree any jabasctript entity
+ * @param {*} tree any javasctript entity
  * @param {printTreeOptionsT} [options]
  */
 export function printTree(tree: any, options?: printTreeOptionsT ): void {
