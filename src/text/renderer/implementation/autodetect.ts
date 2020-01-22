@@ -6,9 +6,9 @@ import { AnsiRenderer } from './ansi';
 import { HtmlRenderer } from './html';
 
 type featuresT = {
-  width: number,
-  readonly env: 'terminal' | 'browser' | 'unknown',
-  readonly allowStyles: boolean,
+  width: number;
+  readonly env: 'terminal' | 'browser' | 'unknown';
+  readonly allowStyles: boolean;
 };
 export class AutodetectRenderer extends Renderer {
   public readonly eol: string;
@@ -20,14 +20,14 @@ export class AutodetectRenderer extends Renderer {
     this.renderer = this.createRenderer();
     this.eol = this.renderer.eol;
   }
-  protected detectFeatures():featuresT {
+  protected detectFeatures(): featuresT {
     return {
       width: Infinity,
       env: 'unknown',
       allowStyles: false,
-    }
+    };
   }
-  protected createRenderer():Renderer {
+  protected createRenderer(): Renderer {
     if (!this.features.allowStyles) {
       return new PlainRenderer();
     } else {

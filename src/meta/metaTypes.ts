@@ -1,32 +1,56 @@
-import { StrictUnicodeLine, StrictUnicodeText } from '../text/strictUnicode';
-import { AnyTextContainer } from '../text/textContainer';
+import { StrictUnicodeLine, StrictUnicodeChar } from '../text/strictUnicode';
+import { AnyTextContainer, AtomicTextContainer } from '../text/textContainer';
 
 export interface MetaNodeI {
   children: MetaNodeI[];
-  nodePattern: LinePatternI;
-  childPattern: BranchPatternI;
+  nodePattern: UniversalArmPatternI;
   leaf: AnyTextContainer;
 }
-export type patternModeKeyT = 'first' | 'last' | 'other';
 
-type patternT<T> = {
-  [key in patternModeKeyT]: T;
-}
-export interface BranchPatternI extends patternT<LinePatternI> {
-  first: LinePatternI;
-  other: LinePatternI;
-  last: LinePatternI;
-}
+export type unstyledArmT = StrictUnicodeLine;
 
-export interface LinePatternI extends patternT<BasicPatternI> {
-  first: BasicPatternI;
-  other: BasicPatternI;
-  last: BasicPatternI;
+export interface ConditionalUnstyledArmI {
+  first: unstyledArmT;
+  other: unstyledArmT;
+  last: unstyledArmT;
+}
+export interface UniversalUnstyledArmI {
+  first: ConditionalUnstyledArmI;
+  other: ConditionalUnstyledArmI;
+  last: ConditionalUnstyledArmI;
 }
 
-export interface BasicPatternI extends patternT<StrictUnicodeLine> {
-  first: StrictUnicodeLine;
-  other: StrictUnicodeLine;
-  last: StrictUnicodeLine;
-  generateArm(armWidth: number): StrictUnicodeLine;
+export type armT = AtomicTextContainer<StrictUnicodeLine>;
+
+export interface ConditionalArmI {
+  first: armT;
+  other: armT;
+  last: armT;
+}
+
+export interface ConditionalArmsI {
+  first: armT[];
+  other: armT[];
+  last: armT[];
+}
+
+export interface ArmPatternI {
+  first: StrictUnicodeChar;
+  other: StrictUnicodeChar;
+  last: StrictUnicodeChar;
+  generateUnstyledArm(armWidth: number): unstyledArmT;
+}
+
+export interface ConditionalArmPatternI {
+  first: ArmPatternI;
+  other: ArmPatternI;
+  last: ArmPatternI;
+  generateConditionalUnstyledArm(armWidth: number): ConditionalUnstyledArmI;
+}
+
+export interface UniversalArmPatternI {
+  first: ConditionalArmPatternI;
+  other: ConditionalArmPatternI;
+  last: ConditionalArmPatternI;
+  generateUniversalUnstyledArm(armWidth: number): UniversalUnstyledArmI;
 }
