@@ -5,6 +5,7 @@ export interface MetaNodeI {
   children: MetaNodeI[];
   pattern: ChildDependentArmPatternI;
   leaf: AnyTextContainer;
+  armWidth: number;
 }
 
 export type armT = StrictUnicodeLine;
@@ -16,6 +17,7 @@ export interface LineDependentArmI {
 }
 
 export interface ChildDependentArmI {
+  leaf: LineDependentArmI;
   firstChild: LineDependentArmI;
   otherChild: LineDependentArmI;
   lastChild: LineDependentArmI;
@@ -50,6 +52,7 @@ export interface LineDependentArmPatternI {
 }
 
 export interface ChildDependentArmPatternI {
+  leaf: LineDependentArmPatternI;
   firstChild: LineDependentArmPatternI;
   otherChild: LineDependentArmPatternI;
   lastChild: LineDependentArmPatternI;

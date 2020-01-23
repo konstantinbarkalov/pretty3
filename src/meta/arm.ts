@@ -9,7 +9,7 @@ export class LineDependentArm implements LineDependentArmI {
   constructor(public firstLine: armT, public otherLine: armT, public lastLine: armT) { }
 }
 export class ChildDependentArm implements ChildDependentArmI {
-  constructor(public firstChild: LineDependentArmI, public otherChild: LineDependentArmI, public lastChild: LineDependentArmI) { }
+  constructor(public leaf: LineDependentArmI, public firstChild: LineDependentArmI, public otherChild: LineDependentArmI, public lastChild: LineDependentArmI) { }
 }
 
 export class ArmPattern implements ArmPatternI {
@@ -21,8 +21,8 @@ export class ArmPattern implements ArmPatternI {
    *
    * @remarks
    *
-   * During generation `last` have higher priority then `first`.
-   * So `last` will be the only generated character if `this.armWidth = 1`.
+   * During generation `first` have higher priority then `last`.
+   * So `first` will be the only generated character if `this.armWidth = 1`.
    * Same way `other` have lowest priority. And appars only if `this.armWidth > 2`
    *
    * @param {number} armWidth
@@ -39,13 +39,13 @@ export class ArmPattern implements ArmPatternI {
    */
   generateArm(armWidth: number): StrictUnicodeLine {
     let generated = '';
-    if (armWidth > 1) {
+    if (armWidth > 0) {
       generated += this.firstChar.toString();
     }
     if (armWidth > 2) {
       generated += this.otherChar.toString().repeat(armWidth - 2);
     }
-    if (armWidth > 0) {
+    if (armWidth > 1) {
       generated += this.lastChar.toString();
     }
     return new StrictUnicodeLine(generated, true);
@@ -65,9 +65,10 @@ export class LineDependentArmPattern implements LineDependentArmPatternI {
 }
 
 export class ChildDependentArmPattern implements ChildDependentArmPatternI {
-  constructor(public firstChild: LineDependentArmPatternI, public otherChild: LineDependentArmPatternI, public lastChild: LineDependentArmPatternI) { }
+  constructor(public leaf: LineDependentArmPatternI, public firstChild: LineDependentArmPatternI, public otherChild: LineDependentArmPatternI, public lastChild: LineDependentArmPatternI) { }
   generateChildDependentArm(armWidth: number): ChildDependentArmI {
     const childDependentArm: ChildDependentArm = new ChildDependentArm (
+      this.leaf.generateLineDependentArm(armWidth),
       this.firstChild.generateLineDependentArm(armWidth),
       this.otherChild.generateLineDependentArm(armWidth),
       this.lastChild.generateLineDependentArm(armWidth),
@@ -93,7 +94,7 @@ function easyCreateLineDependentArmPattern(firstChars: string, otherChars: strin
   return lineDependentArmPattern;
 }
 type easyCreateChildDependentArmPatternSettingsT = {
-  otherChildFirstLine: string; lastChildFirstLine: string; nonlastChildotherLine: string;
+  otherChildFirstLine: string; lastChildFirstLine: string; spacer: string;
 };
 export function easyCreateChildDependentArmPattern(settings: easyCreateChildDependentArmPatternSettingsT): ChildDependentArmPattern
 export function easyCreateChildDependentArmPattern(matrix: string[]): ChildDependentArmPattern
@@ -103,12 +104,14 @@ export function easyCreateChildDependentArmPattern(input: string[] | easyCreateC
       easyCreateLineDependentArmPattern(input[0], input[1], input[2]),
       easyCreateLineDependentArmPattern(input[3], input[4], input[5]),
       easyCreateLineDependentArmPattern(input[6], input[7], input[8]),
+      easyCreateLineDependentArmPattern(input[9], input[10], input[11]),
     );
     return childDependentArmPattern;
   } else {
     const childDependentArmPattern = new ChildDependentArmPattern(
-      easyCreateLineDependentArmPattern(input.otherChildFirstLine, input.nonlastChildotherLine, input.nonlastChildotherLine),
-      easyCreateLineDependentArmPattern(input.otherChildFirstLine, input.nonlastChildotherLine, input.nonlastChildotherLine),
+      easyCreateLineDependentArmPattern(input.otherChildFirstLine, input.spacer, input.spacer),
+      easyCreateLineDependentArmPattern(input.otherChildFirstLine, input.spacer, input.spacer),
+      easyCreateLineDependentArmPattern(input.otherChildFirstLine, input.spacer, input.spacer),
       easyCreateLineDependentArmPattern(input.lastChildFirstLine, '   ', '   '),
     );
     return childDependentArmPattern;
