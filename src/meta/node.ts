@@ -1,20 +1,18 @@
-
-import { MetaNodeI, ChildDependentArmPatternI } from './types';
 import { AnyTextContainer, AtomicTextContainer } from '../text/textContainer';
-
 import { StrictUnicodeLine } from '../text/strictUnicode';
-import { ChildDependentArmPattern } from './arm';
+import { MetaNodeI } from './types/node';
+import { ArmGeneratorI } from './types/armGenerator';
 
 
 
 export class MetaNode implements MetaNodeI {
   public children: MetaNodeI[] = [];
-  constructor(public leaf: AnyTextContainer, public pattern: ChildDependentArmPatternI, public armWidth: number) { }
+  constructor(public leaf: AnyTextContainer, public armGenerator: ArmGeneratorI<MetaNode>, public armWidth: number) { }
 }
 
 
-export function easyCreateNode(text: string, nodePattern: ChildDependentArmPattern, armWidth: number): MetaNode {
+export function easyCreateNode(text: string, armGenerator: ArmGeneratorI<MetaNode>, armWidth: number): MetaNode {
   const leaf = new AtomicTextContainer(new StrictUnicodeLine(text));
-  const metaNode = new MetaNode(leaf, nodePattern, armWidth);
+  const metaNode = new MetaNode(leaf, armGenerator, armWidth);
   return metaNode;
 }
