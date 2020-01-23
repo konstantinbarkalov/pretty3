@@ -39,9 +39,8 @@ function renderMetaNodeRecursive(node: MetaNodeI, parentLineDependentSyledArms: 
     const generateArmParameters: generateFnParametersT = {
       node,
       childId: null,
-      childrenCount: node.children.length,
       lineId: leafFlatLineId,
-      linesCount: leafFlatLines.length,
+      isLastLine: isLastLineOfLeaf && !hasChildren,
     };
     const arm = node.armGenerator.generateArm(generateArmParameters);
     const styledArm = new AtomicTextContainer(arm); // TODO: style here

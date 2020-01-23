@@ -5,11 +5,11 @@ import { ArmT } from './types/arm';
 export class PatternDrivenArmGenerator implements ArmGeneratorI {
   constructor (public pattern: ChildDependentArmPatternI) { }
   public generateArm(parameters: generateFnParametersT): ArmT {
-    const hasChildren = parameters.childrenCount > 0;
+    const hasChildren = parameters.node.children.length > 0;
     const isFirstChild = parameters.childId === 0;
-    const isLastChild = parameters.childId === parameters.childrenCount - 1;
+    const isLastChild = parameters.childId === parameters.node.children.length - 1;
     const isFirstLine = parameters.lineId === 0;
-    const isLastLine = parameters.lineId === parameters.linesCount - 1;
+    const isLastLine = parameters.lineId === parameters.isLastLine;
     const isLeaf = parameters.childId === null;
 
     let lineDependentPattern: LineDependentArmPatternI;
@@ -39,3 +39,5 @@ export class PatternDrivenArmGenerator implements ArmGeneratorI {
     return generated;
   }
 }
+
+
