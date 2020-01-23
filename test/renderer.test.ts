@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { AtomicTextContainer, NonatomicTextContainer, TextContainer } from '../src/text/textContainer';
+import { AtomicTextContainer, NonatomicTextContainer, AnyTextContainer } from '../src/text/textContainer';
 import { PlainRenderer, HtmlRenderer, AnsiRenderer } from '../src/text/renderer/implementation';
 import { StrictUnicodeText, StrictUnicodeLine } from '../src/text/strictUnicode';
 import { Style, StyleSwitches } from '../src/text/style';
@@ -26,7 +26,7 @@ const wrappedThenFlattened = wrapped.flatten();
 const flattened = richText.flatten();
 const flattenedThenWrapped = flattened.wrap(20).wrapped;
 
-const textContainers: {[key: string]: TextContainer} = {
+const textContainers: {[key: string]: AnyTextContainer} = {
   simpleLine,
   richText,
   wrapped,
