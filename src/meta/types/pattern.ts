@@ -1,30 +1,27 @@
 import { StrictUnicodeChar } from '../../text/strictUnicode';
 
 import { Style } from '../../text/style';
-import { ArmPlainLineT } from './arm';
+import { ArmT } from './arm';
+import { KnotMatrixI } from './matrix';
 
 
-export interface ArmPlainLinePatternI {
+export interface ArmPatternI {
   firstChar: StrictUnicodeChar;
   otherChar: StrictUnicodeChar;
   lastChar: StrictUnicodeChar;
-  generateArmPlainLine(armWidth: number): ArmPlainLineT;
-}
-
-export interface LineDependentArmPlainLinePatternI {
-  firstLine: ArmPlainLinePatternI;
-  otherLine: ArmPlainLinePatternI;
-  lastLine: ArmPlainLinePatternI;
-}
-
-export interface KnotDependentArmPlainLinePatternI {
-  leaf: LineDependentArmPlainLinePatternI;
-  firstChild: LineDependentArmPlainLinePatternI;
-  otherChild: LineDependentArmPlainLinePatternI;
-  lastChild: LineDependentArmPlainLinePatternI;
-}
-
-export interface KnotDependentArmPatternI {
-  plainPattern: KnotDependentArmPlainLinePatternI;
+  generateArm(armWidth: number): ArmT;
   style: Style;
+}
+
+export interface ArmPatternKnotMatrixI extends KnotMatrixI<ArmPatternI> {
+  firstLine: ArmPatternI;
+  otherLine: ArmPatternI;
+  lastLine: ArmPatternI;
+}
+
+export interface ArmPatternMatrixI {
+  leaf: ArmPatternKnotMatrixI;
+  firstChild: ArmPatternKnotMatrixI;
+  otherChild: ArmPatternKnotMatrixI;
+  lastChild: ArmPatternKnotMatrixI;
 }

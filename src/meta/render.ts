@@ -6,7 +6,7 @@ import { FlatNonatomicTextContainer } from '../text/textContainer';
 import { StrictUnicodeLine } from '../text/strictUnicode';
 import { PlainRenderer } from '../text/renderer/implementation';
 import { ArmGeneratorChain, ArmGeneratorChainElement } from './ArmGeneratorChainElement';
-import { KnotDependentArmPlainLinePattern, KnotDependentArmPattern } from './pattern';
+import { ArmPatternMatrix } from './pattern';
 import { Style } from '../text/style';
 import { PatternDrivenArmGenerator } from './patternDrivenArmGenerator';
 import { MetaNode } from './node';
@@ -82,13 +82,12 @@ function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain
 //   spacer: '│  ',
 //   lastChildFirstLine:    '└─╸',
 // });
-const plainPattern = KnotDependentArmPlainLinePattern.fromMatrix([
+const pattern = ArmPatternMatrix.fromString([
   '┬─>', '│  ', '│  ',
   '├──', '│  ', '│  ',
   '├──', '│  ', '│  ',
   '└──', '   ', '   ',
-]);
-const pattern = new KnotDependentArmPattern(plainPattern, new Style());
+], new Style());
 const armGenerator = new PatternDrivenArmGenerator(pattern);
 const armWidthGenerator = armGenerator; // implements both
 

@@ -1,11 +1,14 @@
 import { StrictUnicodeLine, StrictUnicodeChar } from '../text/strictUnicode';
-import { ArmPlainLinePatternI, LineDependentArmPlainLinePatternI, KnotDependentArmPlainLinePatternI, KnotDependentArmPatternI } from './types/pattern';
+
 import { Style } from '../text/style';
+import { ArmT } from './types/arm';
+import { AtomicTextContainer } from '../text/textContainer';
+import { ArmPatternI, ArmPatternKnotMatrixI, ArmPatternMatrixI } from './types/pattern';
 
 
-export class ArmPlainLinePattern implements ArmPlainLinePatternI {
+export class ArmPattern implements ArmPatternI {
 
-  constructor(public firstChar: StrictUnicodeChar, public otherChar: StrictUnicodeChar, public lastChar: StrictUnicodeChar) { }
+  constructor(public firstChar: StrictUnicodeChar, public otherChar: StrictUnicodeChar, public lastChar: StrictUnicodeChar, public style: Style) { }
   /**
    * Generates line with drawn armPlainLine like: `╰───╸`
    * with repeating `this.other` character to fit `this.armWidth`
@@ -41,59 +44,61 @@ export class ArmPlainLinePattern implements ArmPlainLinePatternI {
     }
     return new StrictUnicodeLine(generated, true);
   }
-  static fromString(chars: string): ArmPlainLinePattern {
-    const basicСhars: [StrictUnicodeChar, StrictUnicodeChar, StrictUnicodeChar] = [
+  generateArm(armWidth: number): ArmT {
+    const plainLine = this.generateArmPlainLine(armWidth);
+    const arm: ArmT = new AtomicTextContainer<StrictUnicodeLine>(plainLine, this.style);
+    return arm;
+  }
+  static fromString(chars: string, style: Style): ArmPattern {
+    const armPlainLinePattern = new ArmPattern(
       new StrictUnicodeChar(chars[0]),
       new StrictUnicodeChar(chars[1]),
       new StrictUnicodeChar(chars[2]),
-    ];
-    const armPlainLinePattern = new ArmPlainLinePattern(...basicСhars);
+      style,
+    );
     return armPlainLinePattern;
   }
 }
 
-export class LineDependentArmPlainLinePattern implements LineDependentArmPlainLinePatternI {
-  constructor(public firstLine: ArmPlainLinePatternI, public otherLine: ArmPlainLinePatternI, public lastLine: ArmPlainLinePatternI) { }
-  static fromString(firstChars: string, otherChars: string, lastChars: string): LineDependentArmPlainLinePattern {
-    const lineDependentArmPlainLinePattern = new LineDependentArmPlainLinePattern(
-      ArmPlainLinePattern.fromString(firstChars),
-      ArmPlainLinePattern.fromString(otherChars),
-      ArmPlainLinePattern.fromString(lastChars),
+export class ArmPatternKnotMatrix implements ArmPatternKnotMatrixI {
+  constructor(public firstLine: ArmPatternI, public otherLine: ArmPatternI, public lastLine: ArmPatternI) { }
+  static fromString(firstChars: string, otherChars: string, lastChars: string, style: Style): ArmPatternKnotMatrix {
+    const lineDependentArmPattern = new ArmPatternKnotMatrix(
+      ArmPattern.fromString(firstChars, style),
+      ArmPattern.fromString(otherChars, style),
+      ArmPattern.fromString(lastChars, style),
     );
-    return lineDependentArmPlainLinePattern;
+    return lineDependentArmPattern;
   }
 }
 
-type patternMatrixT = [
+type patternStringArrayT = [
   string, string, string,
   string, string, string,
   string, string, string,
   string, string, string,
 ];
 
-export class KnotDependentArmPlainLinePattern implements KnotDependentArmPlainLinePatternI {
-  constructor(public leaf: LineDependentArmPlainLinePatternI, public firstChild: LineDependentArmPlainLinePatternI, public otherChild: LineDependentArmPlainLinePatternI, public lastChild: LineDependentArmPlainLinePatternI) { }
-  static fromMatrix(matrix: patternMatrixT): KnotDependentArmPlainLinePattern {
-    const knotDependentArmPlainLinePattern = new KnotDependentArmPlainLinePattern(
-      LineDependentArmPlainLinePattern.fromString(matrix[0], matrix[1], matrix[2]),
-      LineDependentArmPlainLinePattern.fromString(matrix[3], matrix[4], matrix[5]),
-      LineDependentArmPlainLinePattern.fromString(matrix[6], matrix[7], matrix[8]),
-      LineDependentArmPlainLinePattern.fromString(matrix[9], matrix[10], matrix[11]),
+export class ArmPatternMatrix implements ArmPatternMatrixI {
+  constructor(public leaf: ArmPatternKnotMatrixI, public firstChild: ArmPatternKnotMatrixI, public otherChild: ArmPatternKnotMatrixI, public lastChild: ArmPatternKnotMatrixI) { }
+  static fromString(matrix: patternStringArrayT, style: Style): ArmPatternMatrix {
+    const knotDependentArmPlainLinePattern = new ArmPatternMatrix(
+      ArmPatternKnotMatrix.fromString(matrix[0], matrix[1], matrix[2], style),
+      ArmPatternKnotMatrix.fromString(matrix[3], matrix[4], matrix[5], style),
+      ArmPatternKnotMatrix.fromString(matrix[6], matrix[7], matrix[8], style),
+      ArmPatternKnotMatrix.fromString(matrix[9], matrix[10], matrix[11], style),
     );
     return knotDependentArmPlainLinePattern;
   }
-  static fromString(otherChildFirstLine: string, spacer: string, lastChildFirstLine: string,): KnotDependentArmPlainLinePattern {
-    const knotDependentArmPlainLinePattern = KnotDependentArmPlainLinePattern.fromMatrix([
-      otherChildFirstLine, spacer, spacer,
-      otherChildFirstLine, spacer, spacer,
-      otherChildFirstLine, spacer, spacer,
-      lastChildFirstLine , '   ',  '   ',
-    ]);
-    return knotDependentArmPlainLinePattern;
-  }
+  // TODO move to easy-node
+  // static fromString(otherChildFirstLine: string, spacer: string, lastChildFirstLine: string, style): ArmPatternMatrix {
+  //   const knotDependentArmPlainLinePattern = ArmPatternMatrix.fromMatrix([
+  //     otherChildFirstLine, spacer, spacer,
+  //     otherChildFirstLine, spacer, spacer,
+  //     otherChildFirstLine, spacer, spacer,
+  //     lastChildFirstLine , '   ',  '   ',
+  //   ]);
+  //   return knotDependentArmPlainLinePattern;
+  // }
 }
 
-
-export class KnotDependentArmPattern implements KnotDependentArmPatternI {
-  constructor(public plainPattern: KnotDependentArmPlainLinePattern, public style: Style) { }
-}
