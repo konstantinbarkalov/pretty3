@@ -1,116 +1,79 @@
 import { EOL } from 'os';
 import { MetaNodeI } from './types/node';
-import { LineDependentStyledArmsI, StyledArmT } from './types/deprecated';
 import { Renderer } from '../text/renderer/abstract/renderer';
-import { ArmT } from './types/arm';
-import { AtomicTextContainer, FlatNonatomicTextContainer } from '../text/textContainer';
+import { generateFnParametersT } from './types/armGenerator';
+import { FlatNonatomicTextContainer } from '../text/textContainer';
 import { StrictUnicodeLine } from '../text/strictUnicode';
-import { LineDependentArmPatternI } from './types/pattern';
-import { LineDependentStyledArms } from './arm';
-import { easyCreateChildDependentArmPattern } from './pattern';
-import { PatternDrivenArmGenerator } from './patternDrivenArmGenerator';
 import { easyCreateNode } from './node';
 import { PlainRenderer } from '../text/renderer/implementation';
-import { generateFnParametersT } from './types/armGenerator';
+import { ArmGeneratorChain, ArmGeneratorChainElement } from './ArmGeneratorChainElement';
+import { ChildDependentPlainArmLinePattern, ChildDependentArmPattern } from './pattern';
+import { Style } from '../text/style';
+import { PatternDrivenArmGenerator } from './patternDrivenArmGenerator';
 
 
 
-function renderMetaNodeRecursive(node: MetaNodeI, parentLineDependentSyledArms: LineDependentStyledArmsI, maxWidth: number, armWidth: number, firstLinePadding: number, renderer: Renderer): void {
+
+function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain, maxWidth: number, armWidth: number, firstLinePadding: number, renderer: Renderer): void {
   const hasChildren = (node.children.length > 0);
   const wrappedLeaf = node.leaf.wrap(maxWidth, firstLinePadding).wrapped;
   const leafFlatLines = wrappedLeaf.splitToFlatLines();
 
+  const chain = new ArmGeneratorChain(parentChain.elements.slice());
+
+  const generateArmParameters: generateFnParametersT = {
+    node,
+    childId: null,
+    lineId: 0,
+    isLastLine: false,
+  };
+  const chainElement = new ArmGeneratorChainElement(
+    node.armGenerator,
+    generateArmParameters
+  );
+  chain.elements.push(chainElement);
+
   // iterating through leaf lines
   leafFlatLines.forEach((leafFlatLine, leafFlatLineId) => {
-    let parentStyledArms: StyledArmT[];
-    const isFirstLineOfLeaf = leafFlatLineId === 0;
     const isLastLineOfLeaf = leafFlatLineId === leafFlatLines.length - 1;
-    if (isFirstLineOfLeaf) {
-      parentStyledArms = parentLineDependentSyledArms.firstLine;
-    } else if (isLastLineOfLeaf) {
-      if (hasChildren) {
-        parentStyledArms = parentLineDependentSyledArms.otherLine;
-      } else {
-        parentStyledArms = parentLineDependentSyledArms.lastLine;
-      }
-    } else {
-      parentStyledArms = parentLineDependentSyledArms.otherLine;
-    }
-    const generateArmParameters: generateFnParametersT = {
-      node,
-      childId: null,
-      lineId: leafFlatLineId,
-      isLastLine: isLastLineOfLeaf && !hasChildren,
-    };
-    const arm = node.armGenerator.generateArm(generateArmParameters);
-    const styledArm = new AtomicTextContainer(arm); // TODO: style here
-    const atomicsToRender = parentStyledArms.concat(styledArm, leafFlatLine.children);
+
+    chain.elements.forEach((element) => {
+      const isLastChildInChain = element.parameters.childId === element.parameters.node.children.length - 1;
+      element.parameters.isLastLine = isLastChildInChain && !hasChildren && isLastLineOfLeaf;
+      element.parameters.lineId++;
+    });
+
+
+    generateArmParameters.lineId = leafFlatLineId;
+    generateArmParameters.isLastLine = isLastLineOfLeaf && !hasChildren;
+
+    const armChain = chain.generateArmChain();
+    const atomicsToRender = armChain.concat(leafFlatLine.children);
     const flatLineToRender = new FlatNonatomicTextContainer<StrictUnicodeLine>(atomicsToRender);
     const rendered = renderer.renderFlatLine(flatLineToRender);
     console.log(rendered);
   });
   // iterating through children
   node.children.forEach((childNode, childNodeId)=>{
-    let lineDependentStyledArms: LineDependentStyledArmsI;
-    const isFirstChild = childNodeId === 0;
-    const isLastChild = childNodeId === node.children.length - 1;
-    if (isLastChild) {
-      lineDependentStyledArms = new LineDependentStyledArms(
-        parentLineDependentSyledArms.otherLine,
-        parentLineDependentSyledArms.otherLine,
-        parentLineDependentSyledArms.lastLine
-      );
-    } else if (isFirstChild) {
-      lineDependentStyledArms = new LineDependentStyledArms(
-        parentLineDependentSyledArms.otherLine,
-        parentLineDependentSyledArms.otherLine,
-        parentLineDependentSyledArms.otherLine
-      );
-    } else {
-      lineDependentStyledArms = new LineDependentStyledArms(
-        parentLineDependentSyledArms.otherLine,
-        parentLineDependentSyledArms.otherLine,
-        parentLineDependentSyledArms.otherLine
-      );
-    }
-
-    const generateArmParameters: generateFnParametersT = {
-      node,
-      childId: childNodeId,
-      childrenCount: node.children.length,
-      lineId: leafFlatLineId,
-      linesCount: leafFlatLines.length,
-    };
-
-    const arm = node.armGenerator.generateArm(generateArmParameters);
-
-    const lineDependentArm = childLineDependentArmPattern.generateLineDependentArm(childNode.armWidth);
-    const lineDependentStyledArm = {
-      first: new AtomicTextContainer(lineDependentArm.firstLine), // TODO: style here
-      other: new AtomicTextContainer(lineDependentArm.otherLine), // TODO: style here
-      last: new AtomicTextContainer(lineDependentArm.lastLine), // TODO: style here
-    };
-    lineDependentStyledArms.firstLine = lineDependentStyledArms.firstLine.concat(lineDependentStyledArm.first);
-    lineDependentStyledArms.otherLine = lineDependentStyledArms.otherLine.concat(lineDependentStyledArm.other);
-    lineDependentStyledArms.lastLine = lineDependentStyledArms.lastLine.concat(lineDependentStyledArm.last);
-
-    renderMetaNodeRecursive(childNode, lineDependentStyledArms, maxWidth, armWidth, firstLinePadding, renderer);
+    chain.elements[chain.elements.length - 1].parameters.childId = childNodeId;
+    renderMetaNodeRecursive(childNode, chain, maxWidth, armWidth, firstLinePadding, renderer);
   });
 }
-// const pattern = easyCreateChildDependentArmPattern({
+// const pattern = easyCreateChildDependentPlainArmLinePattern({
 //   otherChildFirstLine:   '├─╸',
 //   spacer: '│  ',
 //   lastChildFirstLine:    '└─╸',
 // });
-const pattern = easyCreateChildDependentArmPattern([
+const plainPattern = ChildDependentPlainArmLinePattern.fromMatrix([
   '┬─>', '│  ', '│  ',
   '├──', '│  ', '│  ',
   '├──', '│  ', '│  ',
   '└──', '   ', '   ',
 ]);
+const pattern = new ChildDependentArmPattern(plainPattern, new Style());
 const generator = new PatternDrivenArmGenerator(pattern);
 function genWidth(): number {
-  return Math.floor(Math.random() * 10) + 2;
+  return 4; // Math.floor(Math.random() * 10) + 2;
 }
 const testMetaNodeA = easyCreateNode('alla long story about: evwkfsdf vfodpskj eevcsg dfsv evwkfsdf vfodpskj eevcsg dfsv', generator, genWidth());
 testMetaNodeA.children.push(easyCreateNode('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', generator, genWidth()));
@@ -142,6 +105,6 @@ const testMetaTree = easyCreateNode('alabama story goes here: er fopgp oidpsfgoi
 testMetaTree.children.push(testMetaNodeA);
 testMetaTree.children.push(testMetaNodeB);
 const renderer = new PlainRenderer();
-const emptyLineDependentArms = new LineDependentStyledArms([],[],[]);
-renderMetaNodeRecursive(testMetaTree, emptyLineDependentArms, 40, 8, 0, renderer);
+const emptyChain = new ArmGeneratorChain([]);
+renderMetaNodeRecursive(testMetaTree, emptyChain, 40, 8, 0, renderer);
 console.log('--- fin ---');

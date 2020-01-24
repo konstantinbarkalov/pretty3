@@ -1,4 +1,4 @@
 import { StrictUnicodeLine } from '../../text/strictUnicode';
 
-export type ArmT = StrictUnicodeLine;
+export type PlainArmLineT = StrictUnicodeLine;
 

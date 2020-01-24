@@ -1,6 +1,9 @@
 import { ArmGeneratorI, generateFnParametersT } from './types/armGenerator';
-import { ChildDependentArmPatternI, LineDependentArmPatternI, ArmPatternI } from './types/pattern';
-import { ArmT } from './types/arm';
+import { ArmT } from './types/deprecated';
+import { ChildDependentArmPatternI, LineDependentPlainArmLinePatternI, PlainArmLinePatternI } from './types/pattern';
+import { AtomicTextContainer } from '../text/textContainer';
+import { StrictUnicodeLine } from '../text/strictUnicode';
+
 
 export class PatternDrivenArmGenerator implements ArmGeneratorI {
   constructor (public pattern: ChildDependentArmPatternI) { }
@@ -9,34 +12,35 @@ export class PatternDrivenArmGenerator implements ArmGeneratorI {
     const isFirstChild = parameters.childId === 0;
     const isLastChild = parameters.childId === parameters.node.children.length - 1;
     const isFirstLine = parameters.lineId === 0;
-    const isLastLine = parameters.lineId === parameters.isLastLine;
+    const isLastLine = parameters.isLastLine;
     const isLeaf = parameters.childId === null;
 
-    let lineDependentPattern: LineDependentArmPatternI;
+    let lineDependentPlainPattern: LineDependentPlainArmLinePatternI;
     if (isLeaf) {
-      lineDependentPattern = this.pattern.leaf;
+      lineDependentPlainPattern = this.pattern.plainPattern.leaf;
     } else if (isFirstChild) {
-      lineDependentPattern = this.pattern.firstChild;
+      lineDependentPlainPattern = this.pattern.plainPattern.firstChild;
     } else if (isLastChild) {
-      lineDependentPattern = this.pattern.lastChild;
+      lineDependentPlainPattern = this.pattern.plainPattern.lastChild;
     } else {
-      lineDependentPattern = this.pattern.otherChild;
+      lineDependentPlainPattern = this.pattern.plainPattern.otherChild;
     }
 
-    let pattern: ArmPatternI;
+    let plainPattern: PlainArmLinePatternI;
     if (isFirstLine) {
-      pattern = lineDependentPattern.firstLine;
+      plainPattern = lineDependentPlainPattern.firstLine;
     } else if (isLastLine) {
       if (hasChildren) {
-        pattern = lineDependentPattern.otherLine;
+        plainPattern = lineDependentPlainPattern.otherLine;
       } else {
-        pattern = lineDependentPattern.lastLine;
+        plainPattern = lineDependentPlainPattern.lastLine;
       }
     } else {
-      pattern = lineDependentPattern.otherLine;
+      plainPattern = lineDependentPlainPattern.otherLine;
     }
-    const generated: ArmT = pattern.generateArm(parameters.node.armWidth);
-    return generated;
+    const generatedPlainArmLine = plainPattern.generatePlainArmLine(parameters.node.armWidth);
+    const generatedArm = new AtomicTextContainer<StrictUnicodeLine>(generatedPlainArmLine, this.pattern.style);
+    return generatedArm;
   }
 }
 
