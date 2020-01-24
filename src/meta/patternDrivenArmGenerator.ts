@@ -1,9 +1,24 @@
 import { ArmGeneratorI, generateFnParametersT, ArmWidthGeneratorI } from './types/armGenerator';
 import { ArmT } from './types/arm';
-import { ArmPatternI, ArmPatternKnotMatrixI, ArmPatternMatrixI } from './types/pattern';
+import { MatrixPicker } from './matrixPicker';
+import { ArmPatternI, ArmPatternMatrixI, ArmPatternKnotMatrixI } from './types/matrix/armPattern';
 
 
-export class PatternDrivenArmGenerator implements ArmGeneratorI, ArmWidthGeneratorI {
+export class PatternDrivenArmGenerator extends MatrixPicker<ArmPatternI> implements ArmGeneratorI {
+  public generateArm(parameters: generateFnParametersT, armWidth: number): ArmT {
+    const pattern = this.pickFromMatrix(parameters);
+    return pattern.generateArm(armWidth);
+  }
+}
+
+export class PatternDrivenArmWidthGenerator extends MatrixPicker<number> implements ArmWidthGeneratorI {
+  public generateArmWidth(parameters: generateFnParametersT): number {
+    const armWidth = this.pickFromMatrix(parameters);
+    return armWidth;
+  }
+}
+
+export class PatternDrivenArmGeneratorOld implements ArmGeneratorI, ArmWidthGeneratorI {
   constructor (public pattern: ArmPatternMatrixI) { }
   public generateArmWidth(parameters: generateFnParametersT): number {
     const hasChildren = parameters.node.children.length > 0;

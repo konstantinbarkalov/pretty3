@@ -5,10 +5,10 @@ import { generateFnParametersT } from './types/armGenerator';
 import { FlatNonatomicTextContainer } from '../text/textContainer';
 import { StrictUnicodeLine } from '../text/strictUnicode';
 import { PlainRenderer } from '../text/renderer/implementation';
-import { ArmGeneratorChain, ArmGeneratorChainElement } from './ArmGeneratorChainElement';
+import { ArmGeneratorChain, ArmGeneratorChainElement } from './armGeneratorChain';
 import { ArmPatternMatrix } from './pattern';
 import { Style } from '../text/style';
-import { PatternDrivenArmGenerator } from './patternDrivenArmGenerator';
+import { PatternDrivenArmGenerator, PatternDrivenArmWidthGenerator } from './patternDrivenArmGenerator';
 import { MetaNode } from './node';
 
 
@@ -89,7 +89,7 @@ const pattern = ArmPatternMatrix.fromString([
   '└──', '   ', '   ',
 ], new Style());
 const armGenerator = new PatternDrivenArmGenerator(pattern);
-const armWidthGenerator = armGenerator; // implements both
+const armWidthGenerator = new PatternDrivenArmWidthGenerator();
 
 const testMetaNodeA = MetaNode.fromString('alla long story about: evwkfsdf vfodpskj eevcsg dfsv evwkfsdf vfodpskj eevcsg dfsv', armGenerator, armWidthGenerator);
 testMetaNodeA.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));

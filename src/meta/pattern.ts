@@ -3,7 +3,7 @@ import { StrictUnicodeLine, StrictUnicodeChar } from '../text/strictUnicode';
 import { Style } from '../text/style';
 import { ArmT } from './types/arm';
 import { AtomicTextContainer } from '../text/textContainer';
-import { ArmPatternI, ArmPatternKnotMatrixI, ArmPatternMatrixI } from './types/pattern';
+import { ArmPatternI, ArmPatternKnotMatrixI, ArmPatternMatrixI } from './types/matrix/armPattern';
 
 
 export class ArmPattern implements ArmPatternI {

@@ -1,8 +1,8 @@
-import { StrictUnicodeChar } from '../../text/strictUnicode';
 
-import { Style } from '../../text/style';
-import { ArmT } from './arm';
-import { KnotMatrixI } from './matrix';
+import { KnotMatrixI, MatrixI } from './matrix';
+import { StrictUnicodeChar } from '../../../text/strictUnicode';
+import { ArmT } from '../arm';
+import { Style } from '../../../text/style';
 
 
 export interface ArmPatternI {
@@ -19,7 +19,7 @@ export interface ArmPatternKnotMatrixI extends KnotMatrixI<ArmPatternI> {
   lastLine: ArmPatternI;
 }
 
-export interface ArmPatternMatrixI {
+export interface ArmPatternMatrixI extends MatrixI<ArmPatternI> {
   leaf: ArmPatternKnotMatrixI;
   firstChild: ArmPatternKnotMatrixI;
   otherChild: ArmPatternKnotMatrixI;
