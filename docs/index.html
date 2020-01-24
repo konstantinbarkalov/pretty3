@@ -1,0 +1,318 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>pretty3</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">pretty3</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1>pretty3</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<p><a href="https://www.npmjs.com/package/pretty3"><img src="https://img.shields.io/npm/v/pretty3" alt="Version"></a> <a href="https://codecov.io/github/konstantinbarkalov/pretty3"><img src="https://img.shields.io/codecov/c/github/konstantinbarkalov/pretty3" alt="Coverage"></a> <img src="https://img.shields.io/bundlephobia/minzip/pretty3" alt="Minified size"> <a href="https://github.com/konstantinbarkalov/pretty3"><img src="https://img.shields.io/github/last-commit/konstantinbarkalov/pretty3" alt="Last commit"></a> <a href="https://github.com/konstantinbarkalov/pretty3/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/pretty3" alt="License: MIT"></a></p>
+				<a href="#🌳-pretty3" id="🌳-pretty3" style="color: inherit; text-decoration: none;">
+					<h1>🌳 pretty3</h1>
+				</a>
+				<blockquote>
+					<p>Universal tree logger done right. With colors, unicode support and word-wrapping. Typesctipt friendly.</p>
+				</blockquote>
+				<a href="#warning-module-is-in-early-alpha-and-not-ready-for-use-yet-beta-release-is-planned-on-february-2020" id="warning-module-is-in-early-alpha-and-not-ready-for-use-yet-beta-release-is-planned-on-february-2020" style="color: inherit; text-decoration: none;">
+					<h1>Warning: module is in early alpha and not ready for use yet. Beta release is planned on February 2020</h1>
+				</a>
+				<a href="#install" id="install" style="color: inherit; text-decoration: none;">
+					<h2>Install</h2>
+				</a>
+				<pre><code class="language-sh">npm install pretty3</code></pre>
+				<a href="#basic-usage" id="basic-usage" style="color: inherit; text-decoration: none;">
+					<h2>Basic usage</h2>
+				</a>
+				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> pretty <span class="hljs-keyword">from</span> <span class="hljs-string">'pretty3'</span>;
+pretty.printTree(data);</code></pre>
+				<a href="#features" id="features" style="color: inherit; text-decoration: none;">
+					<h2>Features</h2>
+				</a>
+				<ul>
+					<li>Rich support for <strong>all javasctipt types</strong>, including <code>TypedArray</code>, <code>Map</code>, <code>Proxy</code> and <code>Symbol</code></li>
+					<li>Gracefull fit and <strong>word-wrap</strong> long/multiline data into limited-width console. Tree stucture does not breaks.</li>
+					<li>Accurate <strong>Unicode</strong>  width calucating for proper word-wrap.</li>
+					<li>Colors support not only in terminal, but in a <strong>browser</strong> <code>console.log()</code> too. Render to html is also supported.</li>
+				</ul>
+				<a href="#advanced-usage" id="advanced-usage" style="color: inherit; text-decoration: none;">
+					<h2>Advanced usage</h2>
+				</a>
+				<pre><code class="language-javascript">pretty.printTree(data, options);</code></pre>
+				<a href="#javasctipt" id="javasctipt" style="color: inherit; text-decoration: none;">
+					<h5>javasctipt</h5>
+				</a>
+				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> options = {
+  <span class="hljs-attr">renderer</span>: <span class="hljs-keyword">new</span> AutodetectRenderer(),
+  <span class="hljs-attr">maxLevel</span>: <span class="hljs-number">6</span>,
+  <span class="hljs-attr">maxItemsPerLevel</span>: [<span class="hljs-number">30</span>, <span class="hljs-number">10</span>],
+  <span class="hljs-attr">maxLineWidth</span>: <span class="hljs-number">80</span>,
+  <span class="hljs-attr">arrayItemTextPattern</span>: {
+    <span class="hljs-attr">other</span>: {
+      <span class="hljs-attr">first</span>: pretty.textPatternString(<span class="hljs-string">'├─╸'</span>),
+      <span class="hljs-attr">other</span>: pretty.textPatternString(<span class="hljs-string">'│  '</span>) },
+    <span class="hljs-attr">last</span>: {
+      <span class="hljs-attr">first</span>: pretty.textPatternString(<span class="hljs-string">'└─╸'</span>),
+      <span class="hljs-attr">other</span>: pretty.textPatternString(<span class="hljs-string">'   '</span>) }
+  },
+  <span class="hljs-attr">objectItemTextPattern</span>: {
+    <span class="hljs-attr">other</span>: {
+      <span class="hljs-attr">first</span>: pretty.textPatternString(<span class="hljs-string">'├─╴'</span>),
+      <span class="hljs-attr">other</span>: pretty.textPatternString(<span class="hljs-string">'│  '</span>) },
+    <span class="hljs-attr">last</span>: {
+      <span class="hljs-attr">first</span>: pretty.textPatternString(<span class="hljs-string">'╰─╴'</span>),
+      <span class="hljs-attr">other</span>: pretty.textPatternString(<span class="hljs-string">'   '</span>) }
+  },
+  <span class="hljs-attr">tabSize</span>: <span class="hljs-number">4</span>,
+  <span class="hljs-attr">paddingSpace</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">eol</span>: <span class="hljs-string">'\n'</span>,
+  <span class="hljs-attr">logLineCallback</span>: <span class="hljs-function">(<span class="hljs-params">line</span>) =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(line);
+  }
+};</code></pre>
+				<a href="#typescript" id="typescript" style="color: inherit; text-decoration: none;">
+					<h5>typescript</h5>
+				</a>
+				<pre><code class="language-typescript"><span class="hljs-keyword">type</span> options = Partial&lt;{
+  renderer: Renderer;
+  maxLevel: <span class="hljs-built_in">number</span>;
+  maxItemsPerLevel: <span class="hljs-built_in">number</span>[] | <span class="hljs-built_in">number</span>;
+  maxLineWidth: <span class="hljs-built_in">number</span>;
+  arrayItemTextPattern: itemTextPatternT;
+  objectItemTextPattern: itemTextPatternT;
+  tabSize: <span class="hljs-built_in">number</span>;
+  paddingSpace: <span class="hljs-built_in">number</span>;
+  eol: <span class="hljs-built_in">string</span>;
+  logLineCallback: <span class="hljs-function">(<span class="hljs-params">line: <span class="hljs-built_in">string</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+}&gt;;</code></pre>
+				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
+					<h2>Contributing</h2>
+				</a>
+				<p>Contributions, issues and feature requests are welcome!</p>
+				<p>Feel free to check <a href="todo">issues page</a>.</p>
+				<a href="#author" id="author" style="color: inherit; text-decoration: none;">
+					<h2>Author</h2>
+				</a>
+				<p>Konstantin Barkalov @<a href="mailto:mail@barkalov.ru">mail</a> @<a href="https://github.com/konstantinbarkalov">github</a></p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_defaultsettings_.html">&quot;default<wbr>Settings&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_index_.html">&quot;index&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_armgeneratorchainelement_.html">&quot;meta/arm<wbr>Generator<wbr>Chain<wbr>Element&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_armplainline_.html">&quot;meta/arm<wbr>Plain<wbr>Line&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_node_.html">&quot;meta/node&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_pattern_.html">&quot;meta/pattern&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_patterndrivenarmgenerator_.html">&quot;meta/pattern<wbr>Driven<wbr>Arm<wbr>Generator&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_render_.html">&quot;meta/render&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_types_armgenerator_.html">&quot;meta/types/arm<wbr>Generator&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_types_armplainline_.html">&quot;meta/types/arm<wbr>Plain<wbr>Line&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_types_deprecated_.html">&quot;meta/types/deprecated&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_types_node_.html">&quot;meta/types/node&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_types_pattern_.html">&quot;meta/types/pattern&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_.html">&quot;pretty&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_renderer_abstract_renderer_.html">&quot;text/renderer/abstract/renderer&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_renderer_abstract_simplerenderer_.html">&quot;text/renderer/abstract/simple<wbr>Renderer&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_renderer_implementation_ansi_.html">&quot;text/renderer/implementation/ansi&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_renderer_implementation_autodetect_.html">&quot;text/renderer/implementation/autodetect&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_renderer_implementation_html_.html">&quot;text/renderer/implementation/html&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_renderer_implementation_index_.html">&quot;text/renderer/implementation/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_renderer_implementation_plain_.html">&quot;text/renderer/implementation/plain&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_strictunicode_.html">&quot;text/strict<wbr>Unicode&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_style_.html">&quot;text/style&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_styletypes_.html">&quot;text/style<wbr>Types&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_textcontainer_.html">&quot;text/text<wbr>Container&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_types_general_.html">&quot;types/general&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_types_icon_.html">&quot;types/icon&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_types_nodedescription_.html">&quot;types/node<wbr>Description&quot;</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
