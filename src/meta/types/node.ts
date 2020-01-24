@@ -1,10 +1,10 @@
 import { AnyTextContainer } from '../../text/textContainer';
-import { ArmGeneratorI } from './armGenerator';
+import { ArmGeneratorI, ArmWidthGeneratorI } from './armGenerator';
 
 
 export interface MetaNodeI {
+  leaf: AnyTextContainer;
   children: MetaNodeI[];
   armGenerator: ArmGeneratorI<MetaNodeI>;
-  leaf: AnyTextContainer;
-  armWidth: number;
+  armWidthGenerator: ArmWidthGeneratorI<MetaNodeI>;
 }

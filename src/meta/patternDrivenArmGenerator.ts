@@ -1,13 +1,25 @@
-import { ArmGeneratorI, generateFnParametersT } from './types/armGenerator';
-import { ArmT } from './types/deprecated';
-import { ChildDependentArmPatternI, LineDependentArmPlainLinePatternI, ArmPlainLinePatternI } from './types/pattern';
+import { ArmGeneratorI, generateFnParametersT, ArmWidthGeneratorI } from './types/armGenerator';
+import { ArmT } from './types/arm';
+import { KnotDependentArmPatternI, LineDependentArmPlainLinePatternI, ArmPlainLinePatternI } from './types/pattern';
 import { AtomicTextContainer } from '../text/textContainer';
 import { StrictUnicodeLine } from '../text/strictUnicode';
 
 
-export class PatternDrivenArmGenerator implements ArmGeneratorI {
-  constructor (public pattern: ChildDependentArmPatternI) { }
-  public generateArm(parameters: generateFnParametersT): ArmT {
+export class PatternDrivenArmGenerator implements ArmGeneratorI, ArmWidthGeneratorI {
+  constructor (public pattern: KnotDependentArmPatternI) { }
+  public generateArmWidth(parameters: generateFnParametersT): number {
+    const hasChildren = parameters.node.children.length > 0;
+    const isFirstLineOfKnot = parameters.lineOfKnotNum === 0;
+    const isLeaf = parameters.childNum === null;
+    const armWidth =
+      (isLeaf)
+        ? (hasChildren)
+          ? (!isFirstLineOfKnot) ? 2 : 2
+          : 0
+        : 4;
+    return armWidth;
+  }
+  public generateArm(parameters: generateFnParametersT, armWidth: number): ArmT {
     const hasChildren = parameters.node.children.length > 0;
     const isFirstChild = parameters.childNum === 0;
     const isLastChild = parameters.childNum === parameters.node.children.length - 1;
@@ -38,7 +50,7 @@ export class PatternDrivenArmGenerator implements ArmGeneratorI {
     } else {
       plainPattern = lineDependentPlainPattern.otherLine;
     }
-    const generatedArmPlainLine = plainPattern.generateArmPlainLine(parameters.node.armWidth);
+    const generatedArmPlainLine = plainPattern.generateArmPlainLine(armWidth);
     const generatedArm = new AtomicTextContainer<StrictUnicodeLine>(generatedArmPlainLine, this.pattern.style);
     return generatedArm;
   }

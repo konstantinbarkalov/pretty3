@@ -1,7 +1,8 @@
 import { StrictUnicodeChar } from '../../text/strictUnicode';
 
 import { Style } from '../../text/style';
-import { ArmPlainLineT } from './armPlainLine';
+import { ArmPlainLineT } from './arm';
+
 
 export interface ArmPlainLinePatternI {
   firstChar: StrictUnicodeChar;
@@ -16,14 +17,14 @@ export interface LineDependentArmPlainLinePatternI {
   lastLine: ArmPlainLinePatternI;
 }
 
-export interface ChildDependentArmPlainLinePatternI {
+export interface KnotDependentArmPlainLinePatternI {
   leaf: LineDependentArmPlainLinePatternI;
   firstChild: LineDependentArmPlainLinePatternI;
   otherChild: LineDependentArmPlainLinePatternI;
   lastChild: LineDependentArmPlainLinePatternI;
 }
 
-export interface ChildDependentArmPatternI {
-  plainPattern: ChildDependentArmPlainLinePatternI;
+export interface KnotDependentArmPatternI {
+  plainPattern: KnotDependentArmPlainLinePatternI;
   style: Style;
 }

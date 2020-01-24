@@ -6,7 +6,7 @@ import { FlatNonatomicTextContainer } from '../text/textContainer';
 import { StrictUnicodeLine } from '../text/strictUnicode';
 import { PlainRenderer } from '../text/renderer/implementation';
 import { ArmGeneratorChain, ArmGeneratorChainElement } from './ArmGeneratorChainElement';
-import { ChildDependentArmPlainLinePattern, ChildDependentArmPattern } from './pattern';
+import { KnotDependentArmPlainLinePattern, KnotDependentArmPattern } from './pattern';
 import { Style } from '../text/style';
 import { PatternDrivenArmGenerator } from './patternDrivenArmGenerator';
 import { MetaNode } from './node';
@@ -31,6 +31,7 @@ function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain
   };
   const currentChainElement = new ArmGeneratorChainElement(
     node.armGenerator,
+    node.armWidthGenerator,
     generateArmParameters,
   );
   //chain.elements.push(currentChainElement);
@@ -76,49 +77,48 @@ function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain
     renderMetaNodeRecursive(childNode, chain, maxWidth, armWidth, firstLinePadding, renderer);
   });
 }
-// const pattern = ChildDependentArmPlainLinePattern.fromString({
+// const pattern = KnotDependentArmPlainLinePattern.fromString({
 //   otherChildFirstLine:   '├─╸',
 //   spacer: '│  ',
 //   lastChildFirstLine:    '└─╸',
 // });
-const plainPattern = ChildDependentArmPlainLinePattern.fromMatrix([
+const plainPattern = KnotDependentArmPlainLinePattern.fromMatrix([
   '┬─>', '│  ', '│  ',
   '├──', '│  ', '│  ',
   '├──', '│  ', '│  ',
   '└──', '   ', '   ',
 ]);
-const pattern = new ChildDependentArmPattern(plainPattern, new Style());
-const generator = new PatternDrivenArmGenerator(pattern);
-function genWidth(): number {
-  return 4; // Math.floor(Math.random() * 10) + 2;
-}
-const testMetaNodeA = MetaNode.fromString('alla long story about: evwkfsdf vfodpskj eevcsg dfsv evwkfsdf vfodpskj eevcsg dfsv', generator, genWidth());
-testMetaNodeA.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', generator, genWidth()));
-testMetaNodeA.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, generator, genWidth()));
-testMetaNodeA.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', generator, genWidth()));
-testMetaNodeA.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', generator, genWidth()));
-testMetaNodeA.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, generator, genWidth()));
-testMetaNodeA.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', generator, genWidth()));
+const pattern = new KnotDependentArmPattern(plainPattern, new Style());
+const armGenerator = new PatternDrivenArmGenerator(pattern);
+const armWidthGenerator = armGenerator; // implements both
 
-const testMetaNodeB = MetaNode.fromString('bella', generator, genWidth());
-testMetaNodeB.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', generator, genWidth()));
-testMetaNodeB.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, generator, genWidth()));
-testMetaNodeB.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', generator, genWidth()));
-testMetaNodeB.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', generator, genWidth()));
-testMetaNodeB.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, generator, genWidth()));
-testMetaNodeB.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', generator, genWidth()));
+const testMetaNodeA = MetaNode.fromString('alla long story about: evwkfsdf vfodpskj eevcsg dfsv evwkfsdf vfodpskj eevcsg dfsv', armGenerator, armWidthGenerator);
+testMetaNodeA.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
+testMetaNodeA.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, armGenerator, armWidthGenerator));
+testMetaNodeA.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
+testMetaNodeA.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
+testMetaNodeA.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, armGenerator, armWidthGenerator));
+testMetaNodeA.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
 
-const testMetaNodeC = MetaNode.fromString('chika', generator, genWidth());
-testMetaNodeC.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', generator, genWidth()));
-testMetaNodeC.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, generator, genWidth()));
-testMetaNodeC.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', generator, genWidth()));
-testMetaNodeC.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', generator, genWidth()));
-testMetaNodeC.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, generator, genWidth()));
-testMetaNodeC.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', generator, genWidth()));
+const testMetaNodeB = MetaNode.fromString('bella', armGenerator, armWidthGenerator);
+testMetaNodeB.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
+testMetaNodeB.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, armGenerator, armWidthGenerator));
+testMetaNodeB.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
+testMetaNodeB.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
+testMetaNodeB.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, armGenerator, armWidthGenerator));
+testMetaNodeB.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
+
+const testMetaNodeC = MetaNode.fromString('chika', armGenerator, armWidthGenerator);
+testMetaNodeC.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
+testMetaNodeC.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, armGenerator, armWidthGenerator));
+testMetaNodeC.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
+testMetaNodeC.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
+testMetaNodeC.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, armGenerator, armWidthGenerator));
+testMetaNodeC.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
 
 testMetaNodeA.children.push(testMetaNodeC);
 
-const testMetaTree = MetaNode.fromString('alabama story goes here: er fopgp oidpsfgoisdf gfgsd qwecsddf fmkg-olvlkmk dgrg', generator, genWidth());
+const testMetaTree = MetaNode.fromString('alabama story goes here: er fopgp oidpsfgoisdf gfgsd qwecsddf fmkg-olvlkmk dgrg', armGenerator, armWidthGenerator);
 testMetaTree.children.push(testMetaNodeA);
 testMetaTree.children.push(testMetaNodeB);
 

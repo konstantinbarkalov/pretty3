@@ -1,5 +1,5 @@
 import { StrictUnicodeLine, StrictUnicodeChar } from '../text/strictUnicode';
-import { ArmPlainLinePatternI, LineDependentArmPlainLinePatternI, ChildDependentArmPlainLinePatternI, ChildDependentArmPatternI } from './types/pattern';
+import { ArmPlainLinePatternI, LineDependentArmPlainLinePatternI, KnotDependentArmPlainLinePatternI, KnotDependentArmPatternI } from './types/pattern';
 import { Style } from '../text/style';
 
 
@@ -71,29 +71,29 @@ type patternMatrixT = [
   string, string, string,
 ];
 
-export class ChildDependentArmPlainLinePattern implements ChildDependentArmPlainLinePatternI {
+export class KnotDependentArmPlainLinePattern implements KnotDependentArmPlainLinePatternI {
   constructor(public leaf: LineDependentArmPlainLinePatternI, public firstChild: LineDependentArmPlainLinePatternI, public otherChild: LineDependentArmPlainLinePatternI, public lastChild: LineDependentArmPlainLinePatternI) { }
-  static fromMatrix(matrix: patternMatrixT): ChildDependentArmPlainLinePattern {
-    const childDependentArmPlainLinePattern = new ChildDependentArmPlainLinePattern(
+  static fromMatrix(matrix: patternMatrixT): KnotDependentArmPlainLinePattern {
+    const knotDependentArmPlainLinePattern = new KnotDependentArmPlainLinePattern(
       LineDependentArmPlainLinePattern.fromString(matrix[0], matrix[1], matrix[2]),
       LineDependentArmPlainLinePattern.fromString(matrix[3], matrix[4], matrix[5]),
       LineDependentArmPlainLinePattern.fromString(matrix[6], matrix[7], matrix[8]),
       LineDependentArmPlainLinePattern.fromString(matrix[9], matrix[10], matrix[11]),
     );
-    return childDependentArmPlainLinePattern;
+    return knotDependentArmPlainLinePattern;
   }
-  static fromString(otherChildFirstLine: string, spacer: string, lastChildFirstLine: string,): ChildDependentArmPlainLinePattern {
-    const childDependentArmPlainLinePattern = ChildDependentArmPlainLinePattern.fromMatrix([
+  static fromString(otherChildFirstLine: string, spacer: string, lastChildFirstLine: string,): KnotDependentArmPlainLinePattern {
+    const knotDependentArmPlainLinePattern = KnotDependentArmPlainLinePattern.fromMatrix([
       otherChildFirstLine, spacer, spacer,
       otherChildFirstLine, spacer, spacer,
       otherChildFirstLine, spacer, spacer,
       lastChildFirstLine , '   ',  '   ',
     ]);
-    return childDependentArmPlainLinePattern;
+    return knotDependentArmPlainLinePattern;
   }
 }
 
 
-export class ChildDependentArmPattern implements ChildDependentArmPatternI {
-  constructor(public plainPattern: ChildDependentArmPlainLinePattern, public style: Style) { }
+export class KnotDependentArmPattern implements KnotDependentArmPatternI {
+  constructor(public plainPattern: KnotDependentArmPlainLinePattern, public style: Style) { }
 }
