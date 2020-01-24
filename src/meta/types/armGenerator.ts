@@ -5,11 +5,12 @@ import { MetaNodeI } from './node';
 
 export type generateFnParametersT<TMetaNode extends MetaNodeI = MetaNodeI> = {
   node: TMetaNode;
-  childId: number | null;
-  lineId: number;
+  childNum: number | null;
+  lineNum: number;
   isLastLine: boolean;
+  lineOfKnotNum: number;
+  isLastLineOfKnot: boolean;
 }
-
 export type generateArmFn<TMetaNode extends MetaNodeI = MetaNodeI> = (parameters: generateFnParametersT<TMetaNode>) => ArmT;
 
 export interface ArmGeneratorI<TMetaNode extends MetaNodeI = MetaNodeI> {

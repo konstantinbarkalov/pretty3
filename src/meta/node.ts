@@ -8,11 +8,11 @@ import { ArmGeneratorI } from './types/armGenerator';
 export class MetaNode implements MetaNodeI {
   public children: MetaNodeI[] = [];
   constructor(public leaf: AnyTextContainer, public armGenerator: ArmGeneratorI<MetaNode>, public armWidth: number) { }
+  static fromString(text: string, armGenerator: ArmGeneratorI<MetaNode>, armWidth: number): MetaNode {
+    const leaf = new AtomicTextContainer(new StrictUnicodeLine(text));
+    const metaNode = new MetaNode(leaf, armGenerator, armWidth);
+    return metaNode;
+  }
 }
 
 
-export function easyCreateNode(text: string, armGenerator: ArmGeneratorI<MetaNode>, armWidth: number): MetaNode {
-  const leaf = new AtomicTextContainer(new StrictUnicodeLine(text));
-  const metaNode = new MetaNode(leaf, armGenerator, armWidth);
-  return metaNode;
-}

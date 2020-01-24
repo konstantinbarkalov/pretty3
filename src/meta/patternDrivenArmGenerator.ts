@@ -1,6 +1,6 @@
 import { ArmGeneratorI, generateFnParametersT } from './types/armGenerator';
 import { ArmT } from './types/deprecated';
-import { ChildDependentArmPatternI, LineDependentPlainArmLinePatternI, PlainArmLinePatternI } from './types/pattern';
+import { ChildDependentArmPatternI, LineDependentArmPlainLinePatternI, ArmPlainLinePatternI } from './types/pattern';
 import { AtomicTextContainer } from '../text/textContainer';
 import { StrictUnicodeLine } from '../text/strictUnicode';
 
@@ -9,13 +9,13 @@ export class PatternDrivenArmGenerator implements ArmGeneratorI {
   constructor (public pattern: ChildDependentArmPatternI) { }
   public generateArm(parameters: generateFnParametersT): ArmT {
     const hasChildren = parameters.node.children.length > 0;
-    const isFirstChild = parameters.childId === 0;
-    const isLastChild = parameters.childId === parameters.node.children.length - 1;
-    const isFirstLine = parameters.lineId === 0;
-    const isLastLine = parameters.isLastLine;
-    const isLeaf = parameters.childId === null;
+    const isFirstChild = parameters.childNum === 0;
+    const isLastChild = parameters.childNum === parameters.node.children.length - 1;
+    const isFirstLineOfKnot = parameters.lineOfKnotNum === 0;
+    const isLastLineOfKnot = parameters.isLastLineOfKnot;
+    const isLeaf = parameters.childNum === null;
 
-    let lineDependentPlainPattern: LineDependentPlainArmLinePatternI;
+    let lineDependentPlainPattern: LineDependentArmPlainLinePatternI;
     if (isLeaf) {
       lineDependentPlainPattern = this.pattern.plainPattern.leaf;
     } else if (isFirstChild) {
@@ -26,10 +26,10 @@ export class PatternDrivenArmGenerator implements ArmGeneratorI {
       lineDependentPlainPattern = this.pattern.plainPattern.otherChild;
     }
 
-    let plainPattern: PlainArmLinePatternI;
-    if (isFirstLine) {
+    let plainPattern: ArmPlainLinePatternI;
+    if (isFirstLineOfKnot) {
       plainPattern = lineDependentPlainPattern.firstLine;
-    } else if (isLastLine) {
+    } else if (isLastLineOfKnot) {
       if (hasChildren) {
         plainPattern = lineDependentPlainPattern.otherLine;
       } else {
@@ -38,8 +38,8 @@ export class PatternDrivenArmGenerator implements ArmGeneratorI {
     } else {
       plainPattern = lineDependentPlainPattern.otherLine;
     }
-    const generatedPlainArmLine = plainPattern.generatePlainArmLine(parameters.node.armWidth);
-    const generatedArm = new AtomicTextContainer<StrictUnicodeLine>(generatedPlainArmLine, this.pattern.style);
+    const generatedArmPlainLine = plainPattern.generateArmPlainLine(parameters.node.armWidth);
+    const generatedArm = new AtomicTextContainer<StrictUnicodeLine>(generatedArmPlainLine, this.pattern.style);
     return generatedArm;
   }
 }

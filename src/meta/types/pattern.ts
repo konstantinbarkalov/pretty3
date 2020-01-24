@@ -1,28 +1,29 @@
 import { StrictUnicodeChar } from '../../text/strictUnicode';
-import { PlainArmLineT } from './plainArmLine';
-import { Style } from '../../text/style';
 
-export interface PlainArmLinePatternI {
+import { Style } from '../../text/style';
+import { ArmPlainLineT } from './armPlainLine';
+
+export interface ArmPlainLinePatternI {
   firstChar: StrictUnicodeChar;
   otherChar: StrictUnicodeChar;
   lastChar: StrictUnicodeChar;
-  generatePlainArmLine(armWidth: number): PlainArmLineT;
+  generateArmPlainLine(armWidth: number): ArmPlainLineT;
 }
 
-export interface LineDependentPlainArmLinePatternI {
-  firstLine: PlainArmLinePatternI;
-  otherLine: PlainArmLinePatternI;
-  lastLine: PlainArmLinePatternI;
+export interface LineDependentArmPlainLinePatternI {
+  firstLine: ArmPlainLinePatternI;
+  otherLine: ArmPlainLinePatternI;
+  lastLine: ArmPlainLinePatternI;
 }
 
-export interface ChildDependentPlainArmLinePatternI {
-  leaf: LineDependentPlainArmLinePatternI;
-  firstChild: LineDependentPlainArmLinePatternI;
-  otherChild: LineDependentPlainArmLinePatternI;
-  lastChild: LineDependentPlainArmLinePatternI;
+export interface ChildDependentArmPlainLinePatternI {
+  leaf: LineDependentArmPlainLinePatternI;
+  firstChild: LineDependentArmPlainLinePatternI;
+  otherChild: LineDependentArmPlainLinePatternI;
+  lastChild: LineDependentArmPlainLinePatternI;
 }
 
 export interface ChildDependentArmPatternI {
-  plainPattern: ChildDependentPlainArmLinePatternI;
+  plainPattern: ChildDependentArmPlainLinePatternI;
   style: Style;
 }
