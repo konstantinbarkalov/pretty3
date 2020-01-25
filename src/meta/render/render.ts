@@ -1,17 +1,17 @@
 import { EOL } from 'os';
-import { MetaNodeI } from './types/node';
-import { Renderer } from '../text/renderer/abstract/renderer';
-import { generateFnParametersT } from './types/armGenerator';
-import { FlatNonatomicTextContainer } from '../text/textContainer';
-import { StrictUnicodeLine } from '../text/strictUnicode';
-import { PlainRenderer } from '../text/renderer/implementation';
+import { MetaNodeI } from '../types/node';
+import { Renderer } from '../../text/renderer/abstract/renderer';
+import { generateFnParametersT } from '../types/arm/armGenerator';
+import { FlatNonatomicTextContainer } from '../../text/textContainer';
+import { StrictUnicodeLine } from '../../text/strictUnicode';
+import { PlainRenderer } from '../../text/renderer/implementation';
 import { ArmGeneratorChain, ArmGeneratorChainElement } from './armGeneratorChain';
-import { ArmPatternMatrix } from './armPattern';
-import { Style } from '../text/style';
-import { PatternDrivenArmGenerator, PatternDrivenArmWidthGenerator } from './patternDrivenArmGenerator';
-import { MetaNode } from './node';
-import { ArmWidthMatrix } from './armWidth';
-import { spacedArmWidthT } from './types/armWidth';
+import { ArmPatternMatrix } from '../matrix/armPatternMatrix';
+import { Style } from '../../text/style';
+import { MatrixDrivenArmGenerator, MatrixDrivenArmWidthGenerator } from '../matrix/matrixDrivenArmGenerator';
+import { MetaNode } from '../node';
+import { ArmWidthMatrix } from '../matrix/armWidthMatrix';
+import { spacedArmWidthT } from '../types/arm/armWidth';
 
 
 
@@ -102,8 +102,8 @@ const armWidthMatrix = ArmWidthMatrix.fromArray([
   armWidth, armWidth, armWidth,
 ]);
 
-const armGenerator = new PatternDrivenArmGenerator(armPatternMatrix);
-const armWidthGenerator = new PatternDrivenArmWidthGenerator(armWidthMatrix);
+const armGenerator = new MatrixDrivenArmGenerator(armPatternMatrix);
+const armWidthGenerator = new MatrixDrivenArmWidthGenerator(armWidthMatrix);
 
 const testMetaNodeA = MetaNode.fromString('alla long story about: evwkfsdf vfodpskj eevcsg dfsv evwkfsdf vfodpskj eevcsg dfsv', armGenerator, armWidthGenerator);
 testMetaNodeA.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));

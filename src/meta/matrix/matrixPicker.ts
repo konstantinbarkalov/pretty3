@@ -1,5 +1,5 @@
-import { MatrixI, KnotMatrixI } from './types/matrix/matrix';
-import { generateFnParametersT } from './types/armGenerator';
+import { MatrixI, KnotMatrixI } from '../types/matrix/matrix';
+import { generateFnParametersT } from '../types/arm/armGenerator';
 
 
 export abstract class MatrixPicker<T> {

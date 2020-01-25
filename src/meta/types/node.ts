@@ -1,5 +1,5 @@
 import { AnyTextContainer } from '../../text/textContainer';
-import { ArmGeneratorI, ArmWidthGeneratorI } from './armGenerator';
+import { ArmGeneratorI, ArmWidthGeneratorI } from './arm/armGenerator';
 
 
 export interface MetaNodeI {

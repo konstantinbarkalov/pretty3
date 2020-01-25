@@ -1,8 +1,8 @@
-import { ArmGeneratorChainElementI, ArmGeneratorI, generateFnParametersT, ArmWidthGeneratorI } from './types/armGenerator';
-import { AtomicTextContainer } from '../text/textContainer';
-import { StrictUnicodeLine } from '../text/strictUnicode';
+import { ArmGeneratorI, generateFnParametersT, ArmWidthGeneratorI } from '../types/arm/armGenerator';
+import { AtomicTextContainer } from '../../text/textContainer';
+import { StrictUnicodeLine } from '../../text/strictUnicode';
 
-export class ArmGeneratorChainElement implements ArmGeneratorChainElementI {
+export class ArmGeneratorChainElement {
   constructor(public armGenerator: ArmGeneratorI, public armWidthGenerator: ArmWidthGeneratorI, public parameters: generateFnParametersT) { }
   generateArm(): AtomicTextContainer<StrictUnicodeLine> {
     const armWidth = this.armWidthGenerator.generateArmWidth(this.parameters);

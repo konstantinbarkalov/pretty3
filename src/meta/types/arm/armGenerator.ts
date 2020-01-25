@@ -1,7 +1,7 @@
 
 import { ArmT } from './arm';
 import { armWidthT } from './armWidth';
-import { MetaNodeI } from './node';
+import { MetaNodeI } from '../node';
 
 
 export type generateFnParametersT<TMetaNode extends MetaNodeI = MetaNodeI> = {
@@ -20,14 +20,4 @@ export interface ArmGeneratorI<TMetaNode extends MetaNodeI = MetaNodeI> {
 }
 export interface ArmWidthGeneratorI<TMetaNode extends MetaNodeI = MetaNodeI> {
   generateArmWidth: generateArmWidthFn<TMetaNode>;
-}
-export interface ArmGeneratorChainElementI<TMetaNode extends MetaNodeI = MetaNodeI> {
-  armGenerator: ArmGeneratorI<TMetaNode>;
-  armWidthGenerator: ArmWidthGeneratorI<TMetaNode>;
-  parameters: generateFnParametersT<TMetaNode>;
-  generateArm(): ArmT;
-}
-export interface ArmGeneratorChainI<TMetaNode extends MetaNodeI = MetaNodeI> {
-  elements: ArmGeneratorChainElementI<TMetaNode>[];
-  generateArms(): ArmT[];
 }

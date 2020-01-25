@@ -1,16 +1,12 @@
-import { ArmPatternI } from '../armPattern';
-import { KnotMatrixI, MatrixI } from './matrix';
+import { StrictUnicodeChar } from '../../../text/strictUnicode';
+import { armWidthT } from '../arm/armWidth';
+import { ArmT } from '../arm/arm';
+import { Style } from '../../../text/style';
 
-export interface ArmPatternKnotMatrixI extends KnotMatrixI<ArmPatternI> {
-  firstLine: ArmPatternI;
-  otherLine: ArmPatternI;
-  lastLine: ArmPatternI;
-}
-
-export interface ArmPatternMatrixI extends MatrixI<ArmPatternI> {
-  infertileLeaf: ArmPatternKnotMatrixI;
-  fertileLeaf: ArmPatternKnotMatrixI;
-  firstChild: ArmPatternKnotMatrixI;
-  otherChild: ArmPatternKnotMatrixI;
-  lastChild: ArmPatternKnotMatrixI;
+export interface ArmPatternI {
+  firstChar: StrictUnicodeChar;
+  otherChar: StrictUnicodeChar;
+  lastChar: StrictUnicodeChar;
+  generateArm(armWidth: armWidthT): ArmT;
+  style: Style;
 }

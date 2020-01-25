@@ -1,5 +1,5 @@
-import { armWidthT } from './types/armWidth';
-import { ArmWidthKnotMatrixI, ArmWidthMatrixI } from './types/matrix/armWidth';
+import { armWidthT } from '../types/arm/armWidth';
+import { ArmWidthKnotMatrixI, ArmWidthMatrixI } from '../types/matrix/armWidthMatrix';
 
 
 export class ArmWidthKnotMatrix implements ArmWidthKnotMatrixI {

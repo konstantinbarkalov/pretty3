@@ -1,4 +1,4 @@
-import { armWidthT } from '../armWidth';
+import { armWidthT } from '../arm/armWidth';
 import { KnotMatrixI, MatrixI } from './matrix';
 
 export interface ArmWidthKnotMatrixI extends KnotMatrixI<armWidthT> {
