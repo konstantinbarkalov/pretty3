@@ -1,15 +1,15 @@
 
-import { KnotMatrixI, MatrixI } from './matrix';
 import { StrictUnicodeChar } from '../../../text/strictUnicode';
-import { ArmT } from '../arm';
 import { Style } from '../../../text/style';
+import { ArmT, armWidthT } from '../arm';
+import { KnotMatrixI, MatrixI } from './matrix';
 
 
 export interface ArmPatternI {
   firstChar: StrictUnicodeChar;
   otherChar: StrictUnicodeChar;
   lastChar: StrictUnicodeChar;
-  generateArm(armWidth: number): ArmT;
+  generateArm(armWidth: armWidthT): ArmT;
   style: Style;
 }
 

@@ -1,7 +1,7 @@
 import { StrictUnicodeLine, StrictUnicodeChar } from '../text/strictUnicode';
 
 import { Style } from '../text/style';
-import { ArmT } from './types/arm';
+import { ArmT, armWidthT, spacedArmWidthT } from './types/arm';
 import { AtomicTextContainer } from '../text/textContainer';
 import { ArmPatternI, ArmPatternKnotMatrixI, ArmPatternMatrixI } from './types/matrix/armPattern';
 
@@ -19,7 +19,7 @@ export class ArmPattern implements ArmPatternI {
    * So `first` will be the only generated character if `this.armWidth = 1`.
    * Same way `other` have lowest priority. And appars only if `this.armWidth > 2`
    *
-   * @param {number} armWidth
+   * @param {armWidthT} armWidth
    * Width of generated armPlainLine. Measured in monospaced-character positions.
    * @returns {StrictUnicodeLine}
    * Drawn armPlainLine, wrapped in StrictUnicodeLine.
@@ -31,20 +31,36 @@ export class ArmPattern implements ArmPatternI {
    *
    * @memberof BasicPattern
    */
-  generateArmPlainLine(armWidth: number): StrictUnicodeLine {
+  generateArmPlainLine(armWidth: armWidthT): StrictUnicodeLine {
+    const spacedArmWidth: spacedArmWidthT = (typeof armWidth === 'number')
+      ? {
+        preSpace: 0,
+        arm: armWidth,
+        postSpace: 0,
+      }
+      : armWidth;
+
+
+
     let generated = '';
-    if (armWidth > 0) {
+    if (spacedArmWidth.preSpace > 0) {
+      generated += ' '.repeat(spacedArmWidth.preSpace);
+    }
+    if (spacedArmWidth.arm > 0) {
       generated += this.firstChar.toString();
     }
-    if (armWidth > 2) {
-      generated += this.otherChar.toString().repeat(armWidth - 2);
+    if (spacedArmWidth.arm > 2) {
+      generated += this.otherChar.toString().repeat(spacedArmWidth.arm - 2);
     }
-    if (armWidth > 1) {
+    if (spacedArmWidth.arm > 1) {
       generated += this.lastChar.toString();
+    }
+    if (spacedArmWidth.postSpace > 0) {
+      generated += ' '.repeat(spacedArmWidth.postSpace);
     }
     return new StrictUnicodeLine(generated, true);
   }
-  generateArm(armWidth: number): ArmT {
+  generateArm(armWidth: armWidthT): ArmT {
     const plainLine = this.generateArmPlainLine(armWidth);
     const arm: ArmT = new AtomicTextContainer<StrictUnicodeLine>(plainLine, this.style);
     return arm;
