@@ -168,7 +168,6 @@ export class StrictUnicodeLine extends StrictUnicodeText {
     return new StrictUnicodeLine(combinedText);
   }
   public *managedWrap(maxWidth: number): Generator<StrictUnicodeLine, StrictUnicodeLine, number> {
-  //public *managedWrap(maxWidth: number): Generator<StrictUnicodeLine, StrictUnicodeLine, number> {
     const lineWidth = this.calcWidth();
     if (lineWidth <= maxWidth) {
       return this;
@@ -214,13 +213,3 @@ export type AnyStrictUnicodeT = StrictUnicodeChar | StrictUnicodeLine | StrictUn
 
 
 
-
-const maxWidth = 10;
-const a = new StrictUnicodeText('well hello, you goonna wrap me now, bitch. ' + EOL + 'me to sir ' + EOL + 'and me');
-const b = a.managedWrap(maxWidth);
-let la;
-do {
-  la = b.next(maxWidth);
-  console.log(la.value.toString());
-} while (!la.done);
-console.log('---fin---');

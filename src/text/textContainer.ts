@@ -53,18 +53,33 @@ export class AtomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT
     return this.text.toString();
   }
   public wrap(maxWidth: number, firstLinePadding = 0): {wrapped: AtomicTextContainer<StrictUnicodeText>; lastLinePadding: number} {
-    const {wrappedText, lastLinePadding} = this.text.wrap(maxWidth, firstLinePadding);
+    const { wrappedText, lastLinePadding } = this.text.wrap(maxWidth, firstLinePadding);
     const wrapped = new AtomicTextContainer(wrappedText, this.style);
-    return {wrapped, lastLinePadding};
+    return { wrapped, lastLinePadding };
   }
   public flatten(initialStyle?: Style): FlatNonatomicTextContainer<T> {
     const style = this.style || initialStyle;
     return new FlatNonatomicTextContainer([new AtomicTextContainer(this.text, style)]);
   }
-  splitToFlatLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[] {
+  public splitToFlatLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[] {
     return this.text.splitToLines().map((line) => {
       return new FlatNonatomicTextContainer<StrictUnicodeLine>([new AtomicTextContainer<StrictUnicodeLine>(line, this.style)]);
     });
+  }
+  public *managedWrap(maxWidth: number): Generator<AtomicTextContainer<StrictUnicodeLine>, AtomicTextContainer<StrictUnicodeLine>, number>  {
+    const lineWrapGenerator = this.text.managedWrap(maxWidth);
+    let done: boolean | undefined = false;
+    while (true) {
+      const generatorResult = lineWrapGenerator.next(maxWidth);
+      done = generatorResult.done;
+      const wrappedLine = generatorResult.value;
+      const wrappedLineContainer = new AtomicTextContainer<StrictUnicodeLine>(wrappedLine, this.style);
+      if (!done) {
+        maxWidth = yield wrappedLineContainer;
+      } else {
+        return wrappedLineContainer;
+      }
+    }
   }
 }
 export class NonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> extends TextContainerBase<T> {
@@ -134,7 +149,50 @@ export class NonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnico
   public splitToFlatLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[] {
     return this.flatten().splitToFlatLines();
   }
+
+
+
+
+
+
+
+  public *managedWrap(maxWidth: number): Generator<AnyTextContainer<StrictUnicodeLine>, AnyTextContainer<StrictUnicodeLine>, number> {
+    let remains: AnyTextContainer<StrictUnicodeLine> | undefined;
+    let remainsWidth = 0;
+    for (const child of this.children) {
+      const lineWrapGenerator = child.managedWrap(maxWidth - remainsWidth);
+      let done: boolean | undefined = false;
+      while (!done) {
+        const generatorResult = lineWrapGenerator.next(maxWidth - remainsWidth);
+        done = generatorResult.done;
+        const wrappedLine = generatorResult.value;
+        if (!done) {
+          if (remains) {
+            const wrappedLineWithRemains = new NonatomicTextContainer<StrictUnicodeLine>([remains, wrappedLine], this.style);
+            maxWidth = yield wrappedLineWithRemains;
+          } else {
+            maxWidth = yield wrappedLine;
+          }
+          remains = undefined;
+          remainsWidth = 0;
+        } else {
+          if (remains) {
+            const wrappedLineWithRemains = new NonatomicTextContainer<StrictUnicodeLine>([remains, wrappedLine], this.style);
+            remains = wrappedLineWithRemains;
+            remainsWidth += wrappedLine.calcSize().width.first;
+          } else {
+            remains = wrappedLine;
+            remainsWidth = wrappedLine.calcSize().width.first;
+          }
+        }
+      }
+    }
+    // tail
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return remains!;
+  }
 }
+
 export class FlatNonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> extends NonatomicTextContainer<T> {
   constructor(public children: AtomicTextContainer<T>[]) {
     super(children, undefined);
