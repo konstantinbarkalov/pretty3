@@ -1,7 +1,8 @@
 import { ArmGeneratorI, generateFnParametersT, ArmWidthGeneratorI } from './types/armGenerator';
-import { ArmT, armWidthT } from './types/arm';
+import { ArmT } from './types/arm';
+import { armWidthT } from './types/armWidth';
 import { MatrixPicker } from './matrixPicker';
-import { ArmPatternI } from './types/matrix/armPattern';
+import { ArmPatternI } from './types/armPattern';
 
 
 export class PatternDrivenArmGenerator extends MatrixPicker<ArmPatternI> implements ArmGeneratorI {

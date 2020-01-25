@@ -1,5 +1,6 @@
 
-import { ArmT, armWidthT } from './arm';
+import { ArmT } from './arm';
+import { armWidthT } from './armWidth';
 import { MetaNodeI } from './node';
 
 

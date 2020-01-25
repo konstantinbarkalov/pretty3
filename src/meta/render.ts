@@ -6,10 +6,11 @@ import { FlatNonatomicTextContainer } from '../text/textContainer';
 import { StrictUnicodeLine } from '../text/strictUnicode';
 import { PlainRenderer } from '../text/renderer/implementation';
 import { ArmGeneratorChain, ArmGeneratorChainElement } from './armGeneratorChain';
-import { ArmPatternMatrix } from './pattern';
+import { ArmPatternMatrix } from './armPattern';
 import { Style } from '../text/style';
 import { PatternDrivenArmGenerator, PatternDrivenArmWidthGenerator } from './patternDrivenArmGenerator';
 import { MetaNode } from './node';
+import { ArmWidthMatrix } from './armWidth';
 
 
 
@@ -82,14 +83,22 @@ function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain
 //   spacer: '│  ',
 //   lastChildFirstLine:    '└─╸',
 // });
-const pattern = ArmPatternMatrix.fromString([
+const armPatternMatrix = ArmPatternMatrix.fromArray([
   '┬─>', '│  ', '│  ',
   '├──', '│  ', '│  ',
   '├──', '│  ', '│  ',
   '└──', '   ', '   ',
 ], new Style());
-const armGenerator = new PatternDrivenArmGenerator(pattern);
-const armWidthGenerator = new PatternDrivenArmWidthGenerator();
+
+const armWidthMatrix = ArmWidthMatrix.fromArray([
+  4, 4, 4,
+  4, 4, 4,
+  4, 4, 4,
+  4, 4, 4,
+]);
+
+const armGenerator = new PatternDrivenArmGenerator(armPatternMatrix);
+const armWidthGenerator = new PatternDrivenArmWidthGenerator(armWidthMatrix);
 
 const testMetaNodeA = MetaNode.fromString('alla long story about: evwkfsdf vfodpskj eevcsg dfsv evwkfsdf vfodpskj eevcsg dfsv', armGenerator, armWidthGenerator);
 testMetaNodeA.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));

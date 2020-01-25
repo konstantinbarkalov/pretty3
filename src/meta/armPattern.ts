@@ -1,10 +1,10 @@
 import { StrictUnicodeLine, StrictUnicodeChar } from '../text/strictUnicode';
-
 import { Style } from '../text/style';
-import { ArmT, armWidthT, spacedArmWidthT } from './types/arm';
+import { ArmT } from './types/arm';
 import { AtomicTextContainer } from '../text/textContainer';
-import { ArmPatternI, ArmPatternKnotMatrixI, ArmPatternMatrixI } from './types/matrix/armPattern';
-
+import { ArmPatternKnotMatrixI, ArmPatternMatrixI } from './types/matrix/armPattern';
+import { ArmPatternI } from './types/armPattern';
+import { armWidthT, spacedArmWidthT } from './types/armWidth';
 
 export class ArmPattern implements ArmPatternI {
 
@@ -97,7 +97,7 @@ type patternStringArrayT = [
 
 export class ArmPatternMatrix implements ArmPatternMatrixI {
   constructor(public leaf: ArmPatternKnotMatrixI, public firstChild: ArmPatternKnotMatrixI, public otherChild: ArmPatternKnotMatrixI, public lastChild: ArmPatternKnotMatrixI) { }
-  static fromString(matrix: patternStringArrayT, style: Style): ArmPatternMatrix {
+  static fromArray(matrix: patternStringArrayT, style: Style): ArmPatternMatrix {
     const knotDependentArmPlainLinePattern = new ArmPatternMatrix(
       ArmPatternKnotMatrix.fromString(matrix[0], matrix[1], matrix[2], style),
       ArmPatternKnotMatrix.fromString(matrix[3], matrix[4], matrix[5], style),
