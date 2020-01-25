@@ -74,6 +74,42 @@ export class StrictUnicodeText extends NormalizedUnicodeText {
     const combinedNormalized = super.combine(...items);
     return new StrictUnicodeText(combinedNormalized);
   }
+  public *managedWrap(maxWidth: number): Generator<StrictUnicodeLine, StrictUnicodeLine, number> {
+    const lines = this.splitToLines();
+    let remains: StrictUnicodeLine | undefined;
+    let remainsWidth = 0;
+    for (const line of lines) {
+      const lineWrapGenerator = line.managedWrap(maxWidth - remainsWidth);
+      let done: boolean | undefined = false;
+      while (!done) {
+        const generatorResult = lineWrapGenerator.next(maxWidth - remainsWidth);
+        done = generatorResult.done;
+        const wrappedLine = generatorResult.value;
+        if (!done) {
+          if (remains) {
+            const wrappedLineWithRemains = StrictUnicodeLine.combine(remains, wrappedLine);
+            maxWidth = yield wrappedLineWithRemains;
+          } else {
+            maxWidth = yield wrappedLine;
+          }
+          remains = undefined;
+          remainsWidth = 0;
+        } else {
+          if (remains) {
+            const wrappedLineWithRemains = StrictUnicodeLine.combine(remains, wrappedLine);
+            remains = wrappedLineWithRemains;
+            remainsWidth += wrappedLine.calcWidth();
+          } else {
+            remains = wrappedLine;
+            remainsWidth = wrappedLine.calcWidth();
+          }
+        }
+      }
+    }
+    // tail
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return remains!;
+  }
 }
 
 export class StrictUnicodeLine extends StrictUnicodeText {
@@ -131,6 +167,27 @@ export class StrictUnicodeLine extends StrictUnicodeText {
     const combinedText = super.combine(...items);
     return new StrictUnicodeLine(combinedText);
   }
+  public *managedWrap(maxWidth: number): Generator<StrictUnicodeLine, StrictUnicodeLine, number> {
+  //public *managedWrap(maxWidth: number): Generator<StrictUnicodeLine, StrictUnicodeLine, number> {
+    const lineWidth = this.calcWidth();
+    if (lineWidth <= maxWidth) {
+      return this;
+    }
+    let wrappedLineWidth = 0;
+    let wrappedLine = '';
+    for (const codePoint of this) {
+      const codePointWidth = 1; // TODO: support for full-width chars
+      if (wrappedLineWidth + codePointWidth > maxWidth) {
+        maxWidth = yield new StrictUnicodeLine(wrappedLine);
+        wrappedLine = '';
+        wrappedLineWidth = 0;
+      }
+      wrappedLineWidth += codePointWidth;
+      wrappedLine += codePoint;
+    }
+    //tail
+    return new StrictUnicodeLine(wrappedLine);
+  }
 }
 
 export class StrictUnicodeChar extends StrictUnicodeLine {
@@ -154,3 +211,16 @@ export class StrictUnicodeChar extends StrictUnicodeLine {
 }
 
 export type AnyStrictUnicodeT = StrictUnicodeChar | StrictUnicodeLine | StrictUnicodeText;
+
+
+
+
+const maxWidth = 10;
+const a = new StrictUnicodeText('well hello, you goonna wrap me now, bitch. ' + EOL + 'me to sir ' + EOL + 'and me');
+const b = a.managedWrap(maxWidth);
+let la;
+do {
+  la = b.next(maxWidth);
+  console.log(la.value.toString());
+} while (!la.done);
+console.log('---fin---');
