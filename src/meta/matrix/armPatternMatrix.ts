@@ -1,5 +1,5 @@
 import { ArmPatternKnotMatrixI, ArmPatternMatrixI } from '../types/matrix/armPatternMatrix';
-import { ArmPatternI } from '../types/armPattern';
+import { ArmPatternI } from '../types/matrix/armPattern';
 import { Style } from '../../text/style';
 import { ArmPattern } from './armPattern';
 

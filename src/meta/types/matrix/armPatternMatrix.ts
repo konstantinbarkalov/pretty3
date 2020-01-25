@@ -1,5 +1,6 @@
 import { KnotMatrixI, MatrixI } from './matrix';
-import { ArmPatternI } from '../armPattern';
+import { ArmPatternI } from './armPattern';
+
 
 
 export interface ArmPatternKnotMatrixI extends KnotMatrixI<ArmPatternI> {
