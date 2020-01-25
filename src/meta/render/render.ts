@@ -2,7 +2,7 @@ import { EOL } from 'os';
 import { MetaNodeI } from '../types/node';
 import { Renderer } from '../../text/renderer/abstract/renderer';
 import { generateFnParametersT } from '../types/arm/armGenerator';
-import { FlatNonatomicTextContainer } from '../../text/textContainer';
+import { NonatomicTextContainer } from '../../text/textContainer';
 import { StrictUnicodeLine } from '../../text/strictUnicode';
 import { PlainRenderer } from '../../text/renderer/implementation';
 import { ArmGeneratorChain, ArmGeneratorChainElement } from './armGeneratorChain';
@@ -17,12 +17,12 @@ import { spacedArmWidthT } from '../types/arm/armWidth';
 
 
 function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain, maxWidth: number, armWidth: number, firstLinePadding: number, renderer: Renderer): void {
-  const parentArmChain = parentChain.generateArmChain();
-  const parentArmChainWidth = new FlatNonatomicTextContainer(parentArmChain).calcSize().width.first;
   const hasChildren = (node.children.length > 0);
-  const wrappedLeaf = node.leaf.wrap(maxWidth - parentArmChainWidth, firstLinePadding).wrapped;
-  // TODO: wrap, with respect of whole armChainWidth not only parentArmChainWidth
-  const leafFlatLines = wrappedLeaf.splitToFlatLines();
+  //const parentArmChain = parentChain.generateArmChain();
+  //const parentArmChainWidth = new FlatNonatomicTextContainer(parentArmChain).calcSize().width.first;
+  // const wrappedLeaf = node.leaf.wrap(maxWidth - parentArmChainWidth, firstLinePadding).wrapped;
+  // // TODO: wrap, with respect of whole armChainWidth not only parentArmChainWidth
+  // const leafFlatLines = wrappedLeaf.splitToFlatLines();
 
   const generateArmParameters: generateFnParametersT = {
     node,
@@ -37,11 +37,21 @@ function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain
     node.armWidthGenerator,
     generateArmParameters,
   );
-  //chain.elements.push(currentChainElement);
 
   // iterating through leaf lines
-  leafFlatLines.forEach((leafFlatLine, leafFlatLineId) => {
-    const isLastLineOfLeaf = leafFlatLineId === leafFlatLines.length - 1;
+  const leafLineWrapGenerator = node.leaf.managedWrap(maxWidth);
+  let done: boolean | undefined = false;
+  while (!done) {
+    const currentArm = currentChainElement.generateArm();
+    const parentArmChain = parentChain.generateArmChain();
+    const armChain = parentArmChain.concat(currentArm);
+    const arm = new NonatomicTextContainer(armChain);
+    const currentLineMaxWidth = maxWidth - arm.calcSize().width.first;
+    const generatorResult = leafLineWrapGenerator.next(currentLineMaxWidth);
+    done = generatorResult.done;
+    //const wrappedLineContainer = generatorResult.value;
+
+    const isLastLineOfLeaf = !!done;
     //const isFirstLineOfLeaf = leafFlatLineId === 0;
 
     parentChain.elements.forEach((parentElement) => {
@@ -55,11 +65,9 @@ function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain
       currentChainElement.parameters.isLastLine = true;
       currentChainElement.parameters.isLastLineOfKnot = true;
     }
-    const currentArm = currentChainElement.generateArm();
-    const parentArmChain = parentChain.generateArmChain();
-    const atomicsToRender = parentArmChain.concat(currentArm, leafFlatLine.children);
-    const flatLineToRender = new FlatNonatomicTextContainer<StrictUnicodeLine>(atomicsToRender);
-    const rendered = renderer.renderFlatLine(flatLineToRender);
+
+    const lineToRender = new NonatomicTextContainer<StrictUnicodeLine>([arm, generatorResult.value]);
+    const rendered = renderer.render(lineToRender);
     console.log(rendered);
 
     parentChain.elements.forEach((parentElement) => {
@@ -68,7 +76,7 @@ function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain
     });
     currentChainElement.parameters.lineNum++;
     currentChainElement.parameters.lineOfKnotNum++;
-  });
+  }
   const chain = new ArmGeneratorChain(parentChain.elements.concat(currentChainElement));
 
   // iterating through children
