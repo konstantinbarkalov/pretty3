@@ -1,29 +1,16 @@
-import { EOL } from 'os';
 import { MetaNodeI } from '../types/node';
 import { Renderer } from '../../text/renderer/abstract/renderer';
 import { generateFnParametersT } from '../types/arm/armGenerator';
-import { NonatomicTextContainer } from '../../text/textContainer';
+import { NonatomicTextContainer, AnyTextContainer } from '../../text/textContainer';
 import { StrictUnicodeLine } from '../../text/strictUnicode';
-import { PlainRenderer } from '../../text/renderer/implementation';
+
 import { ArmGeneratorChain, ArmGeneratorChainElement } from './armGeneratorChain';
-import { ArmPatternMatrix } from '../matrix/armPatternMatrix';
-import { Style } from '../../text/style';
-import { MatrixDrivenArmGenerator, MatrixDrivenArmWidthGenerator } from '../matrix/matrixDrivenArmGenerator';
-import { MetaNode } from '../node';
-import { ArmWidthMatrix } from '../matrix/armWidthMatrix';
-import { spacedArmWidthT } from '../types/arm/armWidth';
 
 
 
 
-function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain, maxWidth: number, armWidth: number, firstLinePadding: number, renderer: Renderer): void {
+export function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain, maxWidth: number, armWidth: number, firstLinePadding: number, renderer: Renderer): void {
   const hasChildren = (node.children.length > 0);
-  //const parentArmChain = parentChain.generateArmChain();
-  //const parentArmChainWidth = new FlatNonatomicTextContainer(parentArmChain).calcSize().width.first;
-  // const wrappedLeaf = node.leaf.wrap(maxWidth - parentArmChainWidth, firstLinePadding).wrapped;
-  // // TODO: wrap, with respect of whole armChainWidth not only parentArmChainWidth
-  // const leafFlatLines = wrappedLeaf.splitToFlatLines();
-
   const generateArmParameters: generateFnParametersT = {
     node,
     childNum: null,
@@ -39,20 +26,29 @@ function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain
   );
 
   // iterating through leaf lines
-  const leafLineWrapGenerator = node.leaf.managedWrap(maxWidth);
-  let done: boolean | undefined = false;
-  while (!done) {
-    const currentArm = currentChainElement.generateArm();
-    const parentArmChain = parentChain.generateArmChain();
-    const armChain = parentArmChain.concat(currentArm);
-    const arm = new NonatomicTextContainer(armChain);
-    const currentLineMaxWidth = maxWidth - arm.calcSize().width.first;
-    const generatorResult = leafLineWrapGenerator.next(currentLineMaxWidth);
-    done = generatorResult.done;
-    //const wrappedLineContainer = generatorResult.value;
 
-    const isLastLineOfLeaf = !!done;
-    //const isFirstLineOfLeaf = leafFlatLineId === 0;
+  let currentArm: AnyTextContainer<StrictUnicodeLine>;
+  let parentArmChain: AnyTextContainer<StrictUnicodeLine>[];
+  let armChain: AnyTextContainer<StrictUnicodeLine>[];
+  let arm: AnyTextContainer<StrictUnicodeLine>;
+  let currentLineMaxWidth: number;
+  let leafLineWrapGenerator: Generator<AnyTextContainer<StrictUnicodeLine>, AnyTextContainer<StrictUnicodeLine>, number> | undefined;
+  let generatorResult: IteratorResult<AnyTextContainer<StrictUnicodeLine>, AnyTextContainer<StrictUnicodeLine>>;
+
+  let isLastLineOfLeaf: boolean;
+
+  do {
+    currentArm = currentChainElement.generateArm();
+    parentArmChain = parentChain.generateArmChain();
+    armChain = parentArmChain.concat(currentArm);
+    arm = new NonatomicTextContainer(armChain);
+    currentLineMaxWidth = maxWidth - arm.calcSize().width.first;
+    if (!leafLineWrapGenerator) {
+      leafLineWrapGenerator = node.leaf.managedWrap(currentLineMaxWidth);
+    }
+    generatorResult = leafLineWrapGenerator.next(currentLineMaxWidth);
+
+    isLastLineOfLeaf = !!generatorResult.done;
 
     parentChain.elements.forEach((parentElement) => {
       const isLastChildOfParent = parentElement.parameters.childNum === parentElement.parameters.node.children.length - 1;
@@ -65,8 +61,8 @@ function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain
       currentChainElement.parameters.isLastLine = true;
       currentChainElement.parameters.isLastLineOfKnot = true;
     }
-
-    const lineToRender = new NonatomicTextContainer<StrictUnicodeLine>([arm, generatorResult.value]);
+    const wrappedLineContainer = generatorResult.value;
+    const lineToRender = new NonatomicTextContainer<StrictUnicodeLine>([arm, wrappedLineContainer]);
     const rendered = renderer.render(lineToRender);
     console.log(rendered);
 
@@ -76,7 +72,8 @@ function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain
     });
     currentChainElement.parameters.lineNum++;
     currentChainElement.parameters.lineOfKnotNum++;
-  }
+  } while (!generatorResult.done);
+
   const chain = new ArmGeneratorChain(parentChain.elements.concat(currentChainElement));
 
   // iterating through children
@@ -87,68 +84,3 @@ function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain
     renderMetaNodeRecursive(childNode, chain, maxWidth, armWidth, firstLinePadding, renderer);
   });
 }
-// const pattern = KnotDependentArmPlainLinePattern.fromString({
-//   otherChildFirstLine:   '├─╸',
-//   spacer: '│  ',
-//   lastChildFirstLine:    '└─╸',
-// });
-const armPatternMatrix = ArmPatternMatrix.fromArray([
-  '┬─)', '│  ', '│  ',
-  '┬─>', '│  ', '│  ',
-  '├──', '│  ', '│  ',
-  '├──', '│  ', '│  ',
-  '└──', '   ', '   ',
-], new Style());
-
-const armWidth: spacedArmWidthT = {preSpace: 1, postSpace: 1, arm: 4};
-const smallArmWidth: spacedArmWidthT = {preSpace: 1, postSpace: 1, arm: 1};
-const armWidthMatrix = ArmWidthMatrix.fromArray([
-  0,        0,        0,
-  0,        smallArmWidth, smallArmWidth,
-  armWidth, armWidth, armWidth,
-  armWidth, armWidth, armWidth,
-  armWidth, armWidth, armWidth,
-]);
-
-const armGenerator = new MatrixDrivenArmGenerator(armPatternMatrix);
-const armWidthGenerator = new MatrixDrivenArmWidthGenerator(armWidthMatrix);
-
-const testMetaNodeA = MetaNode.fromString('alla long story about: evwkfsdf vfodpskj eevcsg dfsv evwkfsdf vfodpskj eevcsg dfsv', armGenerator, armWidthGenerator);
-testMetaNodeA.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
-testMetaNodeA.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, armGenerator, armWidthGenerator));
-testMetaNodeA.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
-testMetaNodeA.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
-testMetaNodeA.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, armGenerator, armWidthGenerator));
-testMetaNodeA.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
-
-const testMetaNodeB = MetaNode.fromString('bella', armGenerator, armWidthGenerator);
-testMetaNodeB.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
-testMetaNodeB.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, armGenerator, armWidthGenerator));
-testMetaNodeB.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
-testMetaNodeB.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
-testMetaNodeB.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, armGenerator, armWidthGenerator));
-testMetaNodeB.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
-
-const testMetaNodeC = MetaNode.fromString('chika', armGenerator, armWidthGenerator);
-testMetaNodeC.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
-testMetaNodeC.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, armGenerator, armWidthGenerator));
-testMetaNodeC.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
-testMetaNodeC.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
-testMetaNodeC.children.push(MetaNode.fromString(`ally dot ${EOL} d ddf sdfg sd g`, armGenerator, armWidthGenerator));
-testMetaNodeC.children.push(MetaNode.fromString('ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ally son sdf sdf s ;dl fasd fasd fkl; aksdf wepo r awr ', armGenerator, armWidthGenerator));
-
-testMetaNodeA.children.push(testMetaNodeC);
-
-const testMetaTree = MetaNode.fromString('alabama story goes here: er fopgp oidpsfgoisdf gfgsd qwecsddf fmkg-olvlkmk dgrg', armGenerator, armWidthGenerator);
-testMetaTree.children.push(testMetaNodeA);
-testMetaTree.children.push(testMetaNodeB);
-
-// const testMetaTree = MetaNode.fromString('root node with text, that is more then one line, when wrapped', generator, 4);
-// testMetaTree.children.push(MetaNode.fromString('endpoint child 1', generator, 4));
-// testMetaTree.children.push(MetaNode.fromString('endpoint child 2 that is multiline too because long text will be wrapped', generator, 4));
-// testMetaTree.children.push(MetaNode.fromString('endpoint child 3 is another long-talking azaza', generator, 4));
-
-const renderer = new PlainRenderer();
-const emptyChain = new ArmGeneratorChain([]);
-renderMetaNodeRecursive(testMetaTree, emptyChain, 40, 8, 0, renderer);
-console.log('--- fin ---');

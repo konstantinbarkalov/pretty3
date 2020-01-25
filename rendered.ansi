@@ -1,0 +1,13 @@
+GitHub is home to over [48;2;0;64;32m[38;2;210;220;255m40 million[49m[39m develo
+pers working together to host and review
+ code, manage projects, and [1mbuild softwa[22m
+[1mre together. [22mSince question was 
+regarding clunkiness 
+of property checking, and one regular us
+ecase for that being validation of funct
+ion argument options objects, thought I'
+d mention a library-free short way of te
+sting existence of multiple properties. [38;2;128;128;128m[1m[39m[22m
+[38;2;128;128;128m[1mDisclaimer: [39m[22m[38;2;128;128;128mIt does require ECMAScript 5[39m
+[38;2;128;128;128m (but IMO anyone still using IE8 deserve[39m
+[38;2;128;128;128ms a broken web)[39m

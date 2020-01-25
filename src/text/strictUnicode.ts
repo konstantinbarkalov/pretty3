@@ -30,7 +30,7 @@ export class StrictUnicodeText extends NormalizedUnicodeText {
   constructor(text: string | String, isSkipChecks = false) {
     super(text, isSkipChecks);
     isSkipChecks = isSkipChecks || this.isPrecheckedInstance(text);
-    if (isSkipChecks) {
+    if (!isSkipChecks) {
       this.guardStringIsStrictUnicode(this);
     }
   }
@@ -76,44 +76,33 @@ export class StrictUnicodeText extends NormalizedUnicodeText {
   }
   public *managedWrap(maxWidth: number): Generator<StrictUnicodeLine, StrictUnicodeLine, number> {
     const lines = this.splitToLines();
-    let remains: StrictUnicodeLine | undefined;
-    let remainsWidth = 0;
-    for (const line of lines) {
-      const lineWrapGenerator = line.managedWrap(maxWidth - remainsWidth);
-      let done: boolean | undefined = false;
-      while (!done) {
-        const generatorResult = lineWrapGenerator.next(maxWidth - remainsWidth);
-        done = generatorResult.done;
-        const wrappedLine = generatorResult.value;
-        if (!done) {
-          if (remains) {
-            const wrappedLineWithRemains = StrictUnicodeLine.combine(remains, wrappedLine);
-            maxWidth = yield wrappedLineWithRemains;
-          } else {
-            maxWidth = yield wrappedLine;
-          }
-          remains = undefined;
-          remainsWidth = 0;
-        } else {
-          if (remains) {
-            const wrappedLineWithRemains = StrictUnicodeLine.combine(remains, wrappedLine);
-            remains = wrappedLineWithRemains;
-            remainsWidth += wrappedLine.calcWidth();
-          } else {
-            remains = wrappedLine;
-            remainsWidth = wrappedLine.calcWidth();
-          }
+    let wrappedLine: StrictUnicodeLine;
+
+    for (let lineId = 0; lineId < lines.length; lineId++) {
+      const line = lines[lineId];
+      const isLastLine = lineId === lines.length - 1;
+      const lineWrapGenerator = line.managedWrap(maxWidth);
+      let done: boolean;
+      do {
+        const generatorResult = lineWrapGenerator.next(maxWidth);
+        done = generatorResult.done || false;
+        wrappedLine = generatorResult.value;
+        if (!done || !isLastLine) {
+          maxWidth = yield wrappedLine;
         }
-      }
+      } while (!done);
     }
     // tail
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return remains!;
+    return wrappedLine!;
   }
 }
 
 export class StrictUnicodeLine extends StrictUnicodeText {
   constructor(text: string | String, isSkipChecks = false) {
+    if (text.toString().includes(EOL)) {
+      console.log(text.toString());
+    }
     super(text, isSkipChecks);
   }
 
@@ -195,13 +184,15 @@ export class StrictUnicodeChar extends StrictUnicodeLine {
     return text instanceof StrictUnicodeChar;
   }
 
+  protected widthCache = 1;
   public guardStringIsStrictUnicode(normalizedText: StrictUnicodeLine): void {
-    if (normalizedText.calcWidth() !== 1) { throw('char width must be strictly 1'); }
+    if (normalizedText.calcWidth() !== 1) {
+      throw('char width must be strictly 1');
+    }
     super.guardStringIsStrictUnicode(normalizedText);
   }
-  protected widthCache = 1;
   public calcWidth(): number {
-    return this.widthCache;
+    return 1;
   }
 
   static combine(...items: StrictUnicodeChar[]): StrictUnicodeLine {
