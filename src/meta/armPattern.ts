@@ -93,16 +93,18 @@ type patternStringArrayT = [
   string, string, string,
   string, string, string,
   string, string, string,
+  string, string, string,
 ];
 
 export class ArmPatternMatrix implements ArmPatternMatrixI {
-  constructor(public leaf: ArmPatternKnotMatrixI, public firstChild: ArmPatternKnotMatrixI, public otherChild: ArmPatternKnotMatrixI, public lastChild: ArmPatternKnotMatrixI) { }
+  constructor(public infertileLeaf: ArmPatternKnotMatrixI, public fertileLeaf: ArmPatternKnotMatrixI, public firstChild: ArmPatternKnotMatrixI, public otherChild: ArmPatternKnotMatrixI, public lastChild: ArmPatternKnotMatrixI) { }
   static fromArray(matrix: patternStringArrayT, style: Style): ArmPatternMatrix {
     const knotDependentArmPlainLinePattern = new ArmPatternMatrix(
       ArmPatternKnotMatrix.fromString(matrix[0], matrix[1], matrix[2], style),
       ArmPatternKnotMatrix.fromString(matrix[3], matrix[4], matrix[5], style),
       ArmPatternKnotMatrix.fromString(matrix[6], matrix[7], matrix[8], style),
       ArmPatternKnotMatrix.fromString(matrix[9], matrix[10], matrix[11], style),
+      ArmPatternKnotMatrix.fromString(matrix[12], matrix[13], matrix[14], style),
     );
     return knotDependentArmPlainLinePattern;
   }

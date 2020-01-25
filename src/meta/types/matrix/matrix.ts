@@ -5,7 +5,8 @@ export interface KnotMatrixI<T> {
 }
 
 export interface MatrixI<T> {
-  leaf: KnotMatrixI<T>;
+  infertileLeaf: KnotMatrixI<T>;
+  fertileLeaf: KnotMatrixI<T>;
   firstChild: KnotMatrixI<T>;
   otherChild: KnotMatrixI<T>;
   lastChild: KnotMatrixI<T>;

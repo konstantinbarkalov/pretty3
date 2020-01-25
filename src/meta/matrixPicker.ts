@@ -14,7 +14,11 @@ export abstract class MatrixPicker<T> {
 
     let knotMatrix: KnotMatrixI<T>;
     if (isLeaf) {
-      knotMatrix = this.matrix.leaf;
+      if (hasChildren) {
+        knotMatrix = this.matrix.fertileLeaf;
+      } else {
+        knotMatrix = this.matrix.infertileLeaf;
+      }
     } else if (isFirstChild) {
       knotMatrix = this.matrix.firstChild;
     } else if (isLastChild) {

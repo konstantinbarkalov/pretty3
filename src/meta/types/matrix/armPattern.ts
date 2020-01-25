@@ -8,7 +8,8 @@ export interface ArmPatternKnotMatrixI extends KnotMatrixI<ArmPatternI> {
 }
 
 export interface ArmPatternMatrixI extends MatrixI<ArmPatternI> {
-  leaf: ArmPatternKnotMatrixI;
+  infertileLeaf: ArmPatternKnotMatrixI;
+  fertileLeaf: ArmPatternKnotMatrixI;
   firstChild: ArmPatternKnotMatrixI;
   otherChild: ArmPatternKnotMatrixI;
   lastChild: ArmPatternKnotMatrixI;

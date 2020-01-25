@@ -11,16 +11,18 @@ import { Style } from '../text/style';
 import { PatternDrivenArmGenerator, PatternDrivenArmWidthGenerator } from './patternDrivenArmGenerator';
 import { MetaNode } from './node';
 import { ArmWidthMatrix } from './armWidth';
+import { spacedArmWidthT } from './types/armWidth';
 
 
 
 
 function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain, maxWidth: number, armWidth: number, firstLinePadding: number, renderer: Renderer): void {
+  const parentArmChain = parentChain.generateArmChain();
+  const parentArmChainWidth = new FlatNonatomicTextContainer(parentArmChain).calcSize().width.first;
   const hasChildren = (node.children.length > 0);
-  const wrappedLeaf = node.leaf.wrap(maxWidth, firstLinePadding).wrapped;
+  const wrappedLeaf = node.leaf.wrap(maxWidth - parentArmChainWidth, firstLinePadding).wrapped;
+  // TODO: wrap, with respect of whole armChainWidth not only parentArmChainWidth
   const leafFlatLines = wrappedLeaf.splitToFlatLines();
-
-
 
   const generateArmParameters: generateFnParametersT = {
     node,
@@ -53,9 +55,8 @@ function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain
       currentChainElement.parameters.isLastLine = true;
       currentChainElement.parameters.isLastLineOfKnot = true;
     }
-
-    const parentArmChain = parentChain.generateArmChain();
     const currentArm = currentChainElement.generateArm();
+    const parentArmChain = parentChain.generateArmChain();
     const atomicsToRender = parentArmChain.concat(currentArm, leafFlatLine.children);
     const flatLineToRender = new FlatNonatomicTextContainer<StrictUnicodeLine>(atomicsToRender);
     const rendered = renderer.renderFlatLine(flatLineToRender);
@@ -84,17 +85,21 @@ function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain
 //   lastChildFirstLine:    '└─╸',
 // });
 const armPatternMatrix = ArmPatternMatrix.fromArray([
+  '┬─)', '│  ', '│  ',
   '┬─>', '│  ', '│  ',
   '├──', '│  ', '│  ',
   '├──', '│  ', '│  ',
   '└──', '   ', '   ',
 ], new Style());
 
+const armWidth: spacedArmWidthT = {preSpace: 1, postSpace: 1, arm: 4};
+const smallArmWidth: spacedArmWidthT = {preSpace: 1, postSpace: 1, arm: 1};
 const armWidthMatrix = ArmWidthMatrix.fromArray([
-  4, 4, 4,
-  4, 4, 4,
-  4, 4, 4,
-  4, 4, 4,
+  0,        0,        0,
+  0,        smallArmWidth, smallArmWidth,
+  armWidth, armWidth, armWidth,
+  armWidth, armWidth, armWidth,
+  armWidth, armWidth, armWidth,
 ]);
 
 const armGenerator = new PatternDrivenArmGenerator(armPatternMatrix);
