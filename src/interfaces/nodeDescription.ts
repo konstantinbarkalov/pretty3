@@ -1,10 +1,15 @@
 import { iconT } from './icon';
 
 export enum NodeMetatypeEnum {
+  Dead,
   Single,
-  Enumerable
+  Enumerable,
 }
 
+export enum DeadNodeTypeEnum {
+  Elipsis,
+  CircularReference,
+}
 export enum SingleNodeTypeEnum {
   Undefined,
   Null,
@@ -26,56 +31,44 @@ export enum EnumerableNodeTypeEnum {
   Unknown,
 }
 
-type subEntryKeyT<TEnumerableNodeTypeEnum extends EnumerableNodeTypeEnum> =
-  TEnumerableNodeTypeEnum extends EnumerableNodeTypeEnum.Array ?
-  number :
-  TEnumerableNodeTypeEnum extends EnumerableNodeTypeEnum.TypedArray ?
-  number :
-  TEnumerableNodeTypeEnum extends EnumerableNodeTypeEnum.Set ?
-  number :
-  TEnumerableNodeTypeEnum extends EnumerableNodeTypeEnum.Map ?
-  {} :
-  TEnumerableNodeTypeEnum extends EnumerableNodeTypeEnum.WeakMap ?
-  {} :
-  TEnumerableNodeTypeEnum extends EnumerableNodeTypeEnum.Object ?
-  string :
-  TEnumerableNodeTypeEnum extends EnumerableNodeTypeEnum.Unknown ?
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  any :
-  never;
 
 type NodeTypeEnumT<TNodeMetatypeEnum extends NodeMetatypeEnum> =
-  TNodeMetatypeEnum extends NodeMetatypeEnum.Single ?
-  SingleNodeTypeEnum :
-  TNodeMetatypeEnum extends NodeMetatypeEnum.Enumerable ?
-  EnumerableNodeTypeEnum :
-  never;
+TNodeMetatypeEnum extends NodeMetatypeEnum.Dead ?
+DeadNodeTypeEnum :
+TNodeMetatypeEnum extends NodeMetatypeEnum.Single ?
+SingleNodeTypeEnum :
+TNodeMetatypeEnum extends NodeMetatypeEnum.Enumerable ?
+EnumerableNodeTypeEnum :
+never;
 
-type nodeSubEntriesT<TEnumerableNodeTypeEnum extends EnumerableNodeTypeEnum> =
-  TEnumerableNodeTypeEnum extends SingleNodeTypeEnum ?
-  undefined :
-  TEnumerableNodeTypeEnum extends EnumerableNodeTypeEnum ?
-  [subEntryKeyT<TEnumerableNodeTypeEnum>, any] :
-  never;
 
+export type nodeDescriptionKeyT = string | number | object | undefined;
 export type nodeDescriptionT<TNodeMetatypeEnum extends NodeMetatypeEnum, TNodeTypeEnum extends NodeTypeEnumT<TNodeMetatypeEnum>> =
-  TNodeTypeEnum extends SingleNodeTypeEnum ? {
+  TNodeTypeEnum extends DeadNodeTypeEnum ? {
     metatype: TNodeMetatypeEnum;
     type: TNodeTypeEnum;
+    icon?: iconT;
+    info?: string | undefined;
+  } : TNodeTypeEnum extends SingleNodeTypeEnum ? {
+    metatype: TNodeMetatypeEnum;
+    type: TNodeTypeEnum;
+    key: nodeDescriptionKeyT;
     value: string;
     icon?: iconT;
     info?: string | undefined;
   } : TNodeTypeEnum extends EnumerableNodeTypeEnum ? {
     metatype: TNodeMetatypeEnum;
     type: TNodeTypeEnum;
+    key: nodeDescriptionKeyT;
     value: string;
     icon?: iconT;
     info?: string | undefined;
-    subEntries: nodeSubEntriesT<TNodeTypeEnum>[];
+    subEntries: anyNodeDescriptionT[];
   }
  : never;
 
+export type anyDeadNodeDescriptionT = nodeDescriptionT<NodeMetatypeEnum.Dead, DeadNodeTypeEnum>;
 export type anySingleNodeDescriptionT = nodeDescriptionT<NodeMetatypeEnum.Single, SingleNodeTypeEnum>;
 export type anyEnumerableNodeDescriptionT = nodeDescriptionT<NodeMetatypeEnum.Enumerable, EnumerableNodeTypeEnum>;
-export type anyNodeDescriptionT = anySingleNodeDescriptionT | anyEnumerableNodeDescriptionT;
+export type anyNodeDescriptionT = anyDeadNodeDescriptionT | anySingleNodeDescriptionT | anyEnumerableNodeDescriptionT;
 export type anyNodeDescriptionTemplateT = Partial<anyNodeDescriptionT>;
