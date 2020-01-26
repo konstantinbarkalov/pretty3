@@ -5,13 +5,30 @@ import { MatrixDrivenArmGenerator, MatrixDrivenArmWidthGenerator } from '../meta
 import { metaNodeTemplateT } from '../interfaces/general';
 import { theme } from './defaultTheme';
 
-const armPatternMatrix = ArmPatternMatrix.fromArray([
-  '┬─)', '│  ', '│  ',
-  '┬─>', '│  ', '│  ',
-  '├──', '│  ', '│  ',
-  '├──', '│  ', '│  ',
-  '└──', '   ', '   ',
+const otherArmPatternMatrix = ArmPatternMatrix.fromArray([
+  '   ', '   ', '   ',
+  '   ', '?  ', '?  ',
+  '???', '?  ', '?  ',
+  '???', '?  ', '?  ',
+  '???', '   ', '   ',
 ], theme.style.branch);
+
+const arrayArmPatternMatrix = ArmPatternMatrix.fromArray([
+  '   ', '   ', '   ',
+  '   ', '│  ', '│  ',
+  '├─╸', '│  ', '│  ',
+  '├─╸', '│  ', '│  ',
+  '└─╸', '   ', '   ',
+], theme.style.branch);
+
+const objectArmPatternMatrix = ArmPatternMatrix.fromArray([
+  '   ', '   ', '   ',
+  '   ', '│  ', '│  ',
+  '├─╴', '│  ', '│  ',
+  '├─╴', '│  ', '│  ',
+  '╰─╴', '   ', '   ',
+], theme.style.branch);
+
 
 const armWidth: spacedArmWidthT = {preSpace: 1, postSpace: 1, arm: 4};
 const smallArmWidth: spacedArmWidthT = {preSpace: 1, postSpace: 1, arm: 8};
@@ -24,16 +41,21 @@ const armWidthMatrix = ArmWidthMatrix.fromArray([
 ]);
 
 const array: metaNodeTemplateT = {
-  armGenerator: new MatrixDrivenArmGenerator(armPatternMatrix),
+  armGenerator: new MatrixDrivenArmGenerator(arrayArmPatternMatrix),
   armWidthGenerator: new MatrixDrivenArmWidthGenerator(armWidthMatrix),
 };
 
 const object: metaNodeTemplateT = {
-  armGenerator: new MatrixDrivenArmGenerator(armPatternMatrix),
+  armGenerator: new MatrixDrivenArmGenerator(objectArmPatternMatrix),
   armWidthGenerator: new MatrixDrivenArmWidthGenerator(armWidthMatrix),
 };
 
+const other: metaNodeTemplateT = {
+  armGenerator: new MatrixDrivenArmGenerator(otherArmPatternMatrix),
+  armWidthGenerator: new MatrixDrivenArmWidthGenerator(armWidthMatrix),
+};
 export const template = {
   array,
-  object
+  object,
+  other,
 };

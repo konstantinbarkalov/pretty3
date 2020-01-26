@@ -14,6 +14,8 @@ export type buildMetaTreeSettingsT = {
   maxLineWidth: number;
   arrayTemplate: metaNodeTemplateT;
   objectTemplate: metaNodeTemplateT;
+  otherTemplate: metaNodeTemplateT;
+  // TODO: every type
 };
 
 export type stringifyTreeSettingsT = buildMetaTreeSettingsT & {

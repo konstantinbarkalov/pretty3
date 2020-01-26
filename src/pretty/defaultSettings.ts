@@ -12,4 +12,5 @@ export const defaultSettings: printTreeSettingsT = {
   maxLineWidth: 80,
   arrayTemplate: template.array,
   objectTemplate: template.object,
+  otherTemplate: template.other,
 };

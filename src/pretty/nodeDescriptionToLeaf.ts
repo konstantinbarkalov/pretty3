@@ -10,7 +10,11 @@ export function nodeDescriptionToLeaf(nodeDescription: anyNodeDescriptionT): Fla
     children.push(new AtomicTextContainer(new StrictUnicodeLine(nodeDescription.icon.text), theme.style.icon));
     children.push(space);
   }
-  if (nodeDescription.metatype !== NodeMetatypeEnum.Dead) {
+  if (nodeDescription.metatype === NodeMetatypeEnum.Dead) {
+
+    children.push(new AtomicTextContainer(new StrictUnicodeLine('...'), theme.style.keyDots));
+    children.push(space);
+  } else {
     if (nodeDescription.key !== undefined) {
       const nodeKeyString = (nodeDescription.key.toString) ? nodeDescription.key.toString() : String(nodeDescription.key);
       children.push(new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), theme.style.key));

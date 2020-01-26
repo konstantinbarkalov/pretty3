@@ -1,7 +1,7 @@
 
 import { buildMetaTreeSettingsT } from '../interfaces/general';
 import { MetaNode } from '../meta/node';
-import { anyNodeDescriptionT, NodeMetatypeEnum, SingleNodeTypeEnum, EnumerableNodeTypeEnum, nodeDescriptionKeyT } from '../interfaces/nodeDescription';
+import { anyNodeDescriptionT, NodeMetatypeEnum, SingleNodeTypeEnum, EnumerableNodeTypeEnum, nodeDescriptionKeyT, anyDeadNodeDescriptionT, DeadNodeTypeEnum } from '../interfaces/nodeDescription';
 import { nodeDescriptionToLeaf } from './nodeDescriptionToLeaf';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -146,6 +146,14 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
     }
 
     if (nodeDescription.subEntries.length < unwrappedSubEntries.length) {
+      const elipsisDescription: anyDeadNodeDescriptionT = {
+        metatype: NodeMetatypeEnum.Dead,
+        type: DeadNodeTypeEnum.Elipsis
+      };
+      nodeDescription.subEntries.push(elipsisDescription);
+    }
+
+    if (nodeDescription.subEntries.length < unwrappedSubEntries.length) {
       nodeDescription.info = `${nodeDescription.subEntries.length} shown of ${unwrappedSubEntries.length} total`;
     } else {
       nodeDescription.info = `${nodeDescription.subEntries.length} entries`;
@@ -156,7 +164,19 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
 
 function nodeDescriptionTreeToMetaTreeRecursive(nodeDescription: anyNodeDescriptionT, settings: buildMetaTreeSettingsT): MetaNode {
   const leaf = nodeDescriptionToLeaf(nodeDescription);
-  const buildedMetaNode = new MetaNode(leaf, settings.objectTemplate.armGenerator, settings.objectTemplate.armWidthGenerator);
+  let buildedMetaNode: MetaNode;
+  if (nodeDescription.metatype === NodeMetatypeEnum.Enumerable) {
+    if (nodeDescription.type === EnumerableNodeTypeEnum.Array) {
+      buildedMetaNode = new MetaNode(leaf, settings.arrayTemplate.armGenerator, settings.arrayTemplate.armWidthGenerator);
+    } else if (nodeDescription.type === EnumerableNodeTypeEnum.Object) {
+      buildedMetaNode = new MetaNode(leaf, settings.objectTemplate.armGenerator, settings.objectTemplate.armWidthGenerator);
+    } else {
+      buildedMetaNode = new MetaNode(leaf, settings.otherTemplate.armGenerator, settings.otherTemplate.armWidthGenerator);
+    }
+  } else {
+    buildedMetaNode = new MetaNode(leaf, settings.otherTemplate.armGenerator, settings.otherTemplate.armWidthGenerator);
+  }
+  // TODO: all enum
   if (nodeDescription.metatype === NodeMetatypeEnum.Enumerable) {
     buildedMetaNode.children = nodeDescription.subEntries.map((childDescription) => {
       return nodeDescriptionTreeToMetaTreeRecursive(childDescription, settings);
