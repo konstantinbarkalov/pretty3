@@ -1,5 +1,5 @@
 
-import { buildMetaTreeSettingsT } from '../interfaces/general';
+import { buildMetaTreeSettingsT } from "../interfaces/general";
 import { MetaNode } from '../meta/node';
 import { anyNodeDescriptionT, NodeMetatypeEnum, SingleNodeTypeEnum, EnumerableNodeTypeEnum } from '../interfaces/nodeDescription';
 import { buildLeaf } from './buildLeaf';

@@ -4,7 +4,7 @@ import { Renderer } from './text/renderer/abstract/renderer';
 import { StrictUnicodeLine, StrictUnicodeText } from './text/strictUnicode';
 import { Style } from './text/style';
 import { AtomicTextContainer, FlatNonatomicTextContainer, AnyTextContainer } from './text/textContainer';
-import { itemTextPatternT, logLineCallbackT, maxLineWidthT, paddingPrefixT, printTreeOptionsOldT, printTreeSettingsOldT, stringifyTreeOptionsOldT, textPatternString, textPatternStringT, textPatternT } from './interfaces/general';
+import { itemTextPatternT, logLineCallbackT, maxLineWidthT, paddingPrefixT, printTreeOptionsOldT, printTreeSettingsOldT, stringifyTreeOptionsOldT, textPatternString, textPatternStringT, textPatternT } from './interfaces/generalOld';
 import { anyNodeDescriptionT, EnumerableNodeTypeEnum, NodeMetatypeEnum, SingleNodeTypeEnum } from './interfaces/nodeDescription';
 
 
