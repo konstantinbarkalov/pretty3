@@ -54,10 +54,10 @@ export function print(tree: any, options?: printTreeOptionsT ): void {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function stringify(tree: any, options?: stringifyTreeOptionsT ): string {
-  let stingCanvas = '';
+  let stringBuffer = '';
   const printTreeOptions = Object.assign({}, options, {
-    logLineCallback(line: string) { stingCanvas += line; },
+    logLineCallback(line: string) { stringBuffer += line; },
   });
   print(tree, printTreeOptions);
-  return stingCanvas;
+  return stringBuffer;
 }

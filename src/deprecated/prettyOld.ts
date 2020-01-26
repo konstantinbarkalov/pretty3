@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import defaultSettings from './defaultSettingsOld';
-import { Renderer } from './text/renderer/abstract/renderer';
-import { StrictUnicodeLine, StrictUnicodeText } from './text/strictUnicode';
-import { Style } from './text/style';
-import { AtomicTextContainer, FlatNonatomicTextContainer, AnyTextContainer } from './text/textContainer';
-import { itemTextPatternT, logLineCallbackT, maxLineWidthT, paddingPrefixT, printTreeOptionsOldT, printTreeSettingsOldT, stringifyTreeOptionsOldT, textPatternString, textPatternStringT, textPatternT } from './interfaces/generalOld';
-import { anyNodeDescriptionT, EnumerableNodeTypeEnum, NodeMetatypeEnum, SingleNodeTypeEnum } from './interfaces/nodeDescription';
+import { Renderer } from '../text/renderer/abstract/renderer';
+import { StrictUnicodeLine, StrictUnicodeText } from '../text/strictUnicode';
+import { Style } from '../text/style';
+import { AtomicTextContainer, FlatNonatomicTextContainer, AnyTextContainer } from '../text/textContainer';
+import { itemTextPatternT, logLineCallbackT, maxLineWidthT, paddingPrefixT, printTreeOptionsOldT, printTreeSettingsOldT, stringifyTreeOptionsOldT, textPatternString, textPatternStringT, textPatternT } from './generalOld';
+import { anyNodeDescriptionT, EnumerableNodeTypeEnum, NodeMetatypeEnum, SingleNodeTypeEnum } from '../interfaces/nodeDescription';
 
 
 const treeStyleColors = {

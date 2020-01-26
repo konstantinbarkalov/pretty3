@@ -1,7 +1,7 @@
 
 import { AnsiRenderer } from '../text/renderer/implementation';
 import { template } from './defaultTemplate';
-import { printTreeSettingsT } from "../interfaces/general";
+import { printTreeSettingsT } from '../interfaces/general';
 
 
 export const defaultSettings: printTreeSettingsT = {

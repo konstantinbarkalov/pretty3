@@ -1,7 +1,7 @@
 import { Renderer } from '../text/renderer/abstract/renderer';
 import { MetaNode } from '../meta/node';
 import { ArmGeneratorI, ArmWidthGeneratorI } from '../meta/interfaces/arm/armGenerator';
-import { logLineCallbackT } from './generalOld';
+import { logLineCallbackT } from '../deprecated/generalOld';
 //// new way
 export type metaNodeTemplateT = {
   armGenerator: ArmGeneratorI<MetaNode>;
