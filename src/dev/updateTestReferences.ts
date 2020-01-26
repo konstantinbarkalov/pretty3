@@ -1,4 +1,4 @@
-import pretty from '../index';
+import {prettyOld as pretty} from '../index';
 import * as fs from 'fs';
 import * as path from 'path';
 import { AnsiRenderer } from '../text/renderer/implementation/ansi';

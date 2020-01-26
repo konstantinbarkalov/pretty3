@@ -30,7 +30,7 @@ export function guardTextPatternString(text: string): text is textPatternStringT
   return text.length === 3;
 }
 
-export type stringifyTreeSettingsT = {
+export type stringifyTreeSettingsOldT = {
   renderer: Renderer;
   maxLevel: number;
   maxItemsPerLevel: number[] | number;
@@ -42,13 +42,13 @@ export type stringifyTreeSettingsT = {
   eol: string;
 }
 
-export type stringifyTreeOptionsT = Partial<stringifyTreeSettingsT>;
+export type stringifyTreeOptionsOldT = Partial<stringifyTreeSettingsOldT>;
 export type logLineCallbackT = (line: string) => void;
-export type printTreeSettingsT = stringifyTreeSettingsT & {
+export type printTreeSettingsOldT = stringifyTreeSettingsOldT & {
   logLineCallback: logLineCallbackT;
 }
 
-export type printTreeOptionsT = Partial<printTreeSettingsT>;
+export type printTreeOptionsOldT = Partial<printTreeSettingsOldT>;
 export type maxLineWidthT = {
   first: number;
   other: number;
@@ -57,8 +57,8 @@ export type maxLineWidthT = {
 
 //// new way
 export type metaNodeTemplateT = {
-  armGenerator: ArmGeneratorI<MetaNode>,
-  armWidthGenerator: ArmWidthGeneratorI<MetaNode>,
+  armGenerator: ArmGeneratorI<MetaNode>;
+  armWidthGenerator: ArmWidthGeneratorI<MetaNode>;
 }
 export type buildMetaTreeSettingsT = {
   maxLevel: number;
@@ -70,8 +70,8 @@ export type buildMetaTreeSettingsT = {
 
 export type buildMetaTreeOptionsT = Partial<buildMetaTreeSettingsT>;
 
-export type renderTreeSettingsT = buildMetaTreeSettingsT & {
+export type printTreeSettingsT = buildMetaTreeSettingsT & {
   renderer: Renderer;
   logLineCallback: logLineCallbackT;
 }
-export type renderTreeOptionsT = Partial<renderTreeSettingsT>;
+export type printTreeOptionsT = Partial<printTreeSettingsT>;

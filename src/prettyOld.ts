@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import defaultSettings from './defaultSettings';
+import defaultSettings from './defaultSettingsOld';
 import { Renderer } from './text/renderer/abstract/renderer';
 import { StrictUnicodeLine, StrictUnicodeText } from './text/strictUnicode';
 import { Style } from './text/style';
 import { AtomicTextContainer, FlatNonatomicTextContainer, AnyTextContainer } from './text/textContainer';
-import { itemTextPatternT, logLineCallbackT, maxLineWidthT, paddingPrefixT, printTreeOptionsT, printTreeSettingsT, stringifyTreeOptionsT, textPatternString, textPatternStringT, textPatternT } from './interfaces/general';
+import { itemTextPatternT, logLineCallbackT, maxLineWidthT, paddingPrefixT, printTreeOptionsOldT, printTreeSettingsOldT, stringifyTreeOptionsOldT, textPatternString, textPatternStringT, textPatternT } from './interfaces/general';
 import { anyNodeDescriptionT, EnumerableNodeTypeEnum, NodeMetatypeEnum, SingleNodeTypeEnum } from './interfaces/nodeDescription';
 
 
@@ -45,15 +45,15 @@ const treeStyle = {
  *
  * @export
  * @param {*} tree any javasctript entity
- * @param {stringifyTreeOptionsT} [options]
+ * @param {stringifyTreeOptionsOldT} [options]
  * @see stringifyTreeOptionsT
  * @returns {string}
  */
-export function stringifyTree(tree: any, options?: stringifyTreeOptionsT ): string {
+export function stringifyTree(tree: any, options?: stringifyTreeOptionsOldT ): string {
   let outputString = '';
   const eol = (options && options.renderer) ? options.renderer.eol : defaultSettings.renderer.eol;
   const overridenOptionsLogLineCallback: logLineCallbackT = (line: string) => { outputString += line + eol ; };
-  const overridenPrintTreeOptions: printTreeOptionsT = { logLineCallback: overridenOptionsLogLineCallback };
+  const overridenPrintTreeOptions: printTreeOptionsOldT = { logLineCallback: overridenOptionsLogLineCallback };
   const printTreeOptions = Object.assign({}, overridenPrintTreeOptions, options);
   printTree(tree, printTreeOptions);
   return outputString;
@@ -75,9 +75,9 @@ export function stringifyTree(tree: any, options?: stringifyTreeOptionsT ): stri
  *
  * @export
  * @param {*} tree any javasctript entity
- * @param {printTreeOptionsT} [options]
+ * @param {printTreeOptionsOldT} [options]
  */
-export function printTree(tree: any, options?: printTreeOptionsT ): void {
+export function printTree(tree: any, options?: printTreeOptionsOldT ): void {
   const settings = Object.assign({}, defaultSettings, options);
   const emptyPaddingPrefix: paddingPrefixT = {
     first: new FlatNonatomicTextContainer<StrictUnicodeLine>([new AtomicTextContainer(new StrictUnicodeLine(''))]),
@@ -97,7 +97,7 @@ function printTreeRecursive(
   basePaddingPrefix: paddingPrefixT,
   currentTextPattern: textPatternT,
   isFirst: boolean,
-  settings: printTreeSettingsT ): void {
+  settings: printTreeSettingsOldT ): void {
 
   const currentLevelMaxItems =
     (level >= settings.maxLevel)
@@ -262,7 +262,7 @@ function printTreeRecursive(
 function printEliplsisLine(
   basePaddingPrefix: paddingPrefixT,
   currentTextPattern: textPatternT,
-  settings: printTreeSettingsT ): void {
+  settings: printTreeSettingsOldT ): void {
   const width: widthT = {
     first: settings.tabSize,
     other: settings.tabSize,

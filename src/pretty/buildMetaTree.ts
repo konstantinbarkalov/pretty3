@@ -1,75 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { StrictUnicodeLine, StrictUnicodeText } from './text/strictUnicode';
-import { Style } from './text/style';
-import { AtomicTextContainer, FlatNonatomicTextContainer } from './text/textContainer';
-import { buildMetaTreeSettingsT, renderTreeSettingsT, renderTreeOptionsT } from './interfaces/general';
-import { MetaNode } from './meta/node';
-import { MatrixDrivenArmGenerator, MatrixDrivenArmWidthGenerator } from './meta/matrix/matrixDrivenArmGenerator';
-import { ArmPatternMatrix } from './meta/matrix/armPatternMatrix';
-import { spacedArmWidthT } from './meta/interfaces/arm/armWidth';
-import { ArmWidthMatrix } from './meta/matrix/armWidthMatrix';
-import { anyNodeDescriptionT, NodeMetatypeEnum, SingleNodeTypeEnum, EnumerableNodeTypeEnum } from './interfaces/nodeDescription';
-import { AnsiRenderer } from './text/renderer/implementation';
-import { renderMetaNode } from './meta/render/render';
 
-const treeStyleColors = {
-  green: {r: 80, g: 160, b: 80},
-  darkGreen: {r: 64, g: 128, b: 64},
-  blue: {r: 160, g: 160, b: 220},
-  darkGray: {r: 64, g: 64, b: 64},
-  gray: {r: 128, g: 128, b: 128},
-  lightGray: {r: 192, g: 192, b: 192},
-  white: {r: 255, g: 255, b: 255},
-};
-const treeStyle = {
-  icon: new Style(treeStyleColors.green),
-  dim: new Style(treeStyleColors.darkGray),
-  key: new Style(treeStyleColors.green),
-  keyDots: new Style(treeStyleColors.darkGreen),
-  value: new Style(treeStyleColors.white),
-  info: new Style(treeStyleColors.blue),
-  branch: new Style(treeStyleColors.darkGray),
-};
+import { buildMetaTreeSettingsT } from '../interfaces/general';
+import { MetaNode } from '../meta/node';
+import { anyNodeDescriptionT, NodeMetatypeEnum, SingleNodeTypeEnum, EnumerableNodeTypeEnum } from '../interfaces/nodeDescription';
+import { buildLeaf } from './buildLeaf';
 
-
-const armPatternMatrix = ArmPatternMatrix.fromArray([
-  '┬─)', '│  ', '│  ',
-  '┬─>', '│  ', '│  ',
-  '├──', '│  ', '│  ',
-  '├──', '│  ', '│  ',
-  '└──', '   ', '   ',
-], treeStyle.branch);
-
-const armWidth: spacedArmWidthT = {preSpace: 1, postSpace: 1, arm: 4};
-const smallArmWidth: spacedArmWidthT = {preSpace: 1, postSpace: 1, arm: 8};
-const armWidthMatrix = ArmWidthMatrix.fromArray([
-  0,        0,        0,
-  0,        smallArmWidth, smallArmWidth,
-  armWidth, armWidth, armWidth,
-  armWidth, armWidth, armWidth,
-  armWidth, armWidth, armWidth,
-]);
-
-
-const newDefaultSettings: renderTreeSettingsT = {
-  renderer: new AnsiRenderer(),
-  logLineCallback: (line) => { console.log(line); },
-  maxLevel: 6,
-  maxItemsPerLevel: [30, 10],
-  maxLineWidth: 80,
-  arrayTemplate: {
-    armGenerator: new MatrixDrivenArmGenerator(armPatternMatrix),
-    armWidthGenerator: new MatrixDrivenArmWidthGenerator(armWidthMatrix),
-  },
-  objectTemplate: {
-    armGenerator: new MatrixDrivenArmGenerator(armPatternMatrix),
-    armWidthGenerator: new MatrixDrivenArmWidthGenerator(armWidthMatrix),
-  },
-};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function buildMetaTree(tree: any, settings: buildMetaTreeSettingsT ): MetaNode {
   return buildMetaTreeRecursive(undefined, tree, 0, settings);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildMetaTreeRecursive(nodeKey: any, node: any, level: number, settings: buildMetaTreeSettingsT): MetaNode {
 
   const currentLevelMaxItems =
@@ -189,40 +129,10 @@ function buildMetaTreeRecursive(nodeKey: any, node: any, level: number, settings
   const buildedMetaNode = new MetaNode(leaf, settings.objectTemplate.armGenerator, settings.objectTemplate.armWidthGenerator);
   if (nodeDescription.metatype === NodeMetatypeEnum.Enumerable) {
     nodeDescription.subEntries.forEach(([subEntryKey, subEntry]) => {
+      // TODO limits
       const subMetaNode = buildMetaTreeRecursive(subEntryKey, subEntry, level + 1, settings);
       buildedMetaNode.children.push(subMetaNode);
     });
   }
   return buildedMetaNode;
-}
-
-
-function buildLeaf(nodeKey: string | number | undefined, nodeDescription: anyNodeDescriptionT): FlatNonatomicTextContainer<StrictUnicodeText> {
-  const space = new AtomicTextContainer(new StrictUnicodeLine(' '));
-  const children: AtomicTextContainer[] = [];
-  if (nodeDescription.icon) {
-    children.push(new AtomicTextContainer(new StrictUnicodeLine(nodeDescription.icon.text), treeStyle.icon));
-    children.push(space);
-  }
-  if (nodeKey !== undefined) {
-    const nodeKeyString = nodeKey?.toString() || '';
-    children.push(new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), treeStyle.key));
-    children.push(new AtomicTextContainer(new StrictUnicodeLine(':'), treeStyle.keyDots));
-    children.push(space);
-  }
-  if (nodeDescription.value) {
-    children.push(new AtomicTextContainer(new StrictUnicodeText(nodeDescription.value)));
-    children.push(space);
-  }
-  if (nodeDescription.info) {
-    children.push(new AtomicTextContainer(new StrictUnicodeLine(nodeDescription.info), treeStyle.info));
-    children.push(space);
-  }
-  return new FlatNonatomicTextContainer(children);
-}
-
-export function renderTree(tree: any, options?: renderTreeOptionsT ): void {
-  const settings = Object.assign({}, newDefaultSettings, options);
-  const metaTree = buildMetaTree(tree, settings);
-  renderMetaNode(metaTree, settings.maxLineWidth, settings.renderer, settings.logLineCallback);
 }

@@ -9,7 +9,7 @@ import { AnsiRenderer } from '../text/renderer/implementation';
 import { renderMetaNode } from '../meta/render/render';
 import { NonatomicTextContainer, AtomicTextContainer } from '../text/textContainer';
 import { StrictUnicodeText } from '../text/strictUnicode';
-import * as pretty2 from '../pretty2';
+import * as pretty2 from '../pretty/print';
 
 const treeStyleColors = {
   green: {r: 80, g: 160, b: 80},
@@ -71,5 +71,5 @@ const renderer = new AnsiRenderer();
 function logLineCallback(line: string): void { console.log(line); }
 renderMetaNode(testMetaTree, 40, renderer, logLineCallback);
 console.log('--- ');
-pretty2.renderTree({a: ['123','777'], b:{q: 'Q'}});
+pretty2.print({a: ['123','777'], b:{q: 'Q'}});
 console.log('--- fin ---');

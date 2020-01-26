@@ -1,3 +1,4 @@
-import * as pretty from './pretty';
+import * as prettyOld from './prettyOld';
+import * as pretty from './pretty/print';
 
-export default pretty;
+export { pretty, prettyOld };
