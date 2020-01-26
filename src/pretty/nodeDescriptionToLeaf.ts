@@ -3,7 +3,7 @@ import { FlatNonatomicTextContainer, AtomicTextContainer } from '../text/textCon
 import { StrictUnicodeText, StrictUnicodeLine } from '../text/strictUnicode';
 import { theme } from './defaultTheme';
 
-export function buildLeaf(nodeKey: string | number | undefined, nodeDescription: anyNodeDescriptionT): FlatNonatomicTextContainer<StrictUnicodeText> {
+export function nodeDescriptionToLeaf(nodeKey: string | number | undefined, nodeDescription: anyNodeDescriptionT): FlatNonatomicTextContainer<StrictUnicodeText> {
   const space = new AtomicTextContainer(new StrictUnicodeLine(' '));
   const children: AtomicTextContainer[] = [];
   if (nodeDescription.icon) {

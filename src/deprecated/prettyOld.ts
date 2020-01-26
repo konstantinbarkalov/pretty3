@@ -5,7 +5,7 @@ import { StrictUnicodeLine, StrictUnicodeText } from '../text/strictUnicode';
 import { Style } from '../text/style';
 import { AtomicTextContainer, FlatNonatomicTextContainer, AnyTextContainer } from '../text/textContainer';
 import { itemTextPatternT, logLineCallbackT, maxLineWidthT, paddingPrefixT, printTreeOptionsOldT, printTreeSettingsOldT, stringifyTreeOptionsOldT, textPatternString, textPatternStringT, textPatternT } from './generalOld';
-import { anyNodeDescriptionT, EnumerableNodeTypeEnum, NodeMetatypeEnum, SingleNodeTypeEnum } from '../interfaces/nodeDescription';
+import { anyNodeDescriptionT, EnumerableNodeTypeEnum, NodeMetatypeEnum, SingleNodeTypeEnum } from './nodeDescriptionOld';
 
 
 const treeStyleColors = {
