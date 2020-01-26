@@ -1,6 +1,8 @@
 import { FlatNonatomicTextContainer } from '../text/textContainer';
 import { StrictUnicodeLine } from '../text/strictUnicode';
 import { Renderer } from '../text/renderer/abstract/renderer';
+import { MetaNode } from '../meta/node';
+import { ArmGeneratorI, ArmWidthGeneratorI } from '../meta/interfaces/arm/armGenerator';
 export type lineT = Readonly<string>;
 export type linesT = Readonly<lineT[]>;
 export type unbreakedLinesT = Readonly<[lineT]>;
@@ -51,3 +53,25 @@ export type maxLineWidthT = {
   first: number;
   other: number;
 }
+
+
+//// new way
+export type metaNodeTemplateT = {
+  armGenerator: ArmGeneratorI<MetaNode>,
+  armWidthGenerator: ArmWidthGeneratorI<MetaNode>,
+}
+export type buildMetaTreeSettingsT = {
+  maxLevel: number;
+  maxItemsPerLevel: number[] | number;
+  maxLineWidth: number;
+  arrayTemplate: metaNodeTemplateT;
+  objectTemplate: metaNodeTemplateT;
+}
+
+export type buildMetaTreeOptionsT = Partial<buildMetaTreeSettingsT>;
+
+export type renderTreeSettingsT = buildMetaTreeSettingsT & {
+  renderer: Renderer;
+  logLineCallback: logLineCallbackT;
+}
+export type renderTreeOptionsT = Partial<renderTreeSettingsT>;

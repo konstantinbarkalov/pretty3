@@ -1,9 +1,9 @@
 import { StrictUnicodeLine, StrictUnicodeChar } from '../../text/strictUnicode';
 import { Style } from '../../text/style';
-import { ArmT } from '../types/arm/arm';
+import { ArmT } from '../interfaces/arm/arm';
 import { AtomicTextContainer } from '../../text/textContainer';
-import { ArmPatternI } from '../types/matrix/armPattern';
-import { armWidthT, spacedArmWidthT } from '../types/arm/armWidth';
+import { ArmPatternI } from '../interfaces/matrix/armPattern';
+import { armWidthT, spacedArmWidthT } from '../interfaces/arm/armWidth';
 
 export class ArmPattern implements ArmPatternI {
   constructor(public firstChar: StrictUnicodeChar, public otherChar: StrictUnicodeChar, public lastChar: StrictUnicodeChar, public style: Style) { }

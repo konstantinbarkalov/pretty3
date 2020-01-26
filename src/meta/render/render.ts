@@ -1,15 +1,19 @@
-import { MetaNodeI } from '../types/node';
+import { MetaNodeI } from '../interfaces/node';
 import { Renderer } from '../../text/renderer/abstract/renderer';
-import { generateFnParametersT } from '../types/arm/armGenerator';
+import { generateFnParametersT } from '../interfaces/arm/armGenerator';
 import { NonatomicTextContainer, AnyTextContainer } from '../../text/textContainer';
 import { StrictUnicodeLine } from '../../text/strictUnicode';
 
 import { ArmGeneratorChain, ArmGeneratorChainElement } from './armGeneratorChain';
+import { logLineCallbackT } from '../../interfaces/general';
 
 
+export function renderMetaNode(node: MetaNodeI, maxWidth: number, renderer: Renderer, logLineCallback: logLineCallbackT): void {
+  const emptyChain = new ArmGeneratorChain([]);
+  return renderMetaNodeRecursive(node, emptyChain, maxWidth, renderer, logLineCallback);
+}
 
-
-export function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain, maxWidth: number, armWidth: number, firstLinePadding: number, renderer: Renderer): void {
+function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain, maxWidth: number, renderer: Renderer, logLineCallback: logLineCallbackT): void {
   const hasChildren = (node.children.length > 0);
   const generateArmParameters: generateFnParametersT = {
     node,
@@ -64,7 +68,7 @@ export function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGenerat
     const wrappedLineContainer = generatorResult.value;
     const lineToRender = new NonatomicTextContainer<StrictUnicodeLine>([arm, wrappedLineContainer]);
     const rendered = renderer.render(lineToRender);
-    console.log(rendered);
+    logLineCallback(rendered);
 
     parentChain.elements.forEach((parentElement) => {
       parentElement.parameters.lineNum++;
@@ -81,6 +85,6 @@ export function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGenerat
     currentChainElement.parameters.childNum = childNodeId;
     currentChainElement.parameters.lineOfKnotNum = 0;
     currentChainElement.parameters.isLastLineOfKnot = false;
-    renderMetaNodeRecursive(childNode, chain, maxWidth, armWidth, firstLinePadding, renderer);
+    renderMetaNodeRecursive(childNode, chain, maxWidth, renderer, logLineCallback);
   });
 }

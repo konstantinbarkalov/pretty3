@@ -4,8 +4,9 @@ import { Renderer } from './text/renderer/abstract/renderer';
 import { StrictUnicodeLine, StrictUnicodeText } from './text/strictUnicode';
 import { Style } from './text/style';
 import { AtomicTextContainer, FlatNonatomicTextContainer, AnyTextContainer } from './text/textContainer';
-import { itemTextPatternT, logLineCallbackT, maxLineWidthT, paddingPrefixT, printTreeOptionsT, printTreeSettingsT, stringifyTreeOptionsT, textPatternString, textPatternStringT, textPatternT } from './types/general';
-import { anyNodeDescriptionT, EnumerableNodeTypeEnum, NodeMetatypeEnum, SingleNodeTypeEnum } from './types/nodeDescription';
+import { itemTextPatternT, logLineCallbackT, maxLineWidthT, paddingPrefixT, printTreeOptionsT, printTreeSettingsT, stringifyTreeOptionsT, textPatternString, textPatternStringT, textPatternT } from './interfaces/general';
+import { anyNodeDescriptionT, EnumerableNodeTypeEnum, NodeMetatypeEnum, SingleNodeTypeEnum } from './interfaces/nodeDescription';
+
 
 const treeStyleColors = {
   green: {r: 80, g: 160, b: 80},
@@ -333,3 +334,4 @@ function buildPaddingPrefixString(textPatternString: textPatternStringT, padding
   const paddingPrefixString = textPatternString[0] + textPatternString[1].repeat(branchRepeatWidth) + textPatternString[2] + ' '.repeat(paddingSpace);
   return paddingPrefixString;
 }
+

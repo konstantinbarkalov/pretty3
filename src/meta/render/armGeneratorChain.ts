@@ -1,4 +1,4 @@
-import { ArmGeneratorI, generateFnParametersT, ArmWidthGeneratorI } from '../types/arm/armGenerator';
+import { ArmGeneratorI, generateFnParametersT, ArmWidthGeneratorI } from '../interfaces/arm/armGenerator';
 import { AtomicTextContainer } from '../../text/textContainer';
 import { StrictUnicodeLine } from '../../text/strictUnicode';
 

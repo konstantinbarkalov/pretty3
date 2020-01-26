@@ -1,7 +1,7 @@
 import { AnyTextContainer, AtomicTextContainer } from '../text/textContainer';
 import { StrictUnicodeText } from '../text/strictUnicode';
-import { MetaNodeI } from './types/node';
-import { ArmGeneratorI, ArmWidthGeneratorI } from './types/arm/armGenerator';
+import { MetaNodeI } from './interfaces/node';
+import { ArmGeneratorI, ArmWidthGeneratorI } from './interfaces/arm/armGenerator';
 
 
 

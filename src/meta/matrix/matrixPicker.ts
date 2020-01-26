@@ -1,5 +1,5 @@
-import { MatrixI, KnotMatrixI } from '../types/matrix/matrix';
-import { generateFnParametersT } from '../types/arm/armGenerator';
+import { MatrixI, KnotMatrixI } from '../interfaces/matrix/matrix';
+import { generateFnParametersT } from '../interfaces/arm/armGenerator';
 
 
 export abstract class MatrixPicker<T> {
@@ -19,10 +19,10 @@ export abstract class MatrixPicker<T> {
       } else {
         knotMatrix = this.matrix.infertileLeaf;
       }
-    } else if (isFirstChild) {
-      knotMatrix = this.matrix.firstChild;
     } else if (isLastChild) {
       knotMatrix = this.matrix.lastChild;
+    } else if (isFirstChild) {
+      knotMatrix = this.matrix.firstChild;
     } else {
       knotMatrix = this.matrix.otherChild;
     }

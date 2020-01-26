@@ -1,6 +1,6 @@
 import { EOL } from 'os';
 import { AutodetectRenderer } from './text/renderer/implementation';
-import { printTreeSettingsT, textPatternString } from './types/general';
+import { printTreeSettingsT, textPatternString } from './interfaces/general';
 
 export const defaultSettings: printTreeSettingsT = {
   renderer: new AutodetectRenderer(),

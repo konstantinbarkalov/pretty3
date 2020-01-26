@@ -1,13 +1,12 @@
 import { ArmPatternMatrix } from '../meta/matrix/armPatternMatrix';
 import { Style } from '../text/style';
-import { spacedArmWidthT } from '../meta/types/arm/armWidth';
+import { spacedArmWidthT } from '../meta/interfaces/arm/armWidth';
 import { ArmWidthMatrix } from '../meta/matrix/armWidthMatrix';
 import { MatrixDrivenArmGenerator, MatrixDrivenArmWidthGenerator } from '../meta/matrix/matrixDrivenArmGenerator';
 import { MetaNode } from '../meta/node';
 import { EOL } from 'os';
 import { AnsiRenderer } from '../text/renderer/implementation';
-import { ArmGeneratorChain } from '../meta/render/armGeneratorChain';
-import { renderMetaNodeRecursive } from '../meta/render/render';
+import { renderMetaNode } from '../meta/render/render';
 
 // const pattern = KnotDependentArmPlainLinePattern.fromString({
 //   otherChildFirstLine:   '├─╸',
@@ -71,6 +70,6 @@ testMetaTree.children.push(testMetaNodeB);
 // testMetaTree.children.push(MetaNode.fromString('endpoint child 3 is another long-talking azaza', generator, 4));
 
 const renderer = new AnsiRenderer();
-const emptyChain = new ArmGeneratorChain([]);
-renderMetaNodeRecursive(testMetaTree, emptyChain, 40, 8, 0, renderer);
+function logLineCallback(line: string): void { console.log(line); }
+renderMetaNode(testMetaTree, 40, renderer, logLineCallback);
 console.log('--- fin ---');
