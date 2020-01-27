@@ -1,10 +1,11 @@
 
-import { buildMetaTreeSettingsT } from './interfaces/general';
+import { buildMetaTreeSettingsT, metaNodeTemplateT } from './interfaces/general';
 import { MetaNode } from '../meta/node';
 import { buildDescriptionTree } from './buildDescriptionTree';
 import { nodeDescriptionT, guardNodeDescription } from './interfaces/nodeDescription';
-import { EnumerableNodeFineTypeEnum, NodeBroadTypeEnum, IterableNodeFineTypeEnum } from './interfaces/nodeType';
+import { NodeBroadTypeEnum } from './interfaces/nodeType';
 import { nodeDescriptionToLeaf } from './nodeDescriptionToLeaf';
+import { typeDependentBroadOnlyDictionaryT, getFromTypeDependentBroadOnlyDictionary } from './typeDependentDictionary';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function buildMetaTree(tree: any, settings: buildMetaTreeSettingsT ): MetaNode {
@@ -12,30 +13,18 @@ export function buildMetaTree(tree: any, settings: buildMetaTreeSettingsT ): Met
   return nodeDescriptionTreeToMetaTreeRecursive(nodeDescriptionTree, settings);
 }
 
+function getTemplate(nodeDescription: nodeDescriptionT, templateDictionary: typeDependentBroadOnlyDictionaryT<metaNodeTemplateT>): metaNodeTemplateT {
+  return getFromTypeDependentBroadOnlyDictionary(templateDictionary, nodeDescription.typeTuple[0] );
+}
 
 function nodeDescriptionTreeToMetaTreeRecursive(nodeDescription: nodeDescriptionT, settings: buildMetaTreeSettingsT): MetaNode {
   const leaf = nodeDescriptionToLeaf(nodeDescription, settings);
-  let buildedMetaNode: MetaNode;
-  if (guardNodeDescription(NodeBroadTypeEnum.Iterable, nodeDescription)) {
-    // TODO:!!!!!!!!!!!!!
-    if (nodeDescription.typeTuple[1] === IterableNodeFineTypeEnum.Array) {
-      buildedMetaNode = new MetaNode(leaf, settings.arrayTemplate.armGenerator, settings.arrayTemplate.armWidthGenerator);
-    } else {
-      buildedMetaNode = new MetaNode(leaf, settings.otherTemplate.armGenerator, settings.otherTemplate.armWidthGenerator);
-    }
-  } else if (guardNodeDescription(NodeBroadTypeEnum.Enumerable, nodeDescription)) {
-    if (nodeDescription.typeTuple[1] === EnumerableNodeFineTypeEnum.Object) {
-      buildedMetaNode = new MetaNode(leaf, settings.objectTemplate.armGenerator, settings.objectTemplate.armWidthGenerator);
-    } else {
-      buildedMetaNode = new MetaNode(leaf, settings.otherTemplate.armGenerator, settings.otherTemplate.armWidthGenerator);
-    }
-  }
-  else {
-    buildedMetaNode = new MetaNode(leaf, settings.otherTemplate.armGenerator, settings.otherTemplate.armWidthGenerator);
-  }
-  // TODO: all enum
-  //if (nodeDescription.typeTuple[0] === NodeBroadTypeEnum.Enumerable) {
-  if (guardNodeDescription(NodeBroadTypeEnum.Enumerable, nodeDescription)) {
+
+  const template = getTemplate(nodeDescription, settings.templateDictionary);
+  const buildedMetaNode = new MetaNode(leaf, template.armGenerator, template.armWidthGenerator);
+
+  if (guardNodeDescription(NodeBroadTypeEnum.Enumerable, nodeDescription) ||
+      guardNodeDescription(NodeBroadTypeEnum.Iterable, nodeDescription)) {
     buildedMetaNode.children = nodeDescription.subEntries.map((childDescription) => {
       return nodeDescriptionTreeToMetaTreeRecursive(childDescription, settings);
     });

@@ -171,7 +171,8 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
       value: (typeof node).toLocaleUpperCase(),
     };
   }
-  if (guardNodeDescription(NodeBroadTypeEnum.Enumerable, nodeDescription)) {
+  if (guardNodeDescription(NodeBroadTypeEnum.Enumerable, nodeDescription) ||
+      guardNodeDescription(NodeBroadTypeEnum.Iterable, nodeDescription)) {
     const itemsShownCount = Math.min(currentLevelMaxItems, unwrappedSubEntries.length);
     for (let i = 0; i < itemsShownCount; i++) {
       const [subEntryKey, subEntry] = unwrappedSubEntries[i];

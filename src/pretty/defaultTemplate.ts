@@ -4,30 +4,41 @@ import { ArmWidthMatrix } from '../meta/matrix/armWidthMatrix';
 import { MatrixDrivenArmGenerator, MatrixDrivenArmWidthGenerator } from '../meta/matrix/matrixDrivenArmGenerator';
 import { metaNodeTemplateT } from './interfaces/general';
 import { theme } from './defaultTheme';
+import { NodeBroadTypeEnum } from './interfaces/nodeType';
+import { typeDependentBroadOnlyDictionaryT } from './typeDependentDictionary';
 
-const otherArmPatternMatrix = ArmPatternMatrix.fromArray([
+
+const deadArmPatternMatrix = ArmPatternMatrix.fromArray([
   '   ', '   ', '   ',
   '   ', '?  ', '?  ',
   '???', '?  ', '?  ',
   '???', '?  ', '?  ',
   '???', '   ', '   ',
-], theme.style.branch);
+], theme.style.branch[NodeBroadTypeEnum.Dead]);
 
-const arrayArmPatternMatrix = ArmPatternMatrix.fromArray([
+const singleArmPatternMatrix = ArmPatternMatrix.fromArray([
+  '   ', '   ', '   ',
+  '   ', '?  ', '?  ',
+  '???', '?  ', '?  ',
+  '???', '?  ', '?  ',
+  '???', '   ', '   ',
+], theme.style.branch[NodeBroadTypeEnum.Single]);
+
+const iterableArmPatternMatrix = ArmPatternMatrix.fromArray([
   '   ', '   ', '   ',
   '   ', '│  ', '│  ',
   '├─╸', '│  ', '│  ',
   '├─╸', '│  ', '│  ',
   '└─╸', '   ', '   ',
-], theme.style.branch);
+], theme.style.branch[NodeBroadTypeEnum.Iterable]);
 
-const objectArmPatternMatrix = ArmPatternMatrix.fromArray([
+const enumerableArmPatternMatrix = ArmPatternMatrix.fromArray([
   '   ', '   ', '   ',
   '   ', '│  ', '│  ',
   '├─╴', '│  ', '│  ',
   '├─╴', '│  ', '│  ',
   '╰─╴', '   ', '   ',
-], theme.style.branch);
+], theme.style.branch[NodeBroadTypeEnum.Enumerable]);
 
 
 const armWidth: spacedArmWidthT = {preSpace: 1, postSpace: 1, arm: 4};
@@ -40,22 +51,29 @@ const armWidthMatrix = ArmWidthMatrix.fromArray([
   armWidth, armWidth, armWidth,
 ]);
 
-const array: metaNodeTemplateT = {
-  armGenerator: new MatrixDrivenArmGenerator(arrayArmPatternMatrix),
+const dead: metaNodeTemplateT = {
+  armGenerator: new MatrixDrivenArmGenerator(deadArmPatternMatrix),
   armWidthGenerator: new MatrixDrivenArmWidthGenerator(armWidthMatrix),
 };
 
-const object: metaNodeTemplateT = {
-  armGenerator: new MatrixDrivenArmGenerator(objectArmPatternMatrix),
+const single: metaNodeTemplateT = {
+  armGenerator: new MatrixDrivenArmGenerator(singleArmPatternMatrix),
   armWidthGenerator: new MatrixDrivenArmWidthGenerator(armWidthMatrix),
 };
 
-const other: metaNodeTemplateT = {
-  armGenerator: new MatrixDrivenArmGenerator(otherArmPatternMatrix),
+const iterable: metaNodeTemplateT = {
+  armGenerator: new MatrixDrivenArmGenerator(iterableArmPatternMatrix),
   armWidthGenerator: new MatrixDrivenArmWidthGenerator(armWidthMatrix),
 };
-export const template = {
-  array,
-  object,
-  other,
+
+const enumerable: metaNodeTemplateT = {
+  armGenerator: new MatrixDrivenArmGenerator(enumerableArmPatternMatrix),
+  armWidthGenerator: new MatrixDrivenArmWidthGenerator(armWidthMatrix),
+};
+
+export const templateDictionary: typeDependentBroadOnlyDictionaryT<metaNodeTemplateT> = {
+  [NodeBroadTypeEnum.Dead]: dead,
+  [NodeBroadTypeEnum.Single]: single,
+  [NodeBroadTypeEnum.Iterable]: iterable,
+  [NodeBroadTypeEnum.Enumerable]: enumerable,
 };

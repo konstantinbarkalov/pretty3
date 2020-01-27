@@ -2,8 +2,9 @@ import { Renderer } from '../../text/renderer/abstract/renderer';
 import { MetaNode } from '../../meta/node';
 import { ArmGeneratorI, ArmWidthGeneratorI } from '../../meta/interfaces/arm/armGenerator';
 import { logLineCallbackT } from '../../deprecated/generalOld';
-import { fullIconsetT } from '../defaultFullIconset';
-//// new way
+import { typeDependentBroadOnlyDictionaryT, typeDependentDictionaryT } from '../typeDependentDictionary';
+import { iconT } from './icon';
+
 export type metaNodeTemplateT = {
   armGenerator: ArmGeneratorI<MetaNode>;
   armWidthGenerator: ArmWidthGeneratorI<MetaNode>;
@@ -13,11 +14,8 @@ export type buildMetaTreeSettingsT = {
   maxLevel: number;
   maxItemsPerLevel: number[] | number;
   maxLineWidth: number;
-  fullIconset: fullIconsetT;
-  arrayTemplate: metaNodeTemplateT;
-  objectTemplate: metaNodeTemplateT;
-  otherTemplate: metaNodeTemplateT;
-  // TODO: every type
+  iconDictionary: typeDependentDictionaryT<iconT>;
+  templateDictionary: typeDependentBroadOnlyDictionaryT<metaNodeTemplateT>;
 };
 
 export type stringifyTreeSettingsT = buildMetaTreeSettingsT & {

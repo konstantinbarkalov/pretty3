@@ -3,22 +3,13 @@ import { AtomicTextContainer, AnyTextContainer, NonatomicTextContainer } from '.
 import { StrictUnicodeText, StrictUnicodeLine } from '../text/strictUnicode';
 import { theme } from './defaultTheme';
 import { buildMetaTreeSettingsT } from './interfaces/general';
-import { iconsetT, fullIconsetT } from './defaultFullIconset';
+
 import { NodeBroadTypeEnum, SingleNodeFineTypeEnum, DeadNodeFineTypeEnum } from './interfaces/nodeType';
 import { iconT } from './interfaces/icon';
+import { typeDependentDictionaryT, getFromTypeDependentDictionary } from './typeDependentDictionary';
 
-function getIcon(nodeDescription: nodeDescriptionT, fullIconset: fullIconsetT): iconT | undefined {
-  const [broadType, type] = nodeDescription.typeTuple;
-  // dirty hack :( be carefaul, it disables some typechecks,
-  // but works fine while fullIconsetT sticks to (meta) types enums
-  // TODO: rework!!
-  const iconset: iconsetT<NodeBroadTypeEnum> | undefined = fullIconset[broadType];
-  if (iconset) {
-    const icon = iconset[type];
-    return icon;
-  } else {
-    return;
-  }
+function getIcon(nodeDescription: nodeDescriptionT, iconDictionary: typeDependentDictionaryT<iconT>): iconT {
+  return getFromTypeDependentDictionary(iconDictionary, nodeDescription.typeTuple );
 }
 
 export function nodeDescriptionToLeaf(nodeDescription: nodeDescriptionT, settings: buildMetaTreeSettingsT): NonatomicTextContainer<StrictUnicodeText> {
@@ -32,7 +23,7 @@ export function nodeDescriptionToLeaf(nodeDescription: nodeDescriptionT, setting
   }
   const preparedContainer: preparedContainerT = { };
 
-  preparedContainer.icon = getIcon(nodeDescription, settings.fullIconset);
+  preparedContainer.icon = getIcon(nodeDescription, settings.iconDictionary);
 
   if (nodeDescription.key !== undefined) {
     const nodeKeyString = (nodeDescription.key.toString) ? nodeDescription.key.toString() : String(nodeDescription.key);

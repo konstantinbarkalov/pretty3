@@ -1,18 +1,12 @@
-import { SingleNodeFineTypeEnum, EnumerableNodeFineTypeEnum, NodeBroadTypeEnum, DeadNodeFineTypeEnum, NodeFineTypeEnumT, IterableNodeFineTypeEnum } from './interfaces/nodeType';
+import { SingleNodeFineTypeEnum, EnumerableNodeFineTypeEnum, NodeBroadTypeEnum, DeadNodeFineTypeEnum, IterableNodeFineTypeEnum } from './interfaces/nodeType';
 import { iconT } from './interfaces/icon';
 import { AtomicTextContainer } from '../text/textContainer';
 import { StrictUnicodeLine } from '../text/strictUnicode';
 import { theme } from './defaultTheme';
+import { typeDependentDictionaryT } from './typeDependentDictionary';
 
 
-export type fullIconsetT = {
-  [key in NodeBroadTypeEnum]: iconsetT<key>;
-}
-export type iconsetT<T extends NodeBroadTypeEnum> = {
-  [key in NodeFineTypeEnumT<T>]: iconT;
-}
-
-export const fullIconset: fullIconsetT = {
+export const iconDictionary: typeDependentDictionaryT<iconT> = {
   [NodeBroadTypeEnum.Dead]: {
     [DeadNodeFineTypeEnum.CircularReference]: new AtomicTextContainer(new StrictUnicodeLine('>∞<'), theme.style.icon),
     [DeadNodeFineTypeEnum.Elipsis]:           new AtomicTextContainer(new StrictUnicodeLine('...'), theme.style.icon),
