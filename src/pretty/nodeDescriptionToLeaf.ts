@@ -1,17 +1,25 @@
-import { anyNodeDescriptionT, NodeMetatypeEnum } from '../interfaces/nodeDescription';
-import { FlatNonatomicTextContainer, AtomicTextContainer } from '../text/textContainer';
+import { nodeDescriptionT, guardNodeDescription } from './interfaces/nodeDescription';
+import { AtomicTextContainer, AnyTextContainer, NonatomicTextContainer } from '../text/textContainer';
 import { StrictUnicodeText, StrictUnicodeLine } from '../text/strictUnicode';
 import { theme } from './defaultTheme';
+import { buildMetaTreeSettingsT } from './interfaces/general';
+import { iconsetT } from './defaultFullIconset';
+import { NodeMetatypeEnum } from './interfaces/nodeType';
 
-export function nodeDescriptionToLeaf(nodeDescription: anyNodeDescriptionT): FlatNonatomicTextContainer<StrictUnicodeText> {
+export function nodeDescriptionToLeaf(nodeDescription: nodeDescriptionT, settings: buildMetaTreeSettingsT): NonatomicTextContainer<StrictUnicodeText> {
   const space = new AtomicTextContainer(new StrictUnicodeLine(' '));
-  const children: AtomicTextContainer[] = [];
-  if (nodeDescription.icon) {
-    children.push(new AtomicTextContainer(new StrictUnicodeLine(nodeDescription.icon.text), theme.style.icon));
+  const children: AnyTextContainer[] = [];
+  const [metatype, type] = nodeDescription.typeTuple;
+  // dirty hack :( be carefaul, it disables some typechecks,
+  // but works fine while fullIconsetT sticks to (meta) types enums
+  // TODO: rework!!
+  const iconset: iconsetT<NodeMetatypeEnum> = settings.fullIconset[metatype];
+  const icon = iconset[type];
+  if (icon) {
+    children.push(icon);
     children.push(space);
   }
-  if (nodeDescription.metatype === NodeMetatypeEnum.Dead) {
-
+  if (guardNodeDescription(NodeMetatypeEnum.Dead, nodeDescription)) {
     children.push(new AtomicTextContainer(new StrictUnicodeLine('...'), theme.style.keyDots));
     children.push(space);
   } else {
@@ -31,5 +39,5 @@ export function nodeDescriptionToLeaf(nodeDescription: anyNodeDescriptionT): Fla
     children.push(new AtomicTextContainer(new StrictUnicodeLine(nodeDescription.info), theme.style.info));
     children.push(space);
   }
-  return new FlatNonatomicTextContainer(children);
+  return new NonatomicTextContainer(children);
 }

@@ -2,7 +2,7 @@ import { ArmPatternMatrix } from '../meta/matrix/armPatternMatrix';
 import { spacedArmWidthT } from '../meta/interfaces/arm/armWidth';
 import { ArmWidthMatrix } from '../meta/matrix/armWidthMatrix';
 import { MatrixDrivenArmGenerator, MatrixDrivenArmWidthGenerator } from '../meta/matrix/matrixDrivenArmGenerator';
-import { metaNodeTemplateT } from '../interfaces/general';
+import { metaNodeTemplateT } from './interfaces/general';
 import { theme } from './defaultTheme';
 
 const otherArmPatternMatrix = ArmPatternMatrix.fromArray([
@@ -31,7 +31,7 @@ const objectArmPatternMatrix = ArmPatternMatrix.fromArray([
 
 
 const armWidth: spacedArmWidthT = {preSpace: 1, postSpace: 1, arm: 4};
-const smallArmWidth: spacedArmWidthT = {preSpace: 1, postSpace: 1, arm: 8};
+const smallArmWidth: spacedArmWidthT = {preSpace: 1, postSpace: 1, arm: 1};
 const armWidthMatrix = ArmWidthMatrix.fromArray([
   0,        0,        0,
   0,        smallArmWidth, smallArmWidth,

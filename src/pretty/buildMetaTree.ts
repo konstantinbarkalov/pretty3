@@ -1,8 +1,9 @@
 
-import { buildMetaTreeSettingsT } from '../interfaces/general';
+import { buildMetaTreeSettingsT } from './interfaces/general';
 import { MetaNode } from '../meta/node';
-import { anyNodeDescriptionT, NodeMetatypeEnum, SingleNodeTypeEnum, EnumerableNodeTypeEnum, nodeDescriptionKeyT, anyDeadNodeDescriptionT, DeadNodeTypeEnum } from '../interfaces/nodeDescription';
 import { nodeDescriptionToLeaf } from './nodeDescriptionToLeaf';
+import { nodeDescriptionKeyT, nodeDescriptionT, guardNodeDescription } from './interfaces/nodeDescription';
+import { NodeMetatypeEnum, SingleNodeTypeEnum, EnumerableNodeTypeEnum, DeadNodeTypeEnum } from './interfaces/nodeType';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function buildMetaTree(tree: any, settings: buildMetaTreeSettingsT ): MetaNode {
@@ -12,7 +13,7 @@ export function buildMetaTree(tree: any, settings: buildMetaTreeSettingsT ): Met
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, settings: buildMetaTreeSettingsT): anyNodeDescriptionT {
+function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, settings: buildMetaTreeSettingsT): nodeDescriptionT {
 
   const currentLevelMaxItems =
     (level >= settings.maxLevel)
@@ -22,60 +23,51 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
         : settings.maxItemsPerLevel;
 
 
-  let nodeDescription: anyNodeDescriptionT;
+  let nodeDescription: nodeDescriptionT;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let unwrappedSubEntries: [nodeDescriptionKeyT, any][] = [];
   if (typeof node === 'string') {
     nodeDescription = {
       key: nodeKey,
-      metatype: NodeMetatypeEnum.Single,
-      type: SingleNodeTypeEnum.String,
+      typeTuple: [ NodeMetatypeEnum.Single, SingleNodeTypeEnum.String ],
       value: node,
     };
   } else if (typeof node === 'number') {
     nodeDescription = {
       key: nodeKey,
-      metatype: NodeMetatypeEnum.Single,
-      type: SingleNodeTypeEnum.Number,
+      typeTuple: [ NodeMetatypeEnum.Single, SingleNodeTypeEnum.Number ],
       value: parseFloat(node.toPrecision(6)).toLocaleString(),
     };
   } else if (typeof node === 'boolean') {
     nodeDescription = {
       key: nodeKey,
-      metatype: NodeMetatypeEnum.Single,
-      type: SingleNodeTypeEnum.Boolean,
+      typeTuple: [ NodeMetatypeEnum.Single, SingleNodeTypeEnum.Boolean ],
       value: node.toLocaleString(),
     };
   } else if (typeof node === 'symbol') {
     nodeDescription = {
       key: nodeKey,
-      metatype: NodeMetatypeEnum.Single,
-      type: SingleNodeTypeEnum.Symbol,
+      typeTuple: [ NodeMetatypeEnum.Single, SingleNodeTypeEnum.Symbol ],
       value: node.toLocaleString(),
-      icon: {text:'<S>', centerId: 1},
     };
   } else if (node === null) {
     nodeDescription = {
       key: nodeKey,
-      metatype: NodeMetatypeEnum.Single,
-      type: SingleNodeTypeEnum.Null,
+      typeTuple: [ NodeMetatypeEnum.Single, SingleNodeTypeEnum.Null ],
       value: 'NULL',
     };
   } else if (node === undefined) {
     nodeDescription = {
       key: nodeKey,
-      metatype: NodeMetatypeEnum.Single,
-      type: SingleNodeTypeEnum.Undefined,
+      typeTuple: [ NodeMetatypeEnum.Single, SingleNodeTypeEnum.Undefined ],
       value: 'UNDEFINED',
     };
   } else if (Array.isArray(node)) {
     nodeDescription = {
       key: nodeKey,
-      metatype: NodeMetatypeEnum.Enumerable,
-      type: EnumerableNodeTypeEnum.Array,
+      typeTuple: [ NodeMetatypeEnum.Enumerable, EnumerableNodeTypeEnum.Array ],
       value: '',
       subEntries: [],
-      icon: {text:'[ ]', centerId: 1}
     };
     unwrappedSubEntries = node.map((sub, subId) => [subId, sub]);
   } else if (typeof node === 'object' && node) {
@@ -89,10 +81,8 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
     if (node instanceof Date) {
       nodeDescription = {
         key: nodeKey,
-        metatype: NodeMetatypeEnum.Single,
-        type: SingleNodeTypeEnum.Date,
+        typeTuple: [ NodeMetatypeEnum.Single, SingleNodeTypeEnum.Date ],
         value: node.toLocaleString(),
-        icon: {text:'{D}', centerId: 1},
       };
     } else if (node.hasOwnProperty) {
       let nodeValue: string;
@@ -103,11 +93,9 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
       }
       nodeDescription = {
         key: nodeKey,
-        metatype: NodeMetatypeEnum.Enumerable,
-        type: EnumerableNodeTypeEnum.Object,
+        typeTuple: [ NodeMetatypeEnum.Enumerable, EnumerableNodeTypeEnum.Object ],
         subEntries: [],
         value: nodeValue,
-        icon: {text:'{ }', centerId: 1}
       };
       unwrappedSubEntries = Object.entries(node);
     } else {
@@ -119,10 +107,8 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
       }
       nodeDescription = {
         key: nodeKey,
-        metatype: NodeMetatypeEnum.Enumerable,
-        type: EnumerableNodeTypeEnum.Unknown,
+        typeTuple: [ NodeMetatypeEnum.Enumerable, EnumerableNodeTypeEnum.Unknown ],
         value: nodeValue,
-        icon: {text:'{X}', centerId: 1},
         subEntries: [],
       };
       unwrappedSubEntries = [];
@@ -130,13 +116,12 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
   } else {
     nodeDescription = {
       key: nodeKey,
-      metatype: NodeMetatypeEnum.Single,
-      type: SingleNodeTypeEnum.Unknown,
+      typeTuple: [ NodeMetatypeEnum.Single, SingleNodeTypeEnum.Unknown ],
       value: (typeof node).toLocaleUpperCase(),
-      icon: {text:'<X>', centerId: 1},
     };
   }
-  if (nodeDescription.metatype === NodeMetatypeEnum.Enumerable) {
+  //if (nodeDescription.typeTuple[0] === NodeMetatypeEnum.Enumerable) {
+  if (guardNodeDescription(NodeMetatypeEnum.Enumerable, nodeDescription)) {
     const itemsShownCount = Math.min(currentLevelMaxItems, unwrappedSubEntries.length);
     for (let i = 0; i < itemsShownCount; i++) {
       const [subEntryKey, subEntry] = unwrappedSubEntries[i];
@@ -146,9 +131,8 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
     }
 
     if (nodeDescription.subEntries.length < unwrappedSubEntries.length) {
-      const elipsisDescription: anyDeadNodeDescriptionT = {
-        metatype: NodeMetatypeEnum.Dead,
-        type: DeadNodeTypeEnum.Elipsis
+      const elipsisDescription: nodeDescriptionT<NodeMetatypeEnum.Dead> = {
+        typeTuple: [ NodeMetatypeEnum.Dead, DeadNodeTypeEnum.Elipsis ],
       };
       nodeDescription.subEntries.push(elipsisDescription);
     }
@@ -162,13 +146,14 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
   return nodeDescription;
 }
 
-function nodeDescriptionTreeToMetaTreeRecursive(nodeDescription: anyNodeDescriptionT, settings: buildMetaTreeSettingsT): MetaNode {
-  const leaf = nodeDescriptionToLeaf(nodeDescription);
+function nodeDescriptionTreeToMetaTreeRecursive(nodeDescription: nodeDescriptionT, settings: buildMetaTreeSettingsT): MetaNode {
+  const leaf = nodeDescriptionToLeaf(nodeDescription, settings);
   let buildedMetaNode: MetaNode;
-  if (nodeDescription.metatype === NodeMetatypeEnum.Enumerable) {
-    if (nodeDescription.type === EnumerableNodeTypeEnum.Array) {
+  //if (nodeDescription.typeTuple[0] === NodeMetatypeEnum.Enumerable) {
+  if (guardNodeDescription(NodeMetatypeEnum.Enumerable, nodeDescription)) {
+    if (nodeDescription.typeTuple[1] === EnumerableNodeTypeEnum.Array) {
       buildedMetaNode = new MetaNode(leaf, settings.arrayTemplate.armGenerator, settings.arrayTemplate.armWidthGenerator);
-    } else if (nodeDescription.type === EnumerableNodeTypeEnum.Object) {
+    } else if (nodeDescription.typeTuple[1] === EnumerableNodeTypeEnum.Object) {
       buildedMetaNode = new MetaNode(leaf, settings.objectTemplate.armGenerator, settings.objectTemplate.armWidthGenerator);
     } else {
       buildedMetaNode = new MetaNode(leaf, settings.otherTemplate.armGenerator, settings.otherTemplate.armWidthGenerator);
@@ -177,7 +162,8 @@ function nodeDescriptionTreeToMetaTreeRecursive(nodeDescription: anyNodeDescript
     buildedMetaNode = new MetaNode(leaf, settings.otherTemplate.armGenerator, settings.otherTemplate.armWidthGenerator);
   }
   // TODO: all enum
-  if (nodeDescription.metatype === NodeMetatypeEnum.Enumerable) {
+  //if (nodeDescription.typeTuple[0] === NodeMetatypeEnum.Enumerable) {
+  if (guardNodeDescription(NodeMetatypeEnum.Enumerable, nodeDescription)) {
     buildedMetaNode.children = nodeDescription.subEntries.map((childDescription) => {
       return nodeDescriptionTreeToMetaTreeRecursive(childDescription, settings);
     });

@@ -1,4 +1,4 @@
-import { iconT } from '../interfaces/icon';
+import { iconOldT } from './iconOldT';
 
 export enum NodeMetatypeEnum {
   Single,
@@ -63,13 +63,13 @@ export type nodeDescriptionT<TNodeMetatypeEnum extends NodeMetatypeEnum, TNodeTy
     metatype: TNodeMetatypeEnum;
     type: TNodeTypeEnum;
     value: string;
-    icon?: iconT;
+    icon?: iconOldT;
     info?: string | undefined;
   } : TNodeTypeEnum extends EnumerableNodeTypeEnum ? {
     metatype: TNodeMetatypeEnum;
     type: TNodeTypeEnum;
     value: string;
-    icon?: iconT;
+    icon?: iconOldT;
     info?: string | undefined;
     subEntries: nodeSubEntriesT<TNodeTypeEnum>[];
   }

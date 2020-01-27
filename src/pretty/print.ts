@@ -1,5 +1,5 @@
 import { renderMetaNode } from '../meta/render/render';
-import { printTreeOptionsT, stringifyTreeOptionsT } from '../interfaces/general';
+import { printTreeOptionsT, stringifyTreeOptionsT } from './interfaces/general';
 import { buildMetaTree } from './buildMetaTree';
 import { defaultSettings } from './defaultSettings';
 
