@@ -4,15 +4,15 @@ import { StrictUnicodeText, StrictUnicodeLine } from '../text/strictUnicode';
 import { theme } from './defaultTheme';
 import { buildMetaTreeSettingsT } from './interfaces/general';
 import { iconsetT, fullIconsetT } from './defaultFullIconset';
-import { NodeMetatypeEnum, SingleNodeTypeEnum, DeadNodeTypeEnum } from './interfaces/nodeType';
+import { NodeBroadTypeEnum, SingleNodeFineTypeEnum, DeadNodeFineTypeEnum } from './interfaces/nodeType';
 import { iconT } from './interfaces/icon';
 
 function getIcon(nodeDescription: nodeDescriptionT, fullIconset: fullIconsetT): iconT | undefined {
-  const [metatype, type] = nodeDescription.typeTuple;
+  const [broadType, type] = nodeDescription.typeTuple;
   // dirty hack :( be carefaul, it disables some typechecks,
   // but works fine while fullIconsetT sticks to (meta) types enums
   // TODO: rework!!
-  const iconset: iconsetT<NodeMetatypeEnum> | undefined = fullIconset[metatype];
+  const iconset: iconsetT<NodeBroadTypeEnum> | undefined = fullIconset[broadType];
   if (iconset) {
     const icon = iconset[type];
     return icon;
@@ -39,22 +39,22 @@ export function nodeDescriptionToLeaf(nodeDescription: nodeDescriptionT, setting
     preparedContainer.key = new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), theme.style.key);
   }
 
-  if (guardNodeDescription(NodeMetatypeEnum.Single, nodeDescription)
-      && (nodeDescription.typeTuple[1] === SingleNodeTypeEnum.Function)) {
+  if (guardNodeDescription(NodeBroadTypeEnum.Single, nodeDescription)
+      && (nodeDescription.typeTuple[1] === SingleNodeFineTypeEnum.Function)) {
     preparedContainer.keyDelimiter = new AtomicTextContainer(new StrictUnicodeLine('()'), theme.style.keyDelimeter);
   } else {
     preparedContainer.keyDelimiter = new AtomicTextContainer(new StrictUnicodeLine(':'), theme.style.keyDelimeter);
   }
 
-  if (guardNodeDescription(NodeMetatypeEnum.Dead, nodeDescription)) {
+  if (guardNodeDescription(NodeBroadTypeEnum.Dead, nodeDescription)) {
     // TODO:
-    if (nodeDescription.typeTuple[1] === DeadNodeTypeEnum.CircularReference) {
+    if (nodeDescription.typeTuple[1] === DeadNodeFineTypeEnum.CircularReference) {
       preparedContainer.value = new AtomicTextContainer(new StrictUnicodeLine('CIRCULAR REFERENCE'), theme.style.warning);
     }
   } else {
     if (nodeDescription.value) {
-      if (guardNodeDescription(NodeMetatypeEnum.Single, nodeDescription)
-          && (nodeDescription.typeTuple[1] === SingleNodeTypeEnum.Function)
+      if (guardNodeDescription(NodeBroadTypeEnum.Single, nodeDescription)
+          && (nodeDescription.typeTuple[1] === SingleNodeFineTypeEnum.Function)
           && (nodeDescription.key !== nodeDescription.value)) {
         preparedContainer.value = new NonatomicTextContainer([new AtomicTextContainer(new StrictUnicodeLine(nodeDescription.value)), new AtomicTextContainer(new StrictUnicodeLine('()'))], theme.style.value);
       } else {

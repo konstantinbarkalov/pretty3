@@ -1,6 +1,6 @@
 import { buildMetaTreeSettingsT } from './interfaces/general';
 import { nodeDescriptionKeyT, nodeDescriptionT, guardNodeDescription } from './interfaces/nodeDescription';
-import { NodeMetatypeEnum, SingleNodeTypeEnum, EnumerableNodeTypeEnum, DeadNodeTypeEnum } from './interfaces/nodeType';
+import { NodeBroadTypeEnum, SingleNodeFineTypeEnum, EnumerableNodeFineTypeEnum, DeadNodeFineTypeEnum, IterableNodeFineTypeEnum } from './interfaces/nodeType';
 
 type TypedArrayT =
   Int8Array |
@@ -30,61 +30,61 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
   if (node === undefined) {
     nodeDescription = {
       key: nodeKey,
-      typeTuple: [NodeMetatypeEnum.Single, SingleNodeTypeEnum.Undefined],
+      typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.Undefined],
       value: 'UNDEFINED',
     };
   } else if (node === null) {
     nodeDescription = {
       key: nodeKey,
-      typeTuple: [NodeMetatypeEnum.Single, SingleNodeTypeEnum.Null],
+      typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.Null],
       value: 'NULL',
     };
   } else if (typeof node === 'string') {
     nodeDescription = {
       key: nodeKey,
-      typeTuple: [NodeMetatypeEnum.Single, SingleNodeTypeEnum.String],
+      typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.String],
       value: node,
     };
   }
   else if (typeof node === 'number') {
     nodeDescription = {
       key: nodeKey,
-      typeTuple: [NodeMetatypeEnum.Single, SingleNodeTypeEnum.Number],
+      typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.Number],
       value: parseFloat(node.toPrecision(6)).toLocaleString(),
     };
   }
   else if (typeof node === 'bigint') {
     nodeDescription = {
       key: nodeKey,
-      typeTuple: [NodeMetatypeEnum.Single, SingleNodeTypeEnum.BigInt],
+      typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.BigInt],
       value: node.toLocaleString(),
     };
   }
   else if (typeof node === 'boolean') {
     nodeDescription = {
       key: nodeKey,
-      typeTuple: [NodeMetatypeEnum.Single, SingleNodeTypeEnum.Boolean],
+      typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.Boolean],
       value: node.toLocaleString(),
     };
   }
   else if (typeof node === 'symbol') {
     nodeDescription = {
       key: nodeKey,
-      typeTuple: [NodeMetatypeEnum.Single, SingleNodeTypeEnum.Symbol],
+      typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.Symbol],
       value: node.toLocaleString(),
     };
   }
   else if (typeof node === 'function') {
     nodeDescription = {
       key: nodeKey,
-      typeTuple: [NodeMetatypeEnum.Single, SingleNodeTypeEnum.Function],
+      typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.Function],
       value: node.name,
     };
   }
   else if (Array.isArray(node)) {
     nodeDescription = {
       key: nodeKey,
-      typeTuple: [NodeMetatypeEnum.Enumerable, EnumerableNodeTypeEnum.Array],
+      typeTuple: [NodeBroadTypeEnum.Iterable, IterableNodeFineTypeEnum.Array],
       value: '',
       subEntries: [],
     };
@@ -101,31 +101,31 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
     if (node instanceof String) {
       nodeDescription = {
         key: nodeKey,
-        typeTuple: [NodeMetatypeEnum.Single, SingleNodeTypeEnum.StringObject],
+        typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.StringObject],
         value: node.toLocaleString(),
       };
     } else if (node instanceof Number) {
       nodeDescription = {
         key: nodeKey,
-        typeTuple: [NodeMetatypeEnum.Single, SingleNodeTypeEnum.NumberObject],
+        typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.NumberObject],
         value: node.toLocaleString(),
       };
     } else if (node instanceof Boolean) {
       nodeDescription = {
         key: nodeKey,
-        typeTuple: [NodeMetatypeEnum.Single, SingleNodeTypeEnum.BooleanObject],
+        typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.BooleanObject],
         value: node.toLocaleString(),
       };
     } else if (node instanceof Date) {
       nodeDescription = {
         key: nodeKey,
-        typeTuple: [NodeMetatypeEnum.Single, SingleNodeTypeEnum.Date],
+        typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.Date],
         value: node.toLocaleString(),
       };
     } else if (node instanceof TypedArray) {
       nodeDescription = {
         key: nodeKey,
-        typeTuple: [NodeMetatypeEnum.Enumerable, EnumerableNodeTypeEnum.TypedArray],
+        typeTuple: [NodeBroadTypeEnum.Iterable, IterableNodeFineTypeEnum.TypedArray],
         value: node.toLocaleString(),
         subEntries: [],
       };
@@ -142,7 +142,7 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
       }
       nodeDescription = {
         key: nodeKey,
-        typeTuple: [NodeMetatypeEnum.Enumerable, EnumerableNodeTypeEnum.Object],
+        typeTuple: [NodeBroadTypeEnum.Enumerable, EnumerableNodeFineTypeEnum.Object],
         subEntries: [],
         value: nodeValue,
       };
@@ -157,7 +157,7 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
       }
       nodeDescription = {
         key: nodeKey,
-        typeTuple: [NodeMetatypeEnum.Enumerable, EnumerableNodeTypeEnum.Unknown],
+        typeTuple: [NodeBroadTypeEnum.Enumerable, EnumerableNodeFineTypeEnum.Unknown],
         value: nodeValue,
         subEntries: [],
       };
@@ -167,11 +167,11 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
   else {
     nodeDescription = {
       key: nodeKey,
-      typeTuple: [NodeMetatypeEnum.Single, SingleNodeTypeEnum.Unknown],
+      typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.Unknown],
       value: (typeof node).toLocaleUpperCase(),
     };
   }
-  if (guardNodeDescription(NodeMetatypeEnum.Enumerable, nodeDescription)) {
+  if (guardNodeDescription(NodeBroadTypeEnum.Enumerable, nodeDescription)) {
     const itemsShownCount = Math.min(currentLevelMaxItems, unwrappedSubEntries.length);
     for (let i = 0; i < itemsShownCount; i++) {
       const [subEntryKey, subEntry] = unwrappedSubEntries[i];
@@ -180,8 +180,8 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
       nodeDescription.subEntries.push(childDesctiption);
     }
     if (nodeDescription.subEntries.length < unwrappedSubEntries.length) {
-      const elipsisDescription: nodeDescriptionT<NodeMetatypeEnum.Dead> = {
-        typeTuple: [NodeMetatypeEnum.Dead, DeadNodeTypeEnum.Elipsis],
+      const elipsisDescription: nodeDescriptionT<NodeBroadTypeEnum.Dead> = {
+        typeTuple: [NodeBroadTypeEnum.Dead, DeadNodeFineTypeEnum.Elipsis],
       };
       nodeDescription.subEntries.push(elipsisDescription);
     }

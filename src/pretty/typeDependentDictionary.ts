@@ -1,7 +1,11 @@
+import { NodeBroadTypeEnum, NodeFineTypeEnumT } from './interfaces/nodeType';
 
-export type fullIconsetT = {
-  [key in NodeMetatypeEnum]: iconsetT<key>;
+export type typeDependentBroadOnlyDictionaryT<TValue extends unknown> = {
+  [key in NodeBroadTypeEnum]: TValue;
 }
-export type iconsetT<T extends NodeMetatypeEnum> = {
-  [key in NodeTypeEnumT<T>]: iconT;
+export type typeDependentDictionaryT<TValue extends unknown> = {
+  [key in NodeBroadTypeEnum]: typeDependentFineDictionaryT<key, TValue>;
+}
+export type typeDependentFineDictionaryT<TNodeBroadTypeEnum extends NodeBroadTypeEnum, TValue extends unknown> = {
+  [key in NodeFineTypeEnumT<TNodeBroadTypeEnum>]: TValue;
 }
