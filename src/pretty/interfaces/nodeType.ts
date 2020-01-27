@@ -12,6 +12,7 @@ export enum SingleNodeTypeEnum {
   Null,
   Boolean,
   Number,
+  BigInt,
   String,
   Function,
   Date,

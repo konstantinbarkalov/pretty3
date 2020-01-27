@@ -13,11 +13,13 @@ export function nodeDescriptionToLeaf(nodeDescription: nodeDescriptionT, setting
   // dirty hack :( be carefaul, it disables some typechecks,
   // but works fine while fullIconsetT sticks to (meta) types enums
   // TODO: rework!!
-  const iconset: iconsetT<NodeMetatypeEnum> = settings.fullIconset[metatype];
-  const icon = iconset[type];
-  if (icon) {
-    children.push(icon);
-    children.push(space);
+  const iconset: iconsetT<NodeMetatypeEnum> | undefined = settings.fullIconset[metatype];
+  if (iconset) {
+    const icon = iconset[type];
+    if (icon) {
+      children.push(icon);
+      children.push(space);
+    }
   }
   if (guardNodeDescription(NodeMetatypeEnum.Dead, nodeDescription)) {
     children.push(new AtomicTextContainer(new StrictUnicodeLine('...'), theme.style.keyDots));
