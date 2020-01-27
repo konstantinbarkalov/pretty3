@@ -25,12 +25,14 @@ export const iconDictionary: typeDependentDictionaryT<iconT> = {
     [SingleNodeFineTypeEnum.Symbol]:          new AtomicTextContainer(new StrictUnicodeLine('<S>'), theme.style.icon),
     [SingleNodeFineTypeEnum.Undefined]:       new AtomicTextContainer(new StrictUnicodeLine('< >'), theme.style.icon),
     [SingleNodeFineTypeEnum.Unknown]:         new AtomicTextContainer(new StrictUnicodeLine('<?>'), theme.style.icon),
+    [SingleNodeFineTypeEnum.WeakMap]:         new AtomicTextContainer(new StrictUnicodeLine('(M)'), theme.style.icon),
+    [SingleNodeFineTypeEnum.WeakSet]:         new AtomicTextContainer(new StrictUnicodeLine('(S)'), theme.style.icon),
   },
   [NodeBroadTypeEnum.Enumerable]: {
-    [EnumerableNodeFineTypeEnum.Map]:         new AtomicTextContainer(new StrictUnicodeLine('«M»'), theme.style.icon),
+    [EnumerableNodeFineTypeEnum.Map]:         new AtomicTextContainer(new StrictUnicodeLine('{M}'), theme.style.icon),
     [EnumerableNodeFineTypeEnum.Object]:      new AtomicTextContainer(new StrictUnicodeLine('{ }'), theme.style.icon),
-    [EnumerableNodeFineTypeEnum.Unknown]:     new AtomicTextContainer(new StrictUnicodeLine('«?»'), theme.style.icon),
-    [EnumerableNodeFineTypeEnum.WeakMap]:     new AtomicTextContainer(new StrictUnicodeLine('«W»'), theme.style.icon),
+    [EnumerableNodeFineTypeEnum.Error]:       new AtomicTextContainer(new StrictUnicodeLine('{E}'), theme.style.icon),
+    [EnumerableNodeFineTypeEnum.Unknown]:     new AtomicTextContainer(new StrictUnicodeLine('{?}'), theme.style.icon),
   },
   [NodeBroadTypeEnum.Iterable]: {
     [IterableNodeFineTypeEnum.Array]:         new AtomicTextContainer(new StrictUnicodeLine('[ ]'), theme.style.icon),

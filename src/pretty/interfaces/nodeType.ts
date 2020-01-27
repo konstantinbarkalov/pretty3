@@ -20,13 +20,15 @@ export enum SingleNodeFineTypeEnum {
   BigInt = 'bigInt',
   Function = 'function',
   Date = 'date',
+  WeakMap = 'weakMap',
+  WeakSet = 'weakSet',
   Symbol = 'symbol',
   Unknown = 'unknown',
 }
 export enum EnumerableNodeFineTypeEnum {
   Object = 'object',
   Map = 'map',
-  WeakMap = 'weakMap',
+  Error = 'error',
   Unknown = 'unknown',
 }
 export enum IterableNodeFineTypeEnum {

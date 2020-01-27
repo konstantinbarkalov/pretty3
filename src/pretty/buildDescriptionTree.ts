@@ -81,16 +81,7 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
       value: node.name,
     };
   }
-  else if (Array.isArray(node)) {
-    nodeDescription = {
-      key: nodeKey,
-      typeTuple: [NodeBroadTypeEnum.Iterable, IterableNodeFineTypeEnum.Array],
-      value: '',
-      subEntries: [],
-    };
-    unwrappedSubEntries = node.map((sub, subId) => [subId, sub]);
-  }
-  else if (typeof node === 'object' && node) {
+  else if (node && typeof node === 'object') {
     let nodeCustomObjectString;
     if (node.toLocaleString) {
       const jsObjectString = node.toLocaleString();
@@ -122,6 +113,50 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
         typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.Date],
         value: node.toLocaleString(),
       };
+    } else if (node instanceof WeakMap) {
+      nodeDescription = {
+        key: nodeKey,
+        typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.WeakMap],
+        value: node.toLocaleString(),
+      };
+    } else if (node instanceof WeakSet) {
+      nodeDescription = {
+        key: nodeKey,
+        typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.WeakMap],
+        value: node.toLocaleString(),
+      };
+    } else if (node instanceof Error) {
+      nodeDescription = {
+        key: nodeKey,
+        typeTuple: [NodeBroadTypeEnum.Enumerable, EnumerableNodeFineTypeEnum.Error],
+        value: node.toLocaleString(),
+        subEntries: [],
+      };
+      unwrappedSubEntries = Object.entries(node);
+    } else if (node instanceof Map) {
+      nodeDescription = {
+        key: nodeKey,
+        typeTuple: [NodeBroadTypeEnum.Enumerable, EnumerableNodeFineTypeEnum.Map],
+        value: node.toLocaleString(),
+        subEntries: [],
+      };
+      unwrappedSubEntries = Array.from(node.entries());
+    } else if (node instanceof Set) {
+      nodeDescription = {
+        key: nodeKey,
+        typeTuple: [NodeBroadTypeEnum.Iterable, IterableNodeFineTypeEnum.Set],
+        value: node.toLocaleString(),
+        subEntries: [],
+      };
+      unwrappedSubEntries = Array.from(node.entries());
+    } else if (Array.isArray(node)) {
+      nodeDescription = {
+        key: nodeKey,
+        typeTuple: [NodeBroadTypeEnum.Iterable, IterableNodeFineTypeEnum.Array],
+        value: '',
+        subEntries: [],
+      };
+      unwrappedSubEntries = Object.entries(node);
     } else if (node instanceof TypedArray) {
       nodeDescription = {
         key: nodeKey,
@@ -131,7 +166,7 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
       };
       const typedArray = node as TypedArrayT;
       const array = Array.from<number | bigint>(typedArray);
-      unwrappedSubEntries = array.map((sub, subId) => {return [subId, sub];});
+      unwrappedSubEntries = Object.entries(array);
     } else if (node.hasOwnProperty) {
       let nodeValue: string;
       if (nodeCustomObjectString) {
@@ -163,8 +198,7 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
       };
       unwrappedSubEntries = [];
     }
-  }
-  else {
+  } else {
     nodeDescription = {
       key: nodeKey,
       typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.Unknown],
