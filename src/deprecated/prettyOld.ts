@@ -22,7 +22,7 @@ const treeStyle = {
   icon: new Style(treeStyleColors.green),
   dim: new Style(treeStyleColors.darkGray),
   key: new Style(treeStyleColors.green),
-  keyDots: new Style(treeStyleColors.darkGreen),
+  keyDelimeter: new Style(treeStyleColors.darkGreen),
   value: new Style(treeStyleColors.white),
   info: new Style(treeStyleColors.blue),
   branch: new Style(treeStyleColors.darkGray),
@@ -282,7 +282,7 @@ function buildOneliner(nodeKey: string | number | undefined, nodeDescription: an
   if (nodeKey !== undefined || !isFirst) {
     const nodeKeyString = nodeKey?.toString() || '';
     children.push(new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), treeStyle.key));
-    children.push(new AtomicTextContainer(new StrictUnicodeLine(':'), treeStyle.keyDots));
+    children.push(new AtomicTextContainer(new StrictUnicodeLine(':'), treeStyle.keyDelimeter));
     children.push(space);
 
   }

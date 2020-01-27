@@ -10,7 +10,7 @@ export const defaultSettings: printTreeSettingsT = {
   logLineCallback: (line) => { console.log(line); },
   maxLevel: 6,
   maxItemsPerLevel: [30, 10],
-  maxLineWidth: 40,
+  maxLineWidth: 80,
   arrayTemplate: template.array,
   objectTemplate: template.object,
   otherTemplate: template.other,

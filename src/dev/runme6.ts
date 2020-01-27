@@ -24,7 +24,7 @@ const treeStyle = {
   icon: new Style(treeStyleColors.green),
   dim: new Style(treeStyleColors.darkGray),
   key: new Style(treeStyleColors.green),
-  keyDots: new Style(treeStyleColors.darkGreen),
+  keyDelimeter: new Style(treeStyleColors.darkGreen),
   value: new Style(treeStyleColors.white),
   info: new Style(treeStyleColors.blue),
   branch: new Style(treeStyleColors.darkGray),
@@ -36,7 +36,7 @@ const armPatternMatrix = ArmPatternMatrix.fromArray([
   '├──', '│  ', '│  ',
   '├──', '│  ', '│  ',
   '└──', '   ', '   ',
-], treeStyle.keyDots);
+], treeStyle.keyDelimeter);
 
 const armWidth: spacedArmWidthT = {preSpace: 1, postSpace: 1, arm: 4};
 const smallArmWidth: spacedArmWidthT = {preSpace: 1, postSpace: 1, arm: 1};

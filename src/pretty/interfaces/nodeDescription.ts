@@ -1,9 +1,10 @@
 import { NodeMetatypeEnum, nodeTypeTupleT, guardNodeTypeTuple, } from './nodeType';
 
-export type nodeDescriptionKeyT = string | number | object | undefined;
+export type nodeDescriptionKeyT = string | number | bigint | object | undefined;
 
 type deadNodeDescriptionT<T extends NodeMetatypeEnum.Dead> = {
   typeTuple: nodeTypeTupleT<T>;
+  key?: nodeDescriptionKeyT;
   info?: string | undefined;
 }
 type singleNodeDescriptionT<T extends NodeMetatypeEnum.Single> = {

@@ -3,43 +3,97 @@ import { AtomicTextContainer, AnyTextContainer, NonatomicTextContainer } from '.
 import { StrictUnicodeText, StrictUnicodeLine } from '../text/strictUnicode';
 import { theme } from './defaultTheme';
 import { buildMetaTreeSettingsT } from './interfaces/general';
-import { iconsetT } from './defaultFullIconset';
-import { NodeMetatypeEnum } from './interfaces/nodeType';
+import { iconsetT, fullIconsetT } from './defaultFullIconset';
+import { NodeMetatypeEnum, SingleNodeTypeEnum, DeadNodeTypeEnum } from './interfaces/nodeType';
+import { iconT } from './interfaces/icon';
 
-export function nodeDescriptionToLeaf(nodeDescription: nodeDescriptionT, settings: buildMetaTreeSettingsT): NonatomicTextContainer<StrictUnicodeText> {
-  const space = new AtomicTextContainer(new StrictUnicodeLine(' '));
-  const children: AnyTextContainer[] = [];
+function getIcon(nodeDescription: nodeDescriptionT, fullIconset: fullIconsetT): iconT | undefined {
   const [metatype, type] = nodeDescription.typeTuple;
   // dirty hack :( be carefaul, it disables some typechecks,
   // but works fine while fullIconsetT sticks to (meta) types enums
   // TODO: rework!!
-  const iconset: iconsetT<NodeMetatypeEnum> | undefined = settings.fullIconset[metatype];
+  const iconset: iconsetT<NodeMetatypeEnum> | undefined = fullIconset[metatype];
   if (iconset) {
     const icon = iconset[type];
-    if (icon) {
-      children.push(icon);
-      children.push(space);
-    }
-  }
-  if (guardNodeDescription(NodeMetatypeEnum.Dead, nodeDescription)) {
-    children.push(new AtomicTextContainer(new StrictUnicodeLine('...'), theme.style.keyDots));
-    children.push(space);
+    return icon;
   } else {
-    if (nodeDescription.key !== undefined) {
-      const nodeKeyString = (nodeDescription.key.toString) ? nodeDescription.key.toString() : String(nodeDescription.key);
-      children.push(new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), theme.style.key));
-      children.push(new AtomicTextContainer(new StrictUnicodeLine(':'), theme.style.keyDots));
-      children.push(space);
-    }
-    if (nodeDescription.value) {
-      children.push(new AtomicTextContainer(new StrictUnicodeText(nodeDescription.value)));
-      children.push(space);
-    }
+    return;
+  }
+}
+
+export function nodeDescriptionToLeaf(nodeDescription: nodeDescriptionT, settings: buildMetaTreeSettingsT): NonatomicTextContainer<StrictUnicodeText> {
+  type preparedContainerT = {
+    icon?: AnyTextContainer;
+    key?: AnyTextContainer;
+    keyDelimiter?: AnyTextContainer;
+    value?: AnyTextContainer;
+    infoDelimiter?: AnyTextContainer;
+    info?: AnyTextContainer;
+  }
+  const preparedContainer: preparedContainerT = { };
+
+  preparedContainer.icon = getIcon(nodeDescription, settings.fullIconset);
+
+  if (nodeDescription.key !== undefined) {
+    const nodeKeyString = (nodeDescription.key.toString) ? nodeDescription.key.toString() : String(nodeDescription.key);
+    preparedContainer.key = new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), theme.style.key);
   }
 
-  if (nodeDescription.info) {
-    children.push(new AtomicTextContainer(new StrictUnicodeLine(nodeDescription.info), theme.style.info));
-    children.push(space);
+  if (guardNodeDescription(NodeMetatypeEnum.Single, nodeDescription)
+      && (nodeDescription.typeTuple[1] === SingleNodeTypeEnum.Function)) {
+    preparedContainer.keyDelimiter = new AtomicTextContainer(new StrictUnicodeLine('()'), theme.style.keyDelimeter);
+  } else {
+    preparedContainer.keyDelimiter = new AtomicTextContainer(new StrictUnicodeLine(':'), theme.style.keyDelimeter);
   }
-  return new NonatomicTextContainer(children);
+
+  if (guardNodeDescription(NodeMetatypeEnum.Dead, nodeDescription)) {
+    // TODO:
+    if (nodeDescription.typeTuple[1] === DeadNodeTypeEnum.CircularReference) {
+      preparedContainer.value = new AtomicTextContainer(new StrictUnicodeLine('CIRCULAR REFERENCE'), theme.style.warning);
+    }
+  } else {
+    if (nodeDescription.value) {
+      if (guardNodeDescription(NodeMetatypeEnum.Single, nodeDescription)
+          && (nodeDescription.typeTuple[1] === SingleNodeTypeEnum.Function)
+          && (nodeDescription.key !== nodeDescription.value)) {
+        preparedContainer.value = new NonatomicTextContainer([new AtomicTextContainer(new StrictUnicodeLine(nodeDescription.value)), new AtomicTextContainer(new StrictUnicodeLine('()'))], theme.style.value);
+      } else {
+        preparedContainer.value = new AtomicTextContainer(new StrictUnicodeLine(nodeDescription.value), theme.style.value);
+      }
+    }
+  }
+  if (nodeDescription.info) {
+    preparedContainer.infoDelimiter = new AtomicTextContainer(new StrictUnicodeLine('/'), theme.style.infoDelimeter);
+    preparedContainer.info = new AtomicTextContainer(new StrictUnicodeLine(nodeDescription.info), theme.style.info);
+  }
+  const space = new AtomicTextContainer(new StrictUnicodeLine(' '));
+  const leafChildren: AnyTextContainer[] = [];
+  let spaceNeed = false;
+  if (preparedContainer.icon) {
+    leafChildren.push(preparedContainer.icon);
+    spaceNeed = true;
+  }
+  if (preparedContainer.key) {
+    if (spaceNeed) { leafChildren.push(space); }
+    leafChildren.push(preparedContainer.key);
+    spaceNeed = true;
+  }
+  if (preparedContainer.keyDelimiter && preparedContainer.key && preparedContainer.value) {
+    leafChildren.push(preparedContainer.keyDelimiter);
+  }
+  if (preparedContainer.value) {
+    if (spaceNeed) { leafChildren.push(space); }
+    leafChildren.push(preparedContainer.value);
+    spaceNeed = true;
+  }
+  if (preparedContainer.infoDelimiter && preparedContainer.info) {
+    if (spaceNeed) { leafChildren.push(space); }
+    leafChildren.push(preparedContainer.infoDelimiter);
+    spaceNeed = true;
+  }
+  if (preparedContainer.info) {
+    if (spaceNeed) { leafChildren.push(space); }
+    leafChildren.push(preparedContainer.info);
+  }
+  return new NonatomicTextContainer(leafChildren);
 }
