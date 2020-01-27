@@ -1,35 +1,39 @@
 export enum NodeMetatypeEnum {
-  Dead,
-  Single,
-  Enumerable
+  Dead = 'dead',
+  Single = 'single',
+  Enumerable = 'enumerable',
+  Iterable = 'iterable',
 }
 export enum DeadNodeTypeEnum {
-  Elipsis,
-  CircularReference
+  Elipsis = 'elipsis',
+  CircularReference = 'circularReference',
 }
 export enum SingleNodeTypeEnum {
-  Undefined,
-  Null,
-  Boolean,
-  Number,
-  String,
-  BooleanObject,
-  NumberObject,
-  StringObject,
-  BigInt,
-  Function,
-  Date,
-  Symbol,
-  Unknown
+  Undefined = 'undefined',
+  Null = 'null',
+  Boolean = 'boolean',
+  Number = 'number',
+  String = 'string',
+  BooleanObject = 'booleanObject',
+  NumberObject = 'numberObject',
+  StringObject = 'stringObject',
+  BigInt = 'bigInt',
+  Function = 'function',
+  Date = 'date',
+  Symbol = 'symbol',
+  Unknown = 'unknown',
 }
 export enum EnumerableNodeTypeEnum {
-  Array,
-  TypedArray,
-  Set,
-  Map,
-  WeakMap,
-  Object,
-  Unknown
+  Object = 'object',
+  Map = 'map',
+  WeakMap = 'weakMap',
+  Unknown = 'unknown',
+}
+export enum IterableNodeTypeEnum {
+  Array = 'array',
+  TypedArray = 'typedArray',
+  Set = 'set',
+  Unknown = 'unknown',
 }
 export type NodeTypeEnumT<TNodeMetatypeEnum extends NodeMetatypeEnum = NodeMetatypeEnum> =
   TNodeMetatypeEnum extends NodeMetatypeEnum.Dead
@@ -38,7 +42,9 @@ export type NodeTypeEnumT<TNodeMetatypeEnum extends NodeMetatypeEnum = NodeMetat
       ? SingleNodeTypeEnum
       : TNodeMetatypeEnum extends NodeMetatypeEnum.Enumerable
         ? EnumerableNodeTypeEnum
-        : never;
+        : TNodeMetatypeEnum extends NodeMetatypeEnum.Iterable
+          ? IterableNodeTypeEnum
+          : never;
 
 export type nodeTypeTupleT<TNodeMetatypeEnum extends NodeMetatypeEnum = NodeMetatypeEnum> =
   TNodeMetatypeEnum extends NodeMetatypeEnum.Dead
@@ -47,7 +53,9 @@ export type nodeTypeTupleT<TNodeMetatypeEnum extends NodeMetatypeEnum = NodeMeta
       ? [TNodeMetatypeEnum, NodeTypeEnumT<NodeMetatypeEnum.Single>]
       : TNodeMetatypeEnum extends NodeMetatypeEnum.Enumerable
         ? [TNodeMetatypeEnum, NodeTypeEnumT<NodeMetatypeEnum.Enumerable>]
-        : never;
+        : TNodeMetatypeEnum extends NodeMetatypeEnum.Iterable
+          ? [TNodeMetatypeEnum, NodeTypeEnumT<NodeMetatypeEnum.Iterable>]
+          : never;
 
 export function guardNodeTypeTuple<T extends NodeMetatypeEnum>(metatype: T, nodeTypeTuple: nodeTypeTupleT): nodeTypeTuple is nodeTypeTupleT<T> {
   return (nodeTypeTuple[0] === metatype);

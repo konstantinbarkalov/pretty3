@@ -2,34 +2,42 @@ import { NodeMetatypeEnum, nodeTypeTupleT, guardNodeTypeTuple, } from './nodeTyp
 
 export type nodeDescriptionKeyT = string | number | bigint | object | undefined;
 
-type deadNodeDescriptionT<T extends NodeMetatypeEnum.Dead> = {
-  typeTuple: nodeTypeTupleT<T>;
+type deadNodeDescriptionT = {
+  typeTuple: nodeTypeTupleT<NodeMetatypeEnum.Dead>;
   key?: nodeDescriptionKeyT;
   info?: string | undefined;
 }
-type singleNodeDescriptionT<T extends NodeMetatypeEnum.Single> = {
-  typeTuple: nodeTypeTupleT<T>;
+type singleNodeDescriptionT = {
+  typeTuple: nodeTypeTupleT<NodeMetatypeEnum.Single>;
   key: nodeDescriptionKeyT;
   value: string;
   info?: string | undefined;
 }
-type enumerableNodeDescriptionT<T extends NodeMetatypeEnum.Enumerable> = {
-  typeTuple: nodeTypeTupleT<T>;
+type enumerableNodeDescriptionT = {
+  typeTuple: nodeTypeTupleT<NodeMetatypeEnum.Enumerable>;
+  key: nodeDescriptionKeyT;
+  value: string;
+  subEntries: nodeDescriptionT[];
+  info?: string | undefined;
+}
+type iterableNodeDescriptionT = {
+  typeTuple: nodeTypeTupleT<NodeMetatypeEnum.Iterable>;
   key: nodeDescriptionKeyT;
   value: string;
   subEntries: nodeDescriptionT[];
   info?: string | undefined;
 }
 
-
 export type nodeDescriptionT<TNodeMetatypeEnum extends NodeMetatypeEnum = NodeMetatypeEnum> =
   TNodeMetatypeEnum extends NodeMetatypeEnum.Dead
-    ? deadNodeDescriptionT<TNodeMetatypeEnum>
+    ? deadNodeDescriptionT
     : TNodeMetatypeEnum extends NodeMetatypeEnum.Single
-      ? singleNodeDescriptionT<TNodeMetatypeEnum>
+      ? singleNodeDescriptionT
       : TNodeMetatypeEnum extends NodeMetatypeEnum.Enumerable
-        ? enumerableNodeDescriptionT<TNodeMetatypeEnum>
-        : never;
+        ? enumerableNodeDescriptionT
+        : TNodeMetatypeEnum extends NodeMetatypeEnum.Iterable
+          ? iterableNodeDescriptionT
+          : never;
 
 
 
