@@ -36,8 +36,9 @@ export const iconDictionary: typeDependentDictionaryT<iconT> = {
   },
   [NodeBroadTypeEnum.Iterable]: {
     [IterableNodeFineTypeEnum.Array]:         new AtomicTextContainer(new StrictUnicodeLine('[ ]'), theme.style.icon),
+    [IterableNodeFineTypeEnum.Iterable]:      new AtomicTextContainer(new StrictUnicodeLine(']I['), theme.style.icon),
     [IterableNodeFineTypeEnum.Set]:           new AtomicTextContainer(new StrictUnicodeLine('[S]'), theme.style.icon),
     [IterableNodeFineTypeEnum.TypedArray]:    new AtomicTextContainer(new StrictUnicodeLine('[T]'), theme.style.icon),
-    [IterableNodeFineTypeEnum.Unknown]:       new AtomicTextContainer(new StrictUnicodeLine('[T]'), theme.style.icon),
+    [IterableNodeFineTypeEnum.Unknown]:       new AtomicTextContainer(new StrictUnicodeLine('[?]'), theme.style.icon),
   },
 };

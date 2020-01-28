@@ -49,8 +49,17 @@ function buildHugeMap(depthToGo: number, size: number, counter: number): {huge: 
 }
 function buildHugeIterable(depthToGo: number, size: number, counter: number): {huge: Iterable<hugeT>; counter: number} {
   const {huge: rawHuge, counter: updatedCounter} = buildHugeArray(depthToGo, size, counter);
+  function *hugeIterator(): Generator<hugeT> {
+    const rawInterator = rawHuge[Symbol.iterator]();
+    let result = rawInterator.next();
+    while (!result.done) {
+      yield result.value;
+      result = rawInterator.next();
+    }
+    return result.value;
+  }
   const hugeIterable = {
-    [Symbol.iterator]: rawHuge[Symbol.iterator],
+    [Symbol.iterator]: hugeIterator,
   };
   return {huge: hugeIterable, counter: updatedCounter};
 }

@@ -1,9 +1,9 @@
 import { expect } from 'chai';
-import pretty from '../src/index';
+import {prettyOld as pretty} from '../src/index';
 import * as path from 'path';
 import * as fs from 'fs';
-import { PlainRenderer, HtmlRenderer, AnsiRenderer } from '../src/text/renderer/implementation';
-
+//import { PlainRenderer, HtmlRenderer, AnsiRenderer } from '../src/text/renderer/implementation';
+import { PlainRenderer } from '../src/text/renderer/implementation';
 import input05 from './pretty/input/input05';
 import input06 from './pretty/input/input06';
 
@@ -16,14 +16,14 @@ const rendererRuns = {
     renderer: new PlainRenderer(),
     referenceExtention: '.txt',
   },
-  html: {
-    renderer: new HtmlRenderer(),
-    referenceExtention: '.html',
-  },
-  ansi: {
-    renderer: new AnsiRenderer(),
-    referenceExtention: '.ansi',
-  },
+  // html: {
+  //   renderer: new HtmlRenderer(),
+  //   referenceExtention: '.html',
+  // },
+  // ansi: {
+  //   renderer: new AnsiRenderer(),
+  //   referenceExtention: '.ansi',
+  // },
 };
 
 describe('pretty', () => {

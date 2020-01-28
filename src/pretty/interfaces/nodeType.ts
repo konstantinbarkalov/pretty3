@@ -35,6 +35,7 @@ export enum IterableNodeFineTypeEnum {
   Array = 'array',
   TypedArray = 'typedArray',
   Set = 'set',
+  Iterable = 'iterable',
   Unknown = 'unknown',
 }
 export type NodeFineTypeEnumT<TNodeBroadTypeEnum extends NodeBroadTypeEnum = NodeBroadTypeEnum> =

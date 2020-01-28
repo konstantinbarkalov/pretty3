@@ -167,6 +167,15 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
       const typedArray = node as TypedArrayT;
       const array = Array.from<number | bigint>(typedArray);
       unwrappedSubEntries = Object.entries(array);
+    } else if (node[Symbol.iterator]) {
+      nodeDescription = {
+        key: nodeKey,
+        typeTuple: [NodeBroadTypeEnum.Iterable, IterableNodeFineTypeEnum.Iterable],
+        value: node.toLocaleString(),
+        subEntries: [],
+      };
+      const array = Array.from(node);
+      unwrappedSubEntries = Object.entries(array);
     } else if (node.hasOwnProperty) {
       let nodeValue: string;
       if (nodeCustomObjectString) {
