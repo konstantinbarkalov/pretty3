@@ -4,11 +4,12 @@ export enum NodeBroadTypeEnum {
   Enumerable = 'enumerable',
   Iterable = 'iterable',
 }
+
 export enum DeadNodeFineTypeEnum {
   Elipsis = 'elipsis',
   CircularReference = 'circularReference',
 }
-export enum SingleNodeFineTypeEnum {
+export enum SingleNodeFineTypeEnum   {
   Undefined = 'undefined',
   Null = 'null',
   Boolean = 'boolean',

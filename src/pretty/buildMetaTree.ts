@@ -1,32 +1,34 @@
 
-import { buildMetaTreeSettingsT, metaNodeTemplateT } from './interfaces/general';
+import { buildMetaTreeSettingsT } from './interfaces/general';
 import { MetaNode } from '../meta/node';
 import { buildDescriptionTree } from './buildDescriptionTree';
 import { nodeDescriptionT, guardNodeDescription } from './interfaces/nodeDescription';
 import { NodeBroadTypeEnum } from './interfaces/nodeType';
 import { nodeDescriptionToLeaf } from './nodeDescriptionToLeaf';
-import { typeDependentBroadOnlyDictionaryT, getFromTypeDependentBroadOnlyDictionary } from './typeDependentDictionary';
+import { getFromTypeDependentDictionary } from './typeDependentDictionary';
+import { prebuildedThemeT, nodePrebuildedThemeT } from './interfaces/prebuildedTheme';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function buildMetaTree(tree: any, settings: buildMetaTreeSettingsT ): MetaNode {
+export function buildMetaTree(tree: any, theme: prebuildedThemeT, settings: buildMetaTreeSettingsT ): MetaNode {
   const nodeDescriptionTree = buildDescriptionTree(undefined, tree, settings);
-  return nodeDescriptionTreeToMetaTreeRecursive(nodeDescriptionTree, settings);
+  return nodeDescriptionTreeToMetaTreeRecursive(nodeDescriptionTree, theme, settings);
 }
 
-function getTemplate(nodeDescription: nodeDescriptionT, templateDictionary: typeDependentBroadOnlyDictionaryT<metaNodeTemplateT>): metaNodeTemplateT {
-  return getFromTypeDependentBroadOnlyDictionary(templateDictionary, nodeDescription.typeTuple[0] );
+
+function getNodePrebuildedTheme(nodeDescription: nodeDescriptionT, theme: prebuildedThemeT): nodePrebuildedThemeT {
+  return getFromTypeDependentDictionary(theme, nodeDescription.typeTuple );
 }
 
-function nodeDescriptionTreeToMetaTreeRecursive(nodeDescription: nodeDescriptionT, settings: buildMetaTreeSettingsT): MetaNode {
-  const leaf = nodeDescriptionToLeaf(nodeDescription, settings);
+function nodeDescriptionTreeToMetaTreeRecursive(nodeDescription: nodeDescriptionT, theme: prebuildedThemeT, settings: buildMetaTreeSettingsT): MetaNode {
 
-  const template = getTemplate(nodeDescription, settings.templateDictionary);
-  const buildedMetaNode = new MetaNode(leaf, template.armGenerator, template.armWidthGenerator);
+  const nodePrebuildedTheme = getNodePrebuildedTheme(nodeDescription, theme);
+  const leaf = nodeDescriptionToLeaf(nodeDescription, nodePrebuildedTheme);
+  const buildedMetaNode = new MetaNode(leaf, nodePrebuildedTheme.arm.armGenerator, nodePrebuildedTheme.arm.armWidthGenerator);
 
   if (guardNodeDescription(NodeBroadTypeEnum.Enumerable, nodeDescription) ||
       guardNodeDescription(NodeBroadTypeEnum.Iterable, nodeDescription)) {
     buildedMetaNode.children = nodeDescription.subEntries.map((childDescription) => {
-      return nodeDescriptionTreeToMetaTreeRecursive(childDescription, settings);
+      return nodeDescriptionTreeToMetaTreeRecursive(childDescription, theme, settings);
     });
   }
   return buildedMetaNode;

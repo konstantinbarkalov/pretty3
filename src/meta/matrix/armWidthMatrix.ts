@@ -26,7 +26,7 @@ export class ArmWidthMatrix implements ArmWidthMatrixI {
     );
     return knotDependentArmWidth;
   }
-  static fromCommonWidth(armWidth: armWidthT, fertileLeafNonfirstLineArmWidth: armWidthT = armWidth): ArmPatternMatrix {
+  static fromCommonWidth(armWidth: armWidthT, fertileLeafNonfirstLineArmWidth: armWidthT = armWidth): ArmWidthMatrix {
     const knotDependentArmWidth = new ArmWidthMatrix(
       new ArmWidthKnotMatrix(0, 0, 0),
       new ArmWidthKnotMatrix(0, fertileLeafNonfirstLineArmWidth, fertileLeafNonfirstLineArmWidth),

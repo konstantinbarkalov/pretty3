@@ -6,12 +6,14 @@ type deadNodeDescriptionT = {
   typeTuple: nodeTypeTupleT<NodeBroadTypeEnum.Dead>;
   key?: nodeDescriptionKeyT;
   info?: string | undefined;
+  remark?: string | undefined;
 }
 type singleNodeDescriptionT = {
   typeTuple: nodeTypeTupleT<NodeBroadTypeEnum.Single>;
   key: nodeDescriptionKeyT;
   value: string;
   info?: string | undefined;
+  remark?: string | undefined;
 }
 type enumerableNodeDescriptionT = {
   typeTuple: nodeTypeTupleT<NodeBroadTypeEnum.Enumerable>;
@@ -19,6 +21,7 @@ type enumerableNodeDescriptionT = {
   value: string;
   subEntries: nodeDescriptionT[];
   info?: string | undefined;
+  remark?: string | undefined;
 }
 type iterableNodeDescriptionT = {
   typeTuple: nodeTypeTupleT<NodeBroadTypeEnum.Iterable>;
@@ -26,6 +29,7 @@ type iterableNodeDescriptionT = {
   value: string;
   subEntries: nodeDescriptionT[];
   info?: string | undefined;
+  remark?: string | undefined;
 }
 
 export type nodeDescriptionT<TNodeBroadTypeEnum extends NodeBroadTypeEnum = NodeBroadTypeEnum> =

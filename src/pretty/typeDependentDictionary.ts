@@ -24,3 +24,31 @@ export function getFromTypeDependentDictionary<TValue extends unknown>(dictionar
 export function getFromTypeDependentBroadOnlyDictionary<TValue extends unknown>(dictionary: typeDependentBroadOnlyDictionaryT<TValue>, broadType: NodeBroadTypeEnum): TValue {
   return dictionary[broadType];
 }
+
+export type typeDependentPartialDictionaryT<TValue extends unknown> = {
+  [key in NodeBroadTypeEnum]?: Partial<typeDependentFineDictionaryT<key, TValue>>;
+}
+
+export type typeDependentPartialFineDictionaryT<TNodeBroadTypeEnum extends NodeBroadTypeEnum, TValue extends unknown> = {
+  [key in NodeFineTypeEnumT<TNodeBroadTypeEnum>]?: TValue;
+}
+
+export type typeDependentBroadOnlyPartialDictionaryT<TValue extends unknown> =
+  Partial<typeDependentBroadOnlyDictionaryT<TValue>>
+
+export function getFromTypeDependentPartialDictionary<TValue extends unknown>(dictionary: typeDependentPartialDictionaryT<TValue>, key: nodeTypeTupleT): TValue | undefined {
+  const broadType = key[0];
+  const fineType = key[1];
+  // dirty hack :( be carefaul, it disables some typechecks,
+  // but works fine while fullIconsetT sticks to (meta) types enums
+  // TODO: rework!!
+  const fineDictionary: Partial<typeDependentFineDictionaryT<NodeBroadTypeEnum, TValue>> | undefined = dictionary[broadType];
+  if (fineDictionary) {
+    const value = fineDictionary[fineType];
+    return value;
+  }
+  return undefined;
+}
+export function getFromTypeDependentBroadOnlyPartialDictionary<TValue extends unknown>(dictionary: typeDependentBroadOnlyPartialDictionaryT<TValue>, broadType: NodeBroadTypeEnum): TValue | undefined {
+  return dictionary[broadType];
+}

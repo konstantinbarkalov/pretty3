@@ -1,4 +1,4 @@
-import {prettyOld, pretty} from '../index';
+import {prettyOld, Pretty} from '../index';
 import { AnsiRenderer } from '../text/renderer/implementation/ansi';
 //import tree from './input05';
 import tree from './input06';
@@ -8,4 +8,4 @@ const ansiRenderer = new AnsiRenderer();
 const ansiOutput = prettyOld.stringifyTree(tree, {renderer: ansiRenderer, maxItemsPerLevel: 3, maxLevel: 2});
 console.log(ansiOutput);
 console.log('-----');
-pretty.print(tree, {maxItemsPerLevel: 3, maxLevel: 2});
+Pretty.print(tree, {maxItemsPerLevel: 3, maxLevel: 2});

@@ -1,6 +1,7 @@
 import { Style } from '../../text/style';
 import { consumableArmCharsT } from '../../meta/interfaces/matrix/armPattern';
 import { consumableIconCharsT, consumableLineT } from './general';
+import { typeDependentPartialDictionaryT, typeDependentBroadOnlyPartialDictionaryT } from '../typeDependentDictionary';
 export type nodeBasicItemThemeT = {
   visibility?: boolean;
   style?: Style;
@@ -36,6 +37,7 @@ export type iconItemThemeT = nodeSuffixedItemThemeT & {
 export type nodeThemeT = nodeBasicItemThemeT & {
   arm?: armItemThemeT;
   icon?: iconItemThemeT;
+  keyDelimiter?: nodePredefinableItemThemeT;
   key?: nodeSuffixedSemipredefinableItemThemeT;
   valueDelimiter?: nodePredefinableItemThemeT;
   value?: nodeSuffixedSemipredefinableItemThemeT;
@@ -45,3 +47,8 @@ export type nodeThemeT = nodeBasicItemThemeT & {
   remark?: nodeSuffixedSemipredefinableItemThemeT;
 }
 
+export type themeT = {
+  global?: nodeThemeT;
+  broad?: typeDependentBroadOnlyPartialDictionaryT<nodeThemeT>;
+  fine?: typeDependentPartialDictionaryT<nodeThemeT>;
+}

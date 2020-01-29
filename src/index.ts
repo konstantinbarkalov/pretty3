@@ -1,4 +1,4 @@
 import * as prettyOld from './deprecated/prettyOld';
-import * as pretty from './pretty/print';
+import { Pretty } from './pretty/pretty';
 
-export { pretty, prettyOld };
+export { Pretty, prettyOld };

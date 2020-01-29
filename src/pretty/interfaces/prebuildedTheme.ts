@@ -1,7 +1,9 @@
 import { ArmGeneratorI, ArmWidthGeneratorI } from '../../meta/interfaces/arm/armGenerator';
 import { AnyTextContainer } from '../../text/textContainer';
-import { StrictUnico~deLine } from '../../text/strictUnicode';
+import { StrictUnicodeLine } from '../../text/strictUnicode';
 import { Style } from '../../text/style';
+
+import { typeDependentDictionaryT } from '../typeDependentDictionary';
 export type nodeItemPrebuildedThemeT = {
   style?: Style;
 }
@@ -22,6 +24,7 @@ export type nodePrebuildedThemeT = {
     armWidthGenerator: ArmWidthGeneratorI;
   };
   icon?: nodePredefinableItemPrebuildedThemeT;
+  keyDelimiter?: nodePredefinableItemPrebuildedThemeT;
   key?: nodeSuffixedSemipredefinableItemPrebuildedThemeT;
   valueDelimiter?: nodePredefinableItemPrebuildedThemeT;
   value?: nodeSuffixedSemipredefinableItemPrebuildedThemeT;
@@ -30,3 +33,5 @@ export type nodePrebuildedThemeT = {
   remarkDelimiter?: nodePredefinableItemPrebuildedThemeT;
   remark?: nodeSuffixedSemipredefinableItemPrebuildedThemeT;
 }
+
+export type prebuildedThemeT = typeDependentDictionaryT<nodePrebuildedThemeT>;

@@ -1,11 +1,13 @@
-import { nodeThemeT, nodeBasicItemThemeT, nodePredefinableItemThemeT, nodeSuffixedSemipredefinableItemThemeT } from '../interfaces/nodeTheme';
-import { nodeItemPrebuildedThemeT, nodePredefinableItemPrebuildedThemeT, nodeSuffixedSemipredefinableItemPrebuildedThemeT, nodePrebuildedThemeT } from '../interfaces/nodePrebuildedTheme';
+import { nodeThemeT, nodeBasicItemThemeT, nodePredefinableItemThemeT, nodeSuffixedSemipredefinableItemThemeT, themeT } from '../interfaces/theme';
+import { nodeItemPrebuildedThemeT, nodePredefinableItemPrebuildedThemeT, nodeSuffixedSemipredefinableItemPrebuildedThemeT, nodePrebuildedThemeT } from '../interfaces/prebuildedTheme';
 import { AtomicTextContainer, FlatNonatomicTextContainer } from '../../text/textContainer';
 import { StrictUnicodeLine } from '../../text/strictUnicode';
 import { spacedArmWidthT } from '../../meta/interfaces/arm/armWidth';
 import { MatrixDrivenArmGenerator, MatrixDrivenArmWidthGenerator } from '../../meta/matrix/matrixDrivenArmGenerator';
 import { ArmPatternMatrix } from '../../meta/matrix/armPatternMatrix';
 import { ArmWidthMatrix } from '../../meta/matrix/armWidthMatrix';
+import { NodeBroadTypeEnum, DeadNodeFineTypeEnum, NodeFineTypeEnumT, EnumerableNodeFineTypeEnum, IterableNodeFineTypeEnum, SingleNodeFineTypeEnum, nodeTypeTupleT } from '../interfaces/nodeType';
+import { getFromTypeDependentPartialDictionary, getFromTypeDependentBroadOnlyPartialDictionary, typeDependentDictionaryT, typeDependentPartialDictionaryT, typeDependentPartialFineDictionaryT } from '../typeDependentDictionary';
 
 // deep-assign and collapse
 type mapFilterCallbackfnT<TIn, TOut> = (input: TIn) => TOut | undefined;
@@ -51,6 +53,10 @@ function collapseNodeThemeStack(nodeThemeStack: nodeThemeT[]): nodeThemeT {
     // icon.postfix
     flatCollapsed.icon.postfix = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.icon?.postfix);
   }
+
+  // keyDelimiter
+  flatCollapsed.keyDelimiter = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.keyDelimiter);
+
 
   // key
   flatCollapsed.key = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.key);
@@ -224,3 +230,55 @@ export function prebuildNodeTheme(themeStack: nodeThemeT[], fallback: nodePrebui
   return prebuilded;
 }
 
+export function prebuildTheme(themeStack: themeT[], fallback: nodePrebuildedThemeT): typeDependentDictionaryT<nodePrebuildedThemeT> {
+  const prebuildedThemePartial: typeDependentPartialDictionaryT<nodePrebuildedThemeT> = {};
+  const broadKeys = Object.values(NodeBroadTypeEnum);
+  for (const broadKeySting of broadKeys) {
+    const broadType = broadKeySting as NodeBroadTypeEnum;
+
+    const prebuildedThemeFinePartial: typeDependentPartialFineDictionaryT<NodeBroadTypeEnum, nodePrebuildedThemeT> = {};
+
+    let fineEnum;
+    switch (broadType) {
+    case NodeBroadTypeEnum.Dead:
+      fineEnum = DeadNodeFineTypeEnum;
+      break;
+    case NodeBroadTypeEnum.Enumerable:
+      fineEnum = EnumerableNodeFineTypeEnum;
+      break;
+    case NodeBroadTypeEnum.Iterable:
+      fineEnum = IterableNodeFineTypeEnum;
+      break;
+    case NodeBroadTypeEnum.Single:
+      fineEnum = SingleNodeFineTypeEnum;
+      break;
+    }
+    const fineKeys = Object.values(fineEnum);
+    for (const fineTypeSting of fineKeys) {
+      const fineType = fineTypeSting as NodeFineTypeEnumT;
+      const typeTuple = [broadType, fineType] as nodeTypeTupleT;
+      const qwe: nodeThemeT[] = [];
+      themeStack.forEach((theme) => {
+        if (theme.fine) {
+          const fine = getFromTypeDependentPartialDictionary(theme.fine, typeTuple);
+          if (fine) {
+            qwe.push(fine);
+          }
+        }
+        if (theme.broad) {
+          const broad = getFromTypeDependentBroadOnlyPartialDictionary(theme.broad, broadType);
+          if (broad) {
+            qwe.push(broad);
+          }
+        }
+        if (theme.global) {
+          qwe.push(theme.global);
+        }
+        theme.global;
+      });
+      prebuildedThemeFinePartial[fineType] = prebuildNodeTheme(qwe, fallback);
+    }
+    prebuildedThemePartial[broadType] = prebuildedThemeFinePartial;
+  }
+  return prebuildedThemePartial as typeDependentDictionaryT<nodePrebuildedThemeT>;
+}
