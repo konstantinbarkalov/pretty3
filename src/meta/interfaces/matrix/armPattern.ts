@@ -8,5 +8,8 @@ export interface ArmPatternI {
   otherChar: StrictUnicodeChar;
   lastChar: StrictUnicodeChar;
   generateArm(armWidth: armWidthT): ArmT;
-  style: Style;
+  style?: Style;
 }
+
+export  type consumableArmCharT = string | StrictUnicodeChar;
+export  type consumableArmCharsT = string | [consumableArmCharT, consumableArmCharT, consumableArmCharT];

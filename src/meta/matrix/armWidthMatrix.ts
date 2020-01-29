@@ -16,15 +16,26 @@ type armWidthArrayT = [
 
 export class ArmWidthMatrix implements ArmWidthMatrixI {
   constructor(public infertileLeaf: ArmWidthKnotMatrixI, public fertileLeaf: ArmWidthKnotMatrixI, public firstChild: ArmWidthKnotMatrixI, public otherChild: ArmWidthKnotMatrixI, public lastChild: ArmWidthKnotMatrixI) { }
-  static fromArray(matrix: armWidthArrayT): ArmWidthMatrix {
-    const knotDependentArmPlainLineWidth = new ArmWidthMatrix(
-      new ArmWidthKnotMatrix(matrix[0], matrix[1], matrix[2]),
-      new ArmWidthKnotMatrix(matrix[3], matrix[4], matrix[5]),
-      new ArmWidthKnotMatrix(matrix[6], matrix[7], matrix[8]),
-      new ArmWidthKnotMatrix(matrix[9], matrix[10], matrix[11]),
-      new ArmWidthKnotMatrix(matrix[12], matrix[13], matrix[14]),
+  static fromArray(array: armWidthArrayT): ArmWidthMatrix {
+    const knotDependentArmWidth = new ArmWidthMatrix(
+      new ArmWidthKnotMatrix(array[0], array[1], array[2]),
+      new ArmWidthKnotMatrix(array[3], array[4], array[5]),
+      new ArmWidthKnotMatrix(array[6], array[7], array[8]),
+      new ArmWidthKnotMatrix(array[9], array[10], array[11]),
+      new ArmWidthKnotMatrix(array[12], array[13], array[14]),
     );
-    return knotDependentArmPlainLineWidth;
+    return knotDependentArmWidth;
+  }
+  static fromCommonWidth(armWidth: armWidthT, fertileLeafNonfirstLineArmWidth: armWidthT = armWidth): ArmPatternMatrix {
+    const knotDependentArmWidth = new ArmWidthMatrix(
+      new ArmWidthKnotMatrix(0, 0, 0),
+      new ArmWidthKnotMatrix(0, fertileLeafNonfirstLineArmWidth, fertileLeafNonfirstLineArmWidth),
+      new ArmWidthKnotMatrix(armWidth, armWidth, armWidth),
+      new ArmWidthKnotMatrix(armWidth, armWidth, armWidth),
+      new ArmWidthKnotMatrix(armWidth, armWidth, armWidth),
+
+    );
+    return knotDependentArmWidth;
   }
 }
 

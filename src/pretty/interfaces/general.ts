@@ -4,6 +4,7 @@ import { ArmGeneratorI, ArmWidthGeneratorI } from '../../meta/interfaces/arm/arm
 import { logLineCallbackT } from '../../deprecated/generalOld';
 import { typeDependentBroadOnlyDictionaryT, typeDependentDictionaryT } from '../typeDependentDictionary';
 import { iconT } from './icon';
+import { StrictUnicodeChar, StrictUnicodeLine, StrictUnicodeText } from '../../text/strictUnicode';
 
 export type metaNodeTemplateT = {
   armGenerator: ArmGeneratorI<MetaNode>;
@@ -29,3 +30,8 @@ export type buildMetaTreeOptionsT = Partial<buildMetaTreeSettingsT>;
 export type stringifyTreeOptionsT = Partial<stringifyTreeSettingsT>;
 export type printTreeOptionsT = Partial<printTreeSettingsT>;
 
+
+export  type consumableCharT = string | StrictUnicodeChar;
+export  type consumableLineT = string | StrictUnicodeLine;
+export  type consumableTextT = string | StrictUnicodeText;
+export  type consumableIconCharsT = string | [consumableCharT, consumableCharT, consumableCharT];

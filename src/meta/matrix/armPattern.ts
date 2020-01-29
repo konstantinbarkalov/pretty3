@@ -2,11 +2,11 @@ import { StrictUnicodeLine, StrictUnicodeChar } from '../../text/strictUnicode';
 import { Style } from '../../text/style';
 import { ArmT } from '../interfaces/arm/arm';
 import { AtomicTextContainer } from '../../text/textContainer';
-import { ArmPatternI } from '../interfaces/matrix/armPattern';
+import { ArmPatternI, consumableArmCharsT } from '../interfaces/matrix/armPattern';
 import { armWidthT, spacedArmWidthT } from '../interfaces/arm/armWidth';
 
 export class ArmPattern implements ArmPatternI {
-  constructor(public firstChar: StrictUnicodeChar, public otherChar: StrictUnicodeChar, public lastChar: StrictUnicodeChar, public style: Style) { }
+  constructor(public firstChar: StrictUnicodeChar, public otherChar: StrictUnicodeChar, public lastChar: StrictUnicodeChar, public style?: Style) { }
   /**
    * Generates line with drawn armPlainLine like: `╰───╸`
    * with repeating `this.other` character to fit `this.armWidth`
@@ -60,7 +60,7 @@ export class ArmPattern implements ArmPatternI {
     const arm: ArmT = new AtomicTextContainer<StrictUnicodeLine>(plainLine, this.style);
     return arm;
   }
-  static fromString(chars: string, style: Style): ArmPattern {
+  static fromChars(chars: consumableArmCharsT, style?: Style): ArmPattern {
     const armPlainLinePattern = new ArmPattern(new StrictUnicodeChar(chars[0]), new StrictUnicodeChar(chars[1]), new StrictUnicodeChar(chars[2]), style);
     return armPlainLinePattern;
   }
