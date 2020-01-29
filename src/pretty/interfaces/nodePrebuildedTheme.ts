@@ -1,6 +1,6 @@
 import { ArmGeneratorI, ArmWidthGeneratorI } from '../../meta/interfaces/arm/armGenerator';
 import { AnyTextContainer } from '../../text/textContainer';
-import { StrictUnicodeLine } from '../../text/strictUnicode';
+import { StrictUnico~deLine } from '../../text/strictUnicode';
 import { Style } from '../../text/style';
 export type nodeItemPrebuildedThemeT = {
   style?: Style;
