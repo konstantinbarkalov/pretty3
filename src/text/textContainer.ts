@@ -157,8 +157,11 @@ export class NonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnico
 
 
   public *managedWrap(maxWidth: number): Generator<AnyTextContainer<StrictUnicodeLine>, AnyTextContainer<StrictUnicodeLine>, number> {
-    let remains: AnyTextContainer<StrictUnicodeLine> | undefined;
+    let remains: AnyTextContainer<StrictUnicodeLine>[] | undefined = undefined;
     let remainsWidth = 0;
+    if (this.children.length === 0) {
+      return new NonatomicTextContainer<StrictUnicodeLine>([], this.style);
+    }
     for (const child of this.children) {
       const lineWrapGenerator = child.managedWrap(maxWidth - remainsWidth);
       let done: boolean | undefined = false;
@@ -168,20 +171,20 @@ export class NonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnico
         const wrappedLine = generatorResult.value;
         if (!done) {
           if (remains) {
-            const wrappedLineWithRemains = new NonatomicTextContainer<StrictUnicodeLine>([remains, wrappedLine], this.style);
-            maxWidth = yield wrappedLineWithRemains;
+            const wrappedLineWithRemains = remains.concat([wrappedLine]);
+            maxWidth = yield new NonatomicTextContainer<StrictUnicodeLine>(wrappedLineWithRemains, this.style);
           } else {
-            maxWidth = yield wrappedLine;
+            maxWidth = yield new NonatomicTextContainer<StrictUnicodeLine>([wrappedLine], this.style);
           }
           remains = undefined;
           remainsWidth = 0;
         } else {
           if (remains) {
-            const wrappedLineWithRemains = new NonatomicTextContainer<StrictUnicodeLine>([remains, wrappedLine], this.style);
+            const wrappedLineWithRemains: AnyTextContainer<StrictUnicodeLine>[] = remains.concat([wrappedLine]);
             remains = wrappedLineWithRemains;
             remainsWidth += wrappedLine.calcSize().width.first;
           } else {
-            remains = wrappedLine;
+            remains = [wrappedLine];
             remainsWidth = wrappedLine.calcSize().width.first;
           }
         }
@@ -189,7 +192,7 @@ export class NonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnico
     }
     // tail
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return remains!;
+    return new NonatomicTextContainer<StrictUnicodeLine>(remains!, this.style);
   }
 }
 

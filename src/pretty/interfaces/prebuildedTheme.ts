@@ -13,6 +13,7 @@ export type nodePredefinableItemPrebuildedThemeT = {
 }
 
 export type nodeSuffixedSemipredefinableItemPrebuildedThemeT = {
+  style?: Style;
   prefix?: nodePredefinableItemPrebuildedThemeT;
   content?: nodeItemPrebuildedThemeT;
   postfix?: nodePredefinableItemPrebuildedThemeT;
@@ -23,6 +24,7 @@ export type nodePrebuildedThemeT = {
     armGenerator: ArmGeneratorI;
     armWidthGenerator: ArmWidthGeneratorI;
   };
+  style?: Style;
   icon?: nodePredefinableItemPrebuildedThemeT;
   keyDelimiter?: nodePredefinableItemPrebuildedThemeT;
   key?: nodeSuffixedSemipredefinableItemPrebuildedThemeT;

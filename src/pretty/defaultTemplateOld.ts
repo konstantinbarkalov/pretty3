@@ -2,8 +2,8 @@ import { ArmPatternMatrix } from '../meta/matrix/armPatternMatrix';
 import { spacedArmWidthT } from '../meta/interfaces/arm/armWidth';
 import { ArmWidthMatrix } from '../meta/matrix/armWidthMatrix';
 import { MatrixDrivenArmGenerator, MatrixDrivenArmWidthGenerator } from '../meta/matrix/matrixDrivenArmGenerator';
-import { metaNodeTemplateT } from './interfaces/general';
-import { theme } from './defaultTheme';
+import { metaNodeTemplateT } from './interfaces/metaNodeTemplateOld';
+import { theme } from './defaultThemeOld';
 import { NodeBroadTypeEnum } from './interfaces/nodeType';
 import { typeDependentBroadOnlyDictionaryT } from './typeDependentDictionary';
 

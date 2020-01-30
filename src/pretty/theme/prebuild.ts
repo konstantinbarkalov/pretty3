@@ -1,6 +1,6 @@
 import { nodeThemeT, nodeBasicItemThemeT, nodePredefinableItemThemeT, nodeSuffixedSemipredefinableItemThemeT, themeT } from '../interfaces/theme';
 import { nodeItemPrebuildedThemeT, nodePredefinableItemPrebuildedThemeT, nodeSuffixedSemipredefinableItemPrebuildedThemeT, nodePrebuildedThemeT } from '../interfaces/prebuildedTheme';
-import { AtomicTextContainer, FlatNonatomicTextContainer } from '../../text/textContainer';
+import { AtomicTextContainer, NonatomicTextContainer } from '../../text/textContainer';
 import { StrictUnicodeLine } from '../../text/strictUnicode';
 import { spacedArmWidthT } from '../../meta/interfaces/arm/armWidth';
 import { MatrixDrivenArmGenerator, MatrixDrivenArmWidthGenerator } from '../../meta/matrix/matrixDrivenArmGenerator';
@@ -164,36 +164,39 @@ function prebuildNodeSuffixedSemipredefinableItemTheme(suffixedItemTheme: nodeSu
     if (suffixedItemTheme.postfix) {
       prebuidedPostfix = prebuildPredefinableItemTheme(suffixedItemTheme.postfix) || undefined;
     }
-    const prebuilded = { prefix: prebuidedPrefix, content: prebuidedContent, postfix: prebuidedPostfix};
+    const style = suffixedItemTheme.style;
+    const prebuilded = { prefix: prebuidedPrefix, content: prebuidedContent, postfix: prebuidedPostfix, style };
     return prebuilded;
   }
   return undefined;
 }
 
-function prebuildIconNodeTheme(nodeIconTheme: nodeThemeT['icon']): nodePrebuildedThemeT['icon'] | undefined {
+function prebuildIconNodeTheme(nodeIconTheme: nodeThemeT['icon']): nodePrebuildedThemeT['icon'] | false | undefined {
   if (nodeIconTheme) {
-    if (nodeIconTheme.visibility) {
-      const chars = [
-        nodeIconTheme.chars?.[0],
-        nodeIconTheme.chars?.[1],
-        nodeIconTheme.chars?.[2],
-      ];
-      const hasAnyChars = chars.some((char) => !!char);
-      if (hasAnyChars) {
-        const atomics =[];
-        if (chars[0]) {
-          atomics.push(new AtomicTextContainer(new StrictUnicodeLine(chars[0]), nodeIconTheme.prefix?.style));
-        }
-        if (chars[1]) {
-          atomics.push(new AtomicTextContainer(new StrictUnicodeLine(chars[1]), nodeIconTheme.content?.style));
-        }
-        if (chars[2]) {
-          atomics.push(new AtomicTextContainer(new StrictUnicodeLine(chars[2]), nodeIconTheme.postfix?.style));
-        }
-        const container = new FlatNonatomicTextContainer(atomics);
-        return { container };
-      }
+    if (nodeIconTheme.visibility === false) {
+      return false;
     }
+    const chars = [
+      nodeIconTheme.chars?.[0],
+      nodeIconTheme.chars?.[1],
+      nodeIconTheme.chars?.[2],
+    ];
+    const hasAnyChars = chars.some((char) => !!char);
+    if (hasAnyChars) {
+      const atomics =[];
+      if (chars[0]) {
+        atomics.push(new AtomicTextContainer(new StrictUnicodeLine(chars[0]), nodeIconTheme.prefix?.style));
+      }
+      if (chars[1]) {
+        atomics.push(new AtomicTextContainer(new StrictUnicodeLine(chars[1]), nodeIconTheme.content?.style));
+      }
+      if (chars[2]) {
+        atomics.push(new AtomicTextContainer(new StrictUnicodeLine(chars[2]), nodeIconTheme.postfix?.style));
+      }
+      const container = new NonatomicTextContainer(atomics, nodeIconTheme.style);
+      return { container };
+    }
+
   }
   return undefined;
 }
@@ -205,20 +208,25 @@ function prebuildArmNodeTheme(nodeArmTheme: nodeThemeT['arm']): nodePrebuildedTh
       const armWidth = nodeArmTheme.width;
       const spacedArmWidth: spacedArmWidthT = { preSpace: 1, arm: armWidth, postSpace: 1 };
       const fertileLeafNonfirstLineSpacedArmWidth = { preSpace: 1, arm: 0, postSpace: 1 };
-      return {
-        armGenerator: new MatrixDrivenArmGenerator(ArmPatternMatrix.fromCommonChars('qwe','sdf','dfg', armStyle)),
-        armWidthGenerator: new MatrixDrivenArmWidthGenerator(ArmWidthMatrix.fromCommonWidth(spacedArmWidth, fertileLeafNonfirstLineSpacedArmWidth)),
-      };
+      const commonChars = nodeArmTheme.commonChars;
+      if (commonChars) {
+        return {
+          armGenerator: new MatrixDrivenArmGenerator(ArmPatternMatrix.fromCommonChars(commonChars[0], commonChars[1], commonChars[2], armStyle)),
+          armWidthGenerator: new MatrixDrivenArmWidthGenerator(ArmWidthMatrix.fromCommonWidth(spacedArmWidth, fertileLeafNonfirstLineSpacedArmWidth)),
+        };
+      }
+
     }
   }
-
   return undefined;
 }
 export function prebuildNodeTheme(themeStack: nodeThemeT[], fallback: nodePrebuildedThemeT): nodePrebuildedThemeT {
   const nodeTheme = collapseNodeThemeStack(themeStack);
   const prebuilded: nodePrebuildedThemeT = {
+    // TODO strictly check for false & hide if it is (check root nodeTheme.visibility too)
     arm: prebuildArmNodeTheme(nodeTheme.arm) || fallback.arm,
     icon: prebuildIconNodeTheme(nodeTheme.icon) || fallback.icon,
+    keyDelimiter: prebuildPredefinableItemTheme(nodeTheme.keyDelimiter) || fallback.keyDelimiter,
     key: prebuildNodeSuffixedSemipredefinableItemTheme(nodeTheme.key) || fallback.key,
     valueDelimiter: prebuildPredefinableItemTheme(nodeTheme.valueDelimiter) || fallback.valueDelimiter,
     value: prebuildNodeSuffixedSemipredefinableItemTheme(nodeTheme.value) || fallback.value,
@@ -226,6 +234,7 @@ export function prebuildNodeTheme(themeStack: nodeThemeT[], fallback: nodePrebui
     info: prebuildNodeSuffixedSemipredefinableItemTheme(nodeTheme.info) || fallback.info,
     remarkDelimiter: prebuildPredefinableItemTheme(nodeTheme.remarkDelimiter) || fallback.remarkDelimiter,
     remark: prebuildNodeSuffixedSemipredefinableItemTheme(nodeTheme.remark) || fallback.remark,
+    style: nodeTheme.style,
   };
   return prebuilded;
 }
@@ -257,26 +266,26 @@ export function prebuildTheme(themeStack: themeT[], fallback: nodePrebuildedThem
     for (const fineTypeSting of fineKeys) {
       const fineType = fineTypeSting as NodeFineTypeEnumT;
       const typeTuple = [broadType, fineType] as nodeTypeTupleT;
-      const qwe: nodeThemeT[] = [];
+      const nodeThemeStack: nodeThemeT[] = [];
       themeStack.forEach((theme) => {
         if (theme.fine) {
           const fine = getFromTypeDependentPartialDictionary(theme.fine, typeTuple);
           if (fine) {
-            qwe.push(fine);
+            nodeThemeStack.push(fine);
           }
         }
         if (theme.broad) {
           const broad = getFromTypeDependentBroadOnlyPartialDictionary(theme.broad, broadType);
           if (broad) {
-            qwe.push(broad);
+            nodeThemeStack.push(broad);
           }
         }
         if (theme.global) {
-          qwe.push(theme.global);
+          nodeThemeStack.push(theme.global);
         }
         theme.global;
       });
-      prebuildedThemeFinePartial[fineType] = prebuildNodeTheme(qwe, fallback);
+      prebuildedThemeFinePartial[fineType] = prebuildNodeTheme(nodeThemeStack, fallback);
     }
     prebuildedThemePartial[broadType] = prebuildedThemeFinePartial;
   }

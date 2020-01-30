@@ -1,7 +1,7 @@
 import { prebuildedThemeT } from './interfaces/prebuildedTheme';
-import { prebuildTheme } from './nodeTheme/prebuild';
+import { prebuildTheme } from './theme/prebuild';
 import { themeT } from './interfaces/theme';
-import { fallback } from './nodeTheme/fallback';
+import { fallback } from './theme/fallback';
 import { printTreeOptionsT, stringifyTreeOptionsT } from './interfaces/general';
 import { buildMetaTree } from './buildMetaTree';
 import { renderMetaNode } from '../meta/render/render';

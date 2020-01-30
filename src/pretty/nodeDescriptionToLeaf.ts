@@ -46,7 +46,7 @@ export function nodeDescriptionToLeaf(nodeDescription: nodeDescriptionT, nodeThe
       if (nodeTheme.key.postfix && nodeTheme.key.postfix.container) {
         containers.push(nodeTheme.key.postfix.container);
       }
-      preparedContainer.key = new NonatomicTextContainer(containers);
+      preparedContainer.key = new NonatomicTextContainer(containers, nodeTheme.key.style);
     }
   }
 
@@ -72,10 +72,12 @@ export function nodeDescriptionToLeaf(nodeDescription: nodeDescriptionT, nodeThe
         if (nodeTheme.value.postfix && nodeTheme.value.postfix.container) {
           containers.push(nodeTheme.value.postfix.container);
         }
-        preparedContainer.value = new NonatomicTextContainer(containers);
+        preparedContainer.value = new NonatomicTextContainer(containers, nodeTheme.value.style);
       }
     }
   }
+
+
 
   // infoDelimiter
   if (nodeTheme.infoDelimiter) {
@@ -85,24 +87,23 @@ export function nodeDescriptionToLeaf(nodeDescription: nodeDescriptionT, nodeThe
   }
 
   // info
-  if (!guardNodeDescription(NodeBroadTypeEnum.Dead, nodeDescription)) {
-    if (nodeDescription.info !== undefined) {
-      if (nodeTheme.info) {
-        const containers = [];
-        if (nodeTheme.info.prefix && nodeTheme.info.prefix.container) {
-          containers.push(nodeTheme.info.prefix.container);
-        }
-        if (nodeTheme.info.content) {
-          const nodeKeyString = (nodeDescription.info.toString) ? nodeDescription.info.toString() : String(nodeDescription.info);
-          containers.push(new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), nodeTheme.info.content.style));
-        }
-        if (nodeTheme.info.postfix && nodeTheme.info.postfix.container) {
-          containers.push(nodeTheme.info.postfix.container);
-        }
-        preparedContainer.info = new NonatomicTextContainer(containers);
+  if (nodeDescription.info !== undefined) {
+    if (nodeTheme.info) {
+      const containers = [];
+      if (nodeTheme.info.prefix && nodeTheme.info.prefix.container) {
+        containers.push(nodeTheme.info.prefix.container);
       }
+      if (nodeTheme.info.content) {
+        const nodeKeyString = (nodeDescription.info.toString) ? nodeDescription.info.toString() : String(nodeDescription.info);
+        containers.push(new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), nodeTheme.info.content.style));
+      }
+      if (nodeTheme.info.postfix && nodeTheme.info.postfix.container) {
+        containers.push(nodeTheme.info.postfix.container);
+      }
+      preparedContainer.info = new NonatomicTextContainer(containers, nodeTheme.info.style);
     }
   }
+
 
   // remarkDelimiter
   if (nodeTheme.remarkDelimiter) {
@@ -112,54 +113,63 @@ export function nodeDescriptionToLeaf(nodeDescription: nodeDescriptionT, nodeThe
   }
 
   // remark
-  if (!guardNodeDescription(NodeBroadTypeEnum.Dead, nodeDescription)) {
-    if (nodeDescription.remark !== undefined) {
-      if (nodeTheme.remark) {
-        const containers = [];
-        if (nodeTheme.remark.prefix && nodeTheme.remark.prefix.container) {
-          containers.push(nodeTheme.remark.prefix.container);
-        }
-        if (nodeTheme.remark.content) {
-          const nodeKeyString = (nodeDescription.remark.toString) ? nodeDescription.remark.toString() : String(nodeDescription.remark);
-          containers.push(new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), nodeTheme.remark.content.style));
-        }
-        if (nodeTheme.remark.postfix && nodeTheme.remark.postfix.container) {
-          containers.push(nodeTheme.remark.postfix.container);
-        }
-        preparedContainer.remark = new NonatomicTextContainer(containers);
+  if (nodeDescription.remark !== undefined) {
+    if (nodeTheme.remark) {
+      const containers = [];
+      if (nodeTheme.remark.prefix && nodeTheme.remark.prefix.container) {
+        containers.push(nodeTheme.remark.prefix.container);
       }
+      if (nodeTheme.remark.content) {
+        const nodeKeyString = (nodeDescription.remark.toString) ? nodeDescription.remark.toString() : String(nodeDescription.remark);
+        containers.push(new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), nodeTheme.remark.content.style));
+      }
+      if (nodeTheme.remark.postfix && nodeTheme.remark.postfix.container) {
+        containers.push(nodeTheme.remark.postfix.container);
+      }
+      preparedContainer.remark = new NonatomicTextContainer(containers, nodeTheme.remark.style);
     }
   }
 
-  const leafChildren: AnyTextContainer[] = [];
 
   // pretty hardcode :`)
+
+  const leafChildren: AnyTextContainer[] = [];
+  let isDelimiterNeed = false;
   if (preparedContainer.icon) {
     leafChildren.push(preparedContainer.icon);
+    isDelimiterNeed = true;
   }
-  if (preparedContainer.keyDelimiter) {
+  if (preparedContainer.keyDelimiter && preparedContainer.key && isDelimiterNeed) {
     leafChildren.push(preparedContainer.keyDelimiter);
+    isDelimiterNeed = false;
   }
   if (preparedContainer.key) {
     leafChildren.push(preparedContainer.key);
+    isDelimiterNeed = true;
   }
-  if (preparedContainer.valueDelimiter && preparedContainer.value) {
+  if (preparedContainer.valueDelimiter && preparedContainer.value && isDelimiterNeed) {
     leafChildren.push(preparedContainer.valueDelimiter);
+    isDelimiterNeed = false;
   }
   if (preparedContainer.value) {
     leafChildren.push(preparedContainer.value);
+    isDelimiterNeed = true;
   }
-  if (preparedContainer.infoDelimiter && preparedContainer.info) {
+  if (preparedContainer.infoDelimiter && preparedContainer.info && isDelimiterNeed) {
     leafChildren.push(preparedContainer.infoDelimiter);
+    isDelimiterNeed = false;
   }
   if (preparedContainer.info) {
     leafChildren.push(preparedContainer.info);
+    isDelimiterNeed = true;
   }
-  if (preparedContainer.remarkDelimiter && preparedContainer.remark) {
+  if (preparedContainer.remarkDelimiter && preparedContainer.remark && isDelimiterNeed) {
     leafChildren.push(preparedContainer.remarkDelimiter);
+    isDelimiterNeed = false;
   }
   if (preparedContainer.remark) {
     leafChildren.push(preparedContainer.remark);
+    isDelimiterNeed = true;
   }
-  return new NonatomicTextContainer(leafChildren);
+  return new NonatomicTextContainer(leafChildren, nodeTheme.style);
 }

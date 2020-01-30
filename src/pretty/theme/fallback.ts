@@ -13,19 +13,46 @@ const fallbackArmPatternMatrix = ArmPatternMatrix.fromCommonChars(
 const fallbackArmWidthMatrix = ArmWidthMatrix.fromCommonWidth(4);
 
 export const fallback: nodePrebuildedThemeT = {
+  icon: {
+
+  },
   arm: {
     armGenerator: new MatrixDrivenArmGenerator(fallbackArmPatternMatrix),
     armWidthGenerator: new MatrixDrivenArmWidthGenerator(fallbackArmWidthMatrix),
   },
+  key: {
+    content: {
+    }
+  },
   keyDelimiter: {
     container: new AtomicTextContainer(new StrictUnicodeLine(' ')),
+  },
+
+  value: {
+    content: {
+
+    }
   },
   valueDelimiter: {
     container: new AtomicTextContainer(new StrictUnicodeLine(': ')),
   },
+
+  info: {
+    content: {
+
+    }
+  },
+
   infoDelimiter: {
     container: new AtomicTextContainer(new StrictUnicodeLine(' / ')),
   },
+
+  remark: {
+    content: {
+
+    }
+  },
+
   remarkDelimiter: {
     container: new AtomicTextContainer(new StrictUnicodeLine(' * ')),
   },

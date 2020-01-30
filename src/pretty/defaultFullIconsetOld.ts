@@ -2,7 +2,7 @@ import { SingleNodeFineTypeEnum, EnumerableNodeFineTypeEnum, NodeBroadTypeEnum, 
 import { iconT } from './interfaces/icon';
 import { AtomicTextContainer } from '../text/textContainer';
 import { StrictUnicodeLine } from '../text/strictUnicode';
-import { theme } from './defaultTheme';
+import { theme } from './defaultThemeOld';
 import { typeDependentDictionaryT } from './typeDependentDictionary';
 
 
