@@ -229,7 +229,7 @@ function prebuildArmNodeTheme(nodeArmTheme: nodeThemeT['arm']): nodePrebuildedTh
     if (nodeArmTheme.width !== undefined) {
       const armWidth = nodeArmTheme.width;
       const spacedArmWidth: spacedArmWidthT = { preSpace: 1, arm: armWidth, postSpace: 1 };
-      const fertileLeafNonfirstLineSpacedArmWidth = { preSpace: 1, arm: 0, postSpace: 1 };
+      const fertileLeafNonfirstLineSpacedArmWidth = { preSpace: 1, arm: 1, postSpace: 1 };
       const commonChars = nodeArmTheme.commonChars;
       if (commonChars) {
         return {
@@ -286,11 +286,8 @@ export function prebuildTheme(themeStack: themeT[], fallback: nodePrebuildedThem
       const typeTuple = [broadType, fineType] as nodeTypeTupleT;
       const nodeThemeStack: nodeThemeT[] = [];
       themeStack.forEach((theme) => {
-        if (theme.fine) {
-          const fine = getFromTypeDependentPartialDictionary(theme.fine, typeTuple);
-          if (fine) {
-            nodeThemeStack.push(fine);
-          }
+        if (theme.global) {
+          nodeThemeStack.push(theme.global);
         }
         if (theme.broad) {
           const broad = getFromTypeDependentBroadOnlyPartialDictionary(theme.broad, broadType);
@@ -298,9 +295,14 @@ export function prebuildTheme(themeStack: themeT[], fallback: nodePrebuildedThem
             nodeThemeStack.push(broad);
           }
         }
-        if (theme.global) {
-          nodeThemeStack.push(theme.global);
+        if (theme.fine) {
+          const fine = getFromTypeDependentPartialDictionary(theme.fine, typeTuple);
+          if (fine) {
+            nodeThemeStack.push(fine);
+          }
         }
+
+
         theme.global;
       });
       prebuildedThemeFinePartial[fineType] = prebuildNodeTheme(nodeThemeStack, fallback);

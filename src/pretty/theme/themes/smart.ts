@@ -2,42 +2,45 @@ import { themeT } from '../../interfaces/theme';
 import { Style } from '../../../text/style';
 
 const palette = {
-  red: {r: 255, g: 0, b: 0},
-  brightGreen: {r: 130, g: 240, b: 130},
-  green: {r: 80, g: 160, b: 80},
-  darkGreen: {r: 64, g: 128, b: 64},
-  blue: {r: 160, g: 160, b: 220},
-  darkBlue: {r: 64, g: 64, b: 160},
-  darkGray: {r: 64, g: 64, b: 64},
-  darkGrayGreen: {r: 54, g: 84, b: 54},
-  darkGrayBlue: {r: 54, g: 54, b: 84},
-  gray: {r: 128, g: 128, b: 128},
-  lightGray: {r: 192, g: 192, b: 192},
-  white: {r: 255, g: 255, b: 255},
-  orange: {r: 255, g: 128, b: 0},
+  info: {r: 96, g: 80, b: 96},
+  remark: {r: 255, g: 128, b: 0},
+  value: {r: 225, g: 225, b: 225},
+  unvalue: {r: 180, g: 180, b: 120},
   enumerable: {
-    bright: {r: 130, g: 240, b: 130},
-    main: {r: 100, g: 160, b: 100},
-    dim: {r: 60, g: 90, b: 60},
+    //bright: {r: 160, g: 240, b: 160},
+    arm: {r: 60, g: 70, b: 60},
+    icon: {r: 100, g: 200, b: 100},
+    iconCenter: {r: 55, g: 105, b: 55},
+    key: {r: 100, g: 200, b: 100},
+    keyDelimiter: {r: 60, g: 70, b: 60},
   },
   iterarable: {
-    bright: {r: 130, g: 130, b: 240},
-    main: {r: 100, g: 100, b: 160},
-    dim: {r: 60, g: 60, b: 90},
+    //bright: {r: 160, g: 160, b: 240},
+    arm: {r: 60, g: 60, b: 70},
+    icon: {r: 100, g: 100, b: 200},
+    iconCenter: {r: 55, g: 55, b: 105},
+    key: {r: 100, g: 100, b: 200},
+    keyDelimiter: {r: 60, g: 60, b: 70},
   },
   single: {
-    bright: {r: 200, g: 200, b: 200},
-    main: {r: 130, g: 130, b: 130},
-    dim: {r: 80, g: 80, b: 80},
+    //bright: {r: 200, g: 200, b: 200},
+    arm: {r: 60, g: 60, b: 60},
+    icon: {r: 60, g: 60, b: 60},
+    iconCenter: {r: 120, g: 120, b: 120},
+    key: {r: 120, g: 120, b: 120},
+    keyDelimiter: {r: 60, g: 60, b: 60},
   },
   dead: {
-    bright: {r: 240, g: 130, b: 130 },
-    main: {r: 160, g: 100, b: 100 },
-    dim: {r: 90, g: 60, b: 60 },
+    //bright: {r: 240, g: 160, b: 160 },
+    arm: {r: 70, g: 60, b: 60 },
+    icon: {r: 200, g: 100, b: 100 },
+    iconCenter: {r: 105, g: 55, b: 55 },
+    key: {r: 200, g: 100, b: 100 },
+    keyDelimiter: {r: 70, g: 60, b: 60 },
   },
 };
 
-export const theme: themeT = {
+export const smart: themeT = {
   global: {
     visibility: true,
     icon: {
@@ -51,17 +54,19 @@ export const theme: themeT = {
       }
     },
     value: {
-      style: new Style(palette.red),
+      style: new Style(palette.value),
     },
     info: {
       predelimiter: {
         line: ' / ',
-      }
+      },
+      style: new Style(palette.info),
     },
     remark: {
       predelimiter: {
         line: ' * ',
-      }
+      },
+      style: new Style(palette.remark),
     },
   },
   broad: {
@@ -69,82 +74,330 @@ export const theme: themeT = {
       arm: {
         commonChars: ['├─╸', '│  ', '└─╸',],
         width: 3,
-        style: new Style(palette.enumerable.dim),
+        style: new Style(palette.enumerable.arm),
       },
       icon: {
-        content: {
-          line: '{ }',
+        prefix: {
+          line: '{',
         },
-        style: new Style(palette.enumerable.bright),
+        content: {
+          line: ' ',
+          style: new Style(palette.enumerable.iconCenter),
+        },
+        postfix: {
+          line: '}',
+        },
+        style: new Style(palette.enumerable.icon),
       },
       key: {
-        style: new Style(palette.enumerable.main),
+        style: new Style(palette.enumerable.key),
+        postdelimiter: {
+          style: new Style(palette.enumerable.keyDelimiter),
+        }
       },
     },
     iterable: {
       arm: {
         commonChars: ['├─╴', '│  ', '╰─╴',],
         width: 3,
-        style: new Style(palette.iterarable.dim),
+        style: new Style(palette.iterarable.arm),
       },
       icon: {
-        content: {
-          line: '[ ]',
+        prefix: {
+          line: '[',
         },
-        style: new Style(palette.iterarable.bright),
+        content: {
+          line: ' ',
+          style: new Style(palette.iterarable.iconCenter),
+        },
+        postfix: {
+          line: ']',
+        },
+        style: new Style(palette.iterarable.icon),
       },
       key: {
-        style: new Style(palette.iterarable.main),
+        style: new Style(palette.iterarable.key),
+        postdelimiter: {
+          style: new Style(palette.iterarable.keyDelimiter),
+        }
       },
     },
     single: {
       arm: {
         commonChars: ['├─╴', '│  ', '└─╴',],
         width: 3,
-        style: new Style(palette.single.dim),
+        style: new Style(palette.single.arm),
       },
       icon: {
-        content: {
-          line: '< >',
+        prefix: {
+          line: '<',
         },
-        style: new Style(palette.single.bright),
+        content: {
+          line: ' ',
+          style: new Style(palette.single.iconCenter),
+        },
+        postfix: {
+          line: '>',
+        },
+        style: new Style(palette.single.icon),
       },
       key: {
-        style: new Style(palette.single.main),
+        style: new Style(palette.single.key),
+        postdelimiter: {
+          style: new Style(palette.single.keyDelimiter),
+        }
       },
     },
     dead: {
       arm: {
         commonChars: ['├─╴', '│  ', '╰─╴',], // TODO
         width: 3,
-        style: new Style(palette.dead.dim),
+        style: new Style(palette.dead.arm),
       },
       icon: {
-        content: {
-          line: '> <',
+        prefix: {
+          line: '>',
         },
-        style: new Style(palette.dead.bright),
+        content: {
+          line: ' ',
+          style: new Style(palette.dead.iconCenter),
+        },
+        postfix: {
+          line: '<',
+        },
+        style: new Style(palette.dead.icon),
       },
       key: {
-        style: new Style(palette.dead.main),
+        style: new Style(palette.dead.key),
+        postdelimiter: {
+          style: new Style(palette.dead.keyDelimiter),
+        }
       },
     },
 
   },
   fine: {
     dead: {
-      circularReference: {},
-      elipsis: {},
+      circularReference: {
+        icon: {
+          content: {
+            line: '∞',
+          }
+        }
+      },
+
+      elipsis: {
+        icon: {
+          content: {
+            line: '.',
+          }
+        }
+      },
+
+    },
+    single: {
+      bigInt: {
+        icon: {
+          content: {
+            line: 'I',
+          }
+        }
+      },
+
+      boolean: {
+        icon: {
+          content: {
+            line: 'B',
+          }
+        }
+      },
+
+      booleanObject: {
+        icon: {
+          content: {
+            line: 'B',
+          }
+        }
+      },
+
+      date: {
+        icon: {
+          content: {
+            line: 'D',
+          }
+        }
+      },
+
+      function: {
+        icon: {
+          content: {
+            line: 'F',
+          }
+        }
+      },
+
+      null: {
+        icon: {
+          content: {
+            line: 'X',
+          }
+        },
+        value: {
+          style: new Style(palette.unvalue)
+        }
+      },
+
+      number: {
+        icon: {
+          content: {
+            line: 'N',
+          }
+        }
+      },
+
+      numberObject: {
+        icon: {
+          content: {
+            line: 'N',
+          }
+        }
+      },
+
+      string: {
+        icon: {
+          content: {
+            line: 'T',
+          }
+        }
+      },
+
+      stringObject: {
+        icon: {
+          content: {
+            line: 'T',
+          }
+        }
+      },
+
+      symbol: {
+        icon: {
+          content: {
+            line: 'S',
+          }
+        }
+      },
+
+      undefined: {
+        icon: {
+          content: {
+            line: ' ',
+          }
+        },
+        value: {
+          style: new Style(palette.unvalue)
+        }
+      },
+
+      unknown: {
+        icon: {
+          content: {
+            line: '?',
+          }
+        }
+      },
+
+      weakMap: {
+        icon: {
+          content: {
+            line: 'M',
+          }
+        }
+      },
+
+      weakSet: {
+        icon: {
+          content: {
+            line: 'S',
+          }
+        }
+      },
+
+    },
+    enumerable: {
+      map: {
+        icon: {
+          content: {
+            line: 'M',
+          }
+        }
+      },
+
+      object: {
+        icon: {
+          content: {
+            line: ' ',
+          }
+        }
+      },
+
+      error: {
+        icon: {
+          content: {
+            line: 'E',
+          }
+        }
+      },
+
+      unknown: {
+        icon: {
+          content: {
+            line: '?',
+          }
+        }
+      },
+
     },
     iterable: {
       array: {
-        key: {
-          //style: new Style({r: 0, g: 200, b: 0}),
+        icon: {
           content: {
-            //style: new Style({r: 0, g: 255, b: 0}),
+            line: ' ',
           }
         }
-      }
-    }
+      },
+
+      iterable: {
+        icon: {
+          content: {
+            line: 'I',
+          }
+        }
+      },
+
+      set: {
+        icon: {
+          content: {
+            line: 'S',
+          }
+        }
+      },
+
+      typedArray: {
+        icon: {
+          content: {
+            line: 'T',
+          }
+        }
+      },
+
+      unknown: {
+        icon: {
+          content: {
+            line: '?',
+          }
+        }
+      },
+
+    },
   },
 };

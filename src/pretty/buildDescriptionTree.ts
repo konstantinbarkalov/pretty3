@@ -31,13 +31,13 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
     nodeDescription = {
       key: nodeKey,
       typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.Undefined],
-      value: 'UNDEFINED',
+      value: 'undefined',
     };
   } else if (node === null) {
     nodeDescription = {
       key: nodeKey,
       typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.Null],
-      value: 'NULL',
+      value: 'null',
     };
   } else if (typeof node === 'string') {
     nodeDescription = {
