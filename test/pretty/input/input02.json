@@ -1,5 +1,5 @@
 {
   "a" : 1,
-  "b" : "multiline text appears here with different\nkind\r\nof line-breaks, all of them are supported and translated to os.EOL",
+  "b" : "multiline text temporarly unsupported TODO: make multiline test",
   "c" : 2
 }

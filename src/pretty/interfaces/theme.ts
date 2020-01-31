@@ -1,7 +1,7 @@
 import { Style } from '../../text/style';
 import { consumableArmCharsT } from '../../meta/interfaces/matrix/armPattern';
 import { consumableLineT } from './general';
-import { typeDependentPartialDictionaryT, typeDependentBroadOnlyPartialDictionaryT } from '../typeDependentDictionary';
+import { typeDependentPartialDictionaryT, typeDependentBroadOnlyPartialDictionaryT } from "./typeDependentDictionary";
 export type nodeBasicItemThemeT = {
   visibility?: boolean;
   style?: Style;

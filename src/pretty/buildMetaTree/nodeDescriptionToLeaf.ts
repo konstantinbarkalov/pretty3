@@ -1,10 +1,10 @@
-import { nodeDescriptionT, guardNodeDescription } from './interfaces/nodeDescription';
-import { AtomicTextContainer, AnyTextContainer, NonatomicTextContainer } from '../text/textContainer';
-import { StrictUnicodeText, StrictUnicodeLine } from '../text/strictUnicode';
+import { nodeDescriptionT, guardNodeDescription } from '../interfaces/nodeDescription';
+import { AtomicTextContainer, AnyTextContainer, NonatomicTextContainer } from '../../text/textContainer';
+import { StrictUnicodeText, StrictUnicodeLine } from '../../text/strictUnicode';
 
-import { NodeBroadTypeEnum } from './interfaces/nodeType';
-import { nodePrebuildedThemeT } from './interfaces/prebuildedTheme';
-import { Style } from '../text/style';
+import { NodeBroadTypeEnum } from '../interfaces/nodeType';
+import { nodePrebuildedThemeT } from '../interfaces/prebuildedTheme';
+import { Style } from '../../text/style';
 
 
 export function nodeDescriptionToLeaf(nodeDescription: nodeDescriptionT, nodeTheme: nodePrebuildedThemeT): NonatomicTextContainer<StrictUnicodeText> {

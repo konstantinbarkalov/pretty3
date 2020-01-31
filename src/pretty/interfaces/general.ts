@@ -1,6 +1,8 @@
 import { Renderer } from '../../text/renderer/abstract/renderer';
-import { logLineCallbackT } from '../../deprecated/generalOld';
 import { StrictUnicodeChar, StrictUnicodeLine, StrictUnicodeText } from '../../text/strictUnicode';
+import { themeT } from './theme';
+
+export type logLineCallbackT = (line: string) => void;
 
 export type buildMetaTreeSettingsT = {
   maxLevel: number;
@@ -15,9 +17,18 @@ export type printTreeSettingsT = stringifyTreeSettingsT & {
   logLineCallback: logLineCallbackT;
 };
 
+export type oneshotStringifyTreeSettingsT = stringifyTreeSettingsT & {
+  themeStack: themeT[];
+}
+export type oneshotPrintTreeSettingsT = printTreeSettingsT & {
+  themeStack: themeT[];
+}
+
 export type buildMetaTreeOptionsT = Partial<buildMetaTreeSettingsT>;
 export type stringifyTreeOptionsT = Partial<stringifyTreeSettingsT>;
 export type printTreeOptionsT = Partial<printTreeSettingsT>;
+export type oneshotStringifyTreeOptionsT = Partial<oneshotStringifyTreeSettingsT>;
+export type oneshotPrintTreeOptionsT = Partial<oneshotPrintTreeSettingsT>;
 
 
 export  type consumableCharT = string | StrictUnicodeChar;

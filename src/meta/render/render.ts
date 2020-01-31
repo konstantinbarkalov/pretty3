@@ -5,7 +5,8 @@ import { NonatomicTextContainer, AnyTextContainer } from '../../text/textContain
 import { StrictUnicodeLine } from '../../text/strictUnicode';
 
 import { ArmGeneratorChain, ArmGeneratorChainElement } from './armGeneratorChain';
-import { logLineCallbackT } from '../../deprecated/generalOld';
+import { logLineCallbackT } from '../../pretty/interfaces/general';
+
 
 
 export function renderMetaNode(node: MetaNodeI, maxWidth: number, renderer: Renderer, logLineCallback: logLineCallbackT): void {

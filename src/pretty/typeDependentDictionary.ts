@@ -1,14 +1,5 @@
-import { NodeBroadTypeEnum, NodeFineTypeEnumT, nodeTypeTupleT } from './interfaces/nodeType';
-
-export type typeDependentBroadOnlyDictionaryT<TValue extends unknown> = {
-  [key in NodeBroadTypeEnum]: TValue;
-}
-export type typeDependentDictionaryT<TValue extends unknown> = {
-  [key in NodeBroadTypeEnum]: typeDependentFineDictionaryT<key, TValue>;
-}
-export type typeDependentFineDictionaryT<TNodeBroadTypeEnum extends NodeBroadTypeEnum, TValue extends unknown> = {
-  [key in NodeFineTypeEnumT<TNodeBroadTypeEnum>]: TValue;
-}
+import { NodeBroadTypeEnum, nodeTypeTupleT } from './interfaces/nodeType';
+import { typeDependentDictionaryT, typeDependentFineDictionaryT, typeDependentBroadOnlyDictionaryT, typeDependentPartialDictionaryT, typeDependentBroadOnlyPartialDictionaryT } from './interfaces/typeDependentDictionary';
 
 export function getFromTypeDependentDictionary<TValue extends unknown>(dictionary: typeDependentDictionaryT<TValue>, key: nodeTypeTupleT): TValue {
   const broadType = key[0];
@@ -25,16 +16,6 @@ export function getFromTypeDependentBroadOnlyDictionary<TValue extends unknown>(
   return dictionary[broadType];
 }
 
-export type typeDependentPartialDictionaryT<TValue extends unknown> = {
-  [key in NodeBroadTypeEnum]?: Partial<typeDependentFineDictionaryT<key, TValue>>;
-}
-
-export type typeDependentPartialFineDictionaryT<TNodeBroadTypeEnum extends NodeBroadTypeEnum, TValue extends unknown> = {
-  [key in NodeFineTypeEnumT<TNodeBroadTypeEnum>]?: TValue;
-}
-
-export type typeDependentBroadOnlyPartialDictionaryT<TValue extends unknown> =
-  Partial<typeDependentBroadOnlyDictionaryT<TValue>>
 
 export function getFromTypeDependentPartialDictionary<TValue extends unknown>(dictionary: typeDependentPartialDictionaryT<TValue>, key: nodeTypeTupleT): TValue | undefined {
   const broadType = key[0];

@@ -2,10 +2,11 @@ import { prebuildedThemeT } from './interfaces/prebuildedTheme';
 import { prebuildTheme } from './theme/prebuild';
 import { themeT } from './interfaces/theme';
 import { fallback } from './theme/fallback';
-import { printTreeOptionsT, stringifyTreeOptionsT } from './interfaces/general';
-import { buildMetaTree } from './buildMetaTree';
+import { printTreeOptionsT, stringifyTreeOptionsT, oneshotPrintTreeOptionsT, oneshotStringifyTreeOptionsT } from './interfaces/general';
+import { buildMetaTree } from './buildMetaTree/buildMetaTree';
 import { renderMetaNode } from '../meta/render/render';
 import { defaultSettings } from './defaultSettings';
+import { EOL } from 'os';
 
 export class Pretty {
   protected readonly theme: prebuildedThemeT;
@@ -63,22 +64,24 @@ export class Pretty {
   stringify(tree: any, options?: stringifyTreeOptionsT ): string {
     let stringBuffer = '';
     const printTreeOptions = Object.assign({}, options, {
-      logLineCallback(line: string) { stringBuffer += line; },
+      logLineCallback(line: string) { stringBuffer += line + EOL; },
     });
     this.print(tree, printTreeOptions);
     return stringBuffer;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static print(tree: any, options?: printTreeOptionsT, themeStack?: themeT[]): void {
-    const oneshotPretty = new Pretty(themeStack);
-    oneshotPretty.print(tree, options);
+  static print(tree: any, options?: oneshotPrintTreeOptionsT): void {
+    const settings = Object.assign({}, defaultSettings, options);
+    const oneshotPretty = new Pretty(settings.themeStack);
+    oneshotPretty.print(tree, settings);
 
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static stringify(tree: any, options?: stringifyTreeOptionsT, themeStack?: themeT[] ): string {
-    const oneshotPretty = new Pretty(themeStack);
-    return oneshotPretty.stringify(tree, options);
+  static stringify(tree: any, options?: oneshotStringifyTreeOptionsT ): string {
+    const settings = Object.assign({}, defaultSettings, options);
+    const oneshotPretty = new Pretty(settings.themeStack);
+    return oneshotPretty.stringify(tree, settings);
 
   }
 }

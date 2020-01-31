@@ -1,6 +1,6 @@
-import { buildMetaTreeSettingsT } from './interfaces/general';
-import { nodeDescriptionKeyT, nodeDescriptionT, guardNodeDescription } from './interfaces/nodeDescription';
-import { NodeBroadTypeEnum, SingleNodeFineTypeEnum, EnumerableNodeFineTypeEnum, DeadNodeFineTypeEnum, IterableNodeFineTypeEnum } from './interfaces/nodeType';
+import { buildMetaTreeSettingsT } from '../interfaces/general';
+import { nodeDescriptionKeyT, nodeDescriptionT, guardNodeDescription } from '../interfaces/nodeDescription';
+import { NodeBroadTypeEnum, SingleNodeFineTypeEnum, EnumerableNodeFineTypeEnum, DeadNodeFineTypeEnum, IterableNodeFineTypeEnum } from '../interfaces/nodeType';
 
 type TypedArrayT =
   Int8Array |

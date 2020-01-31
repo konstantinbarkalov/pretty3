@@ -21,6 +21,7 @@ export class AutodetectRenderer extends Renderer {
     this.eol = this.renderer.eol;
   }
   protected detectFeatures(): featuresT {
+    // TODO: implement
     return {
       width: Infinity,
       env: 'unknown',

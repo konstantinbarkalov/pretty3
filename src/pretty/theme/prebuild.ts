@@ -7,7 +7,8 @@ import { MatrixDrivenArmGenerator, MatrixDrivenArmWidthGenerator } from '../../m
 import { ArmPatternMatrix } from '../../meta/matrix/armPatternMatrix';
 import { ArmWidthMatrix } from '../../meta/matrix/armWidthMatrix';
 import { NodeBroadTypeEnum, DeadNodeFineTypeEnum, NodeFineTypeEnumT, EnumerableNodeFineTypeEnum, IterableNodeFineTypeEnum, SingleNodeFineTypeEnum, nodeTypeTupleT } from '../interfaces/nodeType';
-import { getFromTypeDependentPartialDictionary, getFromTypeDependentBroadOnlyPartialDictionary, typeDependentDictionaryT, typeDependentPartialDictionaryT, typeDependentPartialFineDictionaryT } from '../typeDependentDictionary';
+import { getFromTypeDependentPartialDictionary, getFromTypeDependentBroadOnlyPartialDictionary } from '../typeDependentDictionary';
+import { typeDependentDictionaryT, typeDependentPartialDictionaryT, typeDependentPartialFineDictionaryT } from "../interfaces/typeDependentDictionary";
 
 // deep-assign and collapse
 type mapFilterCallbackfnT<TIn, TOut> = (input: TIn) => TOut | undefined;

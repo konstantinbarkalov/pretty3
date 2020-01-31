@@ -3,7 +3,7 @@ import { AnyTextContainer } from '../../text/textContainer';
 import { StrictUnicodeLine } from '../../text/strictUnicode';
 import { Style } from '../../text/style';
 
-import { typeDependentDictionaryT } from '../typeDependentDictionary';
+import { typeDependentDictionaryT } from "./typeDependentDictionary";
 export type nodeItemPrebuildedThemeT = {
   style?: Style;
 }

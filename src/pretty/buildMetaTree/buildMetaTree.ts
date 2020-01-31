@@ -1,12 +1,12 @@
 
-import { buildMetaTreeSettingsT } from './interfaces/general';
-import { MetaNode } from '../meta/node';
+import { buildMetaTreeSettingsT } from '../interfaces/general';
+import { MetaNode } from '../../meta/node';
 import { buildDescriptionTree } from './buildDescriptionTree';
-import { nodeDescriptionT, guardNodeDescription } from './interfaces/nodeDescription';
-import { NodeBroadTypeEnum } from './interfaces/nodeType';
+import { nodeDescriptionT, guardNodeDescription } from '../interfaces/nodeDescription';
+import { NodeBroadTypeEnum } from '../interfaces/nodeType';
 import { nodeDescriptionToLeaf } from './nodeDescriptionToLeaf';
-import { getFromTypeDependentDictionary } from './typeDependentDictionary';
-import { prebuildedThemeT, nodePrebuildedThemeT } from './interfaces/prebuildedTheme';
+import { getFromTypeDependentDictionary } from '../typeDependentDictionary';
+import { prebuildedThemeT, nodePrebuildedThemeT } from '../interfaces/prebuildedTheme';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function buildMetaTree(tree: any, theme: prebuildedThemeT, settings: buildMetaTreeSettingsT ): MetaNode {

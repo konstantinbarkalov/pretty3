@@ -1,4 +1,4 @@
-import {prettyOld, Pretty} from '../index';
+import {Pretty} from '../index';
 import { AnsiRenderer } from '../text/renderer/implementation/ansi';
 
 
@@ -10,9 +10,7 @@ import { smart, mods } from '../pretty/theme/themes';
 const maxItemsPerLevel = [30, 10]; // 3;
 const maxLevel = 5; // 2;
 const maxLineWidth = 80;
-const ansiRenderer = new AnsiRenderer();
-const ansiOutput = prettyOld.stringifyTree(tree, {renderer: ansiRenderer, maxItemsPerLevel, maxLevel, maxLineWidth});
-console.log(ansiOutput);
+const renderer = new AnsiRenderer();
 console.log('-----');
 const pretty = new Pretty([smart.richFonts, mods.noSimplestIcon]);
-pretty.print(tree, {maxItemsPerLevel, maxLevel, maxLineWidth});
+pretty.print(tree, {maxItemsPerLevel, maxLevel, maxLineWidth, renderer});

@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import {prettyOld as pretty} from '../src/index';
+import { Pretty } from '../src/index';
 import * as path from 'path';
 import * as fs from 'fs';
 //import { PlainRenderer, HtmlRenderer, AnsiRenderer } from '../src/text/renderer/implementation';
@@ -32,7 +32,7 @@ describe('pretty', () => {
       describe('starting', () => {
         it('must not fail on empty run', () => {
           expect(() => {
-            pretty.printTree(undefined);
+            Pretty.print(undefined);
           }).not.to.throw();
         });
         it('must synchronously use system console log when options aren\'t overriden', () => {
@@ -42,26 +42,26 @@ describe('pretty', () => {
           console.log = function(...args: unknown[]): void {
             logArgs = args;
           };
-          pretty.printTree('log me');
-          expect(logArgs).to.be.deep.equal(['    log me ']);
+          Pretty.print('log me');
+          expect(logArgs).to.be.deep.equal(['log me']);
           console.log = originalLog;
         });
         it('multiline node', () => {
           const input = JSON.parse(fs.readFileSync(path.resolve(testcaseDataInputPath, 'input02.json'), 'utf8'));
           const reference = fs.readFileSync(path.resolve(testcaseDataReferencePath, 'reference02' + rendererRun.referenceExtention), 'utf8');
-          const output = pretty.stringifyTree(input, {renderer: rendererRun.renderer});
+          const output = Pretty.stringify(input, {renderer: rendererRun.renderer});
           expect(output).to.be.equal(reference);
         });
         it('array-based root', () => {
           const input = JSON.parse(fs.readFileSync(path.resolve(testcaseDataInputPath, 'input03.json'), 'utf8'));
           const reference = fs.readFileSync(path.resolve(testcaseDataReferencePath, 'reference03' + rendererRun.referenceExtention), 'utf8');
-          const output = pretty.stringifyTree(input, {renderer: rendererRun.renderer});
+          const output = Pretty.stringify(input, {renderer: rendererRun.renderer});
           expect(output).to.be.equal(reference);
         });
         it('long lists', () => {
           const input = JSON.parse(fs.readFileSync(path.resolve(testcaseDataInputPath, 'input04.json'), 'utf8'));
           const reference = fs.readFileSync(path.resolve(testcaseDataReferencePath, 'reference04' + rendererRun.referenceExtention), 'utf8');
-          const output = pretty.stringifyTree(input, {renderer: rendererRun.renderer});
+          const output = Pretty.stringify(input, {renderer: rendererRun.renderer});
           expect(output).to.be.equal(reference);
         });
       });
@@ -69,49 +69,49 @@ describe('pretty', () => {
         it('general tree', () => {
           const input = JSON.parse(fs.readFileSync(path.resolve(testcaseDataInputPath, 'input01.json'), 'utf8'));
           const reference = fs.readFileSync(path.resolve(testcaseDataReferencePath, 'reference01' + rendererRun.referenceExtention), 'utf8');
-          const output = pretty.stringifyTree(input, {renderer: rendererRun.renderer});
+          const output = Pretty.stringify(input, {renderer: rendererRun.renderer});
           expect(output).to.be.equal(reference);
         });
         it('multiline node', () => {
           const input = JSON.parse(fs.readFileSync(path.resolve(testcaseDataInputPath, 'input02.json'), 'utf8'));
           const reference = fs.readFileSync(path.resolve(testcaseDataReferencePath, 'reference02' + rendererRun.referenceExtention), 'utf8');
-          const output = pretty.stringifyTree(input, {renderer: rendererRun.renderer});
+          const output = Pretty.stringify(input, {renderer: rendererRun.renderer});
           expect(output).to.be.equal(reference);
         });
         it('array-based root', () => {
           const input = JSON.parse(fs.readFileSync(path.resolve(testcaseDataInputPath, 'input03.json'), 'utf8'));
           const reference = fs.readFileSync(path.resolve(testcaseDataReferencePath, 'reference03' + rendererRun.referenceExtention), 'utf8');
-          const output = pretty.stringifyTree(input, {renderer: rendererRun.renderer});
+          const output = Pretty.stringify(input, {renderer: rendererRun.renderer});
           expect(output).to.be.equal(reference);
         });
         it('long lists', () => {
           const input = JSON.parse(fs.readFileSync(path.resolve(testcaseDataInputPath, 'input04.json'), 'utf8'));
           const reference = fs.readFileSync(path.resolve(testcaseDataReferencePath, 'reference04' + rendererRun.referenceExtention), 'utf8');
-          const output = pretty.stringifyTree(input, {renderer: rendererRun.renderer});
+          const output = Pretty.stringify(input, {renderer: rendererRun.renderer});
           expect(output).to.be.equal(reference);
         });
       });
       describe('rich types stringifing', () => {
         it('general tree with rich amount of types', () => {
           const reference = fs.readFileSync(path.resolve(testcaseDataReferencePath, 'reference05' + rendererRun.referenceExtention), 'utf8');
-          const output = pretty.stringifyTree(input05, {renderer: rendererRun.renderer});
+          const output = Pretty.stringify(input05, {renderer: rendererRun.renderer});
           expect(output).to.be.equal(reference);
         });
       });
       describe('huge tree stringifing', () => {
         it('huge tree chopped both in depth, and by items count', () => {
           const reference = fs.readFileSync(path.resolve(testcaseDataReferencePath, 'reference06-2-3' + rendererRun.referenceExtention), 'utf8');
-          const output = pretty.stringifyTree(input06, {renderer: rendererRun.renderer, maxLevel: 2, maxItemsPerLevel: 3});
+          const output = Pretty.stringify(input06, {renderer: rendererRun.renderer, maxLevel: 2, maxItemsPerLevel: 3});
           expect(output).to.be.equal(reference);
         });
         it('huge tree chopped in depth, but unchopped by items count', () => {
           const reference = fs.readFileSync(path.resolve(testcaseDataReferencePath, 'reference06-2-inf' + rendererRun.referenceExtention), 'utf8');
-          const output = pretty.stringifyTree(input06, {renderer: rendererRun.renderer, maxLevel: 2, maxItemsPerLevel: Infinity});
+          const output = Pretty.stringify(input06, {renderer: rendererRun.renderer, maxLevel: 2, maxItemsPerLevel: Infinity});
           expect(output).to.be.equal(reference);
         });
         it('huge tree unchopped in depth but сhopped by items max', () => {
           const reference = fs.readFileSync(path.resolve(testcaseDataReferencePath, 'reference06-inf-3' + rendererRun.referenceExtention), 'utf8');
-          const output = pretty.stringifyTree(input06, {renderer: rendererRun.renderer, maxLevel: Infinity, maxItemsPerLevel: 3});
+          const output = Pretty.stringify(input06, {renderer: rendererRun.renderer, maxLevel: Infinity, maxItemsPerLevel: 3});
           expect(output).to.be.equal(reference);
         });
       });

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
 import { EOL } from 'os';
-
 export class NormalizedUnicodeText extends String {
   constructor(text: string | String, isSkipChecks = false) {
     const isNormalizedInstance = NormalizedUnicodeText.isNormalizedInstance(text);
