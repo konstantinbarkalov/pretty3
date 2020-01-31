@@ -113,6 +113,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_text_textcontainer_.nonatomictextcontainer.html#calcsize" class="tsd-kind-icon">calc<wbr>Size</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_text_textcontainer_.nonatomictextcontainer.html#flatten" class="tsd-kind-icon">flatten</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_text_textcontainer_.nonatomictextcontainer.html#managedwrap" class="tsd-kind-icon">managed<wbr>Wrap</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_text_textcontainer_.nonatomictextcontainer.html#splittoflatlines" class="tsd-kind-icon">split<wbr>ToFlat<wbr>Lines</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_text_textcontainer_.nonatomictextcontainer.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_text_textcontainer_.nonatomictextcontainer.html#wrap" class="tsd-kind-icon">wrap</a></li>
@@ -133,7 +134,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/4afd76b/src/text/textContainer.ts#L70">text/textContainer.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/52da6be/src/text/textContainer.ts#L85">text/textContainer.ts:85</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -158,7 +159,7 @@
 					<div class="tsd-signature tsd-kind-icon">children<span class="tsd-signature-symbol">:</span> <a href="../modules/_text_textcontainer_.html#anytextcontainer" class="tsd-signature-type">AnyTextContainer</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/4afd76b/src/text/textContainer.ts#L71">text/textContainer.ts:71</a></li>
+							<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/52da6be/src/text/textContainer.ts#L86">text/textContainer.ts:86</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -169,7 +170,7 @@
 					<aside class="tsd-sources">
 						<p>Overrides <a href="_text_textcontainer_.textcontainerbase.html">TextContainerBase</a>.<a href="_text_textcontainer_.textcontainerbase.html#style">style</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/4afd76b/src/text/textContainer.ts#L71">text/textContainer.ts:71</a></li>
+							<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/52da6be/src/text/textContainer.ts#L86">text/textContainer.ts:86</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -187,7 +188,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_text_textcontainer_.textcontainerbase.html">TextContainerBase</a>.<a href="_text_textcontainer_.textcontainerbase.html#calcsize">calcSize</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/4afd76b/src/text/textContainer.ts#L74">text/textContainer.ts:74</a></li>
+									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/52da6be/src/text/textContainer.ts#L89">text/textContainer.ts:89</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">textContainerSizeT</span></h4>
@@ -205,7 +206,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_text_textcontainer_.textcontainerbase.html">TextContainerBase</a>.<a href="_text_textcontainer_.textcontainerbase.html#flatten">flatten</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/4afd76b/src/text/textContainer.ts#L126">text/textContainer.ts:126</a></li>
+									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/52da6be/src/text/textContainer.ts#L141">text/textContainer.ts:141</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -215,6 +216,29 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_text_textcontainer_.flatnonatomictextcontainer.html" class="tsd-signature-type">FlatNonatomicTextContainer</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="managedwrap" class="tsd-anchor"></a>
+					<h3>managed<wbr>Wrap</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">managed<wbr>Wrap<span class="tsd-signature-symbol">(</span>maxWidth<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Generator</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_text_textcontainer_.html#anytextcontainer" class="tsd-signature-type">AnyTextContainer</a><span class="tsd-signature-symbol">&lt;</span><a href="_text_strictunicode_.strictunicodeline.html" class="tsd-signature-type">StrictUnicodeLine</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/_text_textcontainer_.html#anytextcontainer" class="tsd-signature-type">AnyTextContainer</a><span class="tsd-signature-symbol">&lt;</span><a href="_text_strictunicode_.strictunicodeline.html" class="tsd-signature-type">StrictUnicodeLine</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/52da6be/src/text/textContainer.ts#L159">text/textContainer.ts:159</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>maxWidth: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Generator</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_text_textcontainer_.html#anytextcontainer" class="tsd-signature-type">AnyTextContainer</a><span class="tsd-signature-symbol">&lt;</span><a href="_text_strictunicode_.strictunicodeline.html" class="tsd-signature-type">StrictUnicodeLine</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/_text_textcontainer_.html#anytextcontainer" class="tsd-signature-type">AnyTextContainer</a><span class="tsd-signature-symbol">&lt;</span><a href="_text_strictunicode_.strictunicodeline.html" class="tsd-signature-type">StrictUnicodeLine</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -229,7 +253,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_text_textcontainer_.textcontainerbase.html">TextContainerBase</a>.<a href="_text_textcontainer_.textcontainerbase.html#splittoflatlines">splitToFlatLines</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/4afd76b/src/text/textContainer.ts#L134">text/textContainer.ts:134</a></li>
+									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/52da6be/src/text/textContainer.ts#L149">text/textContainer.ts:149</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_text_textcontainer_.flatnonatomictextcontainer.html" class="tsd-signature-type">FlatNonatomicTextContainer</a><span class="tsd-signature-symbol">&lt;</span><a href="_text_strictunicode_.strictunicodeline.html" class="tsd-signature-type">StrictUnicodeLine</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h4>
@@ -247,7 +271,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_text_textcontainer_.textcontainerbase.html">TextContainerBase</a>.<a href="_text_textcontainer_.textcontainerbase.html#tostring">toString</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/4afd76b/src/text/textContainer.ts#L106">text/textContainer.ts:106</a></li>
+									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/52da6be/src/text/textContainer.ts#L121">text/textContainer.ts:121</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -265,7 +289,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_text_textcontainer_.textcontainerbase.html">TextContainerBase</a>.<a href="_text_textcontainer_.textcontainerbase.html#wrap">wrap</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/4afd76b/src/text/textContainer.ts#L109">text/textContainer.ts:109</a></li>
+									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/52da6be/src/text/textContainer.ts#L124">text/textContainer.ts:124</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -329,6 +353,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="_text_textcontainer_.nonatomictextcontainer.html#flatten" class="tsd-kind-icon">flatten</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_text_textcontainer_.nonatomictextcontainer.html#managedwrap" class="tsd-kind-icon">managed<wbr>Wrap</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="_text_textcontainer_.nonatomictextcontainer.html#splittoflatlines" class="tsd-kind-icon">split<wbr>ToFlat<wbr>Lines</a>
