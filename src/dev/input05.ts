@@ -1,4 +1,4 @@
-import fs from 'fs';
+import * as fs from 'fs';
 
 class ExpampleIterator implements Iterator<string> {
   message: string[];
@@ -6,9 +6,12 @@ class ExpampleIterator implements Iterator<string> {
     this.message = message.split(', ');
   }
   next(): IteratorResult<string> {
-    return {
+    return (this.message.length === 0) ? {
+      value: undefined,
+      done: true,
+    } : {
       value: this.message.pop()!,
-      done: (this.message.length === 0),
+      done: false,
     };
   }
 }
