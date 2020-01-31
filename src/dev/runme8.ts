@@ -1,6 +1,6 @@
 import {prettyOld, Pretty} from '../index';
 import { AnsiRenderer } from '../text/renderer/implementation/ansi';
-//import { theme } from '../pretty/theme/themes/smart';
+import { theme } from '../pretty/theme/themes/smart';
 
 import tree from './input05';
 //import tree from './input06';
@@ -13,5 +13,5 @@ const ansiRenderer = new AnsiRenderer();
 const ansiOutput = prettyOld.stringifyTree(tree, {renderer: ansiRenderer, maxItemsPerLevel, maxLevel});
 console.log(ansiOutput);
 console.log('-----');
-const pretty = new Pretty([]);
+const pretty = new Pretty([theme]);
 pretty.print(tree, {maxItemsPerLevel, maxLevel});

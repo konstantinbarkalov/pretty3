@@ -1,6 +1,6 @@
-import { nodeThemeT, nodeBasicItemThemeT, nodePredefinableItemThemeT, nodeSuffixedSemipredefinableItemThemeT, themeT } from '../interfaces/theme';
-import { nodeItemPrebuildedThemeT, nodePredefinableItemPrebuildedThemeT, nodeSuffixedSemipredefinableItemPrebuildedThemeT, nodePrebuildedThemeT } from '../interfaces/prebuildedTheme';
-import { AtomicTextContainer, NonatomicTextContainer } from '../../text/textContainer';
+import { nodeThemeT, nodeBasicItemThemeT, nodePredefinableItemThemeT, nodeSuffixedSemipredefinableItemThemeT, themeT, nodeSuffixedPredefinableItemThemeT } from '../interfaces/theme';
+import { nodeItemPrebuildedThemeT, nodePredefinableItemPrebuildedThemeT, nodeSuffixedSemipredefinableItemPrebuildedThemeT, nodePrebuildedThemeT, nodeSuffixedPredefinableItemPrebuildedThemeT } from '../interfaces/prebuildedTheme';
+import { AtomicTextContainer } from '../../text/textContainer';
 import { StrictUnicodeLine } from '../../text/strictUnicode';
 import { spacedArmWidthT } from '../../meta/interfaces/arm/armWidth';
 import { MatrixDrivenArmGenerator, MatrixDrivenArmWidthGenerator } from '../../meta/matrix/matrixDrivenArmGenerator';
@@ -46,73 +46,81 @@ function collapseNodeThemeStack(nodeThemeStack: nodeThemeT[]): nodeThemeT {
   flatCollapsed.icon = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.icon);
 
   if (flatCollapsed.icon) {
+    // icon.predelimiter
+    flatCollapsed.icon.predelimiter = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.icon?.predelimiter);
     // icon.prefix
     flatCollapsed.icon.prefix = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.icon?.prefix);
     // icon.content
     flatCollapsed.icon.content = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.icon?.content);
     // icon.postfix
     flatCollapsed.icon.postfix = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.icon?.postfix);
+    // icon.postdelimiter
+    flatCollapsed.icon.postdelimiter = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.icon?.postdelimiter);
   }
-
-  // keyDelimiter
-  flatCollapsed.keyDelimiter = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.keyDelimiter);
 
 
   // key
   flatCollapsed.key = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.key);
 
   if (flatCollapsed.key) {
+    // key.predelimiter
+    flatCollapsed.key.predelimiter = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.key?.predelimiter);
     // key.prefix
     flatCollapsed.key.prefix = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.key?.prefix);
     // key.content
     flatCollapsed.key.content = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.key?.content);
     // key.postfix
     flatCollapsed.key.postfix = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.key?.postfix);
+    // key.postdelimiter
+    flatCollapsed.key.postdelimiter = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.key?.postdelimiter);
   }
-
-  // valueDelimiter
-  flatCollapsed.valueDelimiter = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.valueDelimiter);
 
   // value
   flatCollapsed.value = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.value);
 
   if (flatCollapsed.value) {
+    // value.predelimiter
+    flatCollapsed.value.predelimiter = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.value?.predelimiter);
     // value.prefix
     flatCollapsed.value.prefix = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.value?.prefix);
     // value.content
     flatCollapsed.value.content = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.value?.content);
     // value.postfix
     flatCollapsed.value.postfix = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.value?.postfix);
+    // value.postdelimiter
+    flatCollapsed.value.postdelimiter = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.value?.postdelimiter);
   }
-
-  // infoDelimiter
-  flatCollapsed.infoDelimiter = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.infoDelimiter);
 
   // info
   flatCollapsed.info = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.info);
 
   if (flatCollapsed.info) {
+    // info.predelimiter
+    flatCollapsed.info.predelimiter = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.info?.predelimiter);
     // info.prefix
     flatCollapsed.info.prefix = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.info?.prefix);
     // info.content
     flatCollapsed.info.content = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.info?.content);
     // info.postfix
     flatCollapsed.info.postfix = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.info?.postfix);
+    // info.postdelimiter
+    flatCollapsed.info.postdelimiter = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.info?.postdelimiter);
   }
-
-  // remarkDelimiter
-  flatCollapsed.remarkDelimiter = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.remarkDelimiter);
 
   // remark
   flatCollapsed.remark = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.remark);
 
   if (flatCollapsed.remark) {
+    // remark.predelimiter
+    flatCollapsed.remark.predelimiter = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.remark?.predelimiter);
     // remark.prefix
     flatCollapsed.remark.prefix = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.remark?.prefix);
     // remark.content
     flatCollapsed.remark.content = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.remark?.content);
     // remark.postfix
     flatCollapsed.remark.postfix = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.remark?.postfix);
+    // remark.postdelimiter
+    flatCollapsed.remark.postdelimiter = mapFilterCollapseStack(nodeThemeStack, (nodeTheme) => nodeTheme.remark?.postdelimiter);
   }
   return flatCollapsed;
 }
@@ -152,9 +160,15 @@ function prebuildNodeSuffixedSemipredefinableItemTheme(suffixedItemTheme: nodeSu
     if (suffixedItemTheme.visibility === false) {
       return false;
     }
+    let prebuidedPredelimiter;
     let prebuidedPrefix;
     let prebuidedContent;
     let prebuidedPostfix;
+    let prebuidedPostdelimiter;
+    // TODO: deep fallback to prebuided-fallback subparts instead just not creating it if no theme for it
+    if (suffixedItemTheme.predelimiter) {
+      prebuidedPredelimiter = prebuildPredefinableItemTheme(suffixedItemTheme.predelimiter) || undefined;
+    }
     if (suffixedItemTheme.prefix) {
       prebuidedPrefix = prebuildPredefinableItemTheme(suffixedItemTheme.prefix) || undefined;
     }
@@ -164,39 +178,47 @@ function prebuildNodeSuffixedSemipredefinableItemTheme(suffixedItemTheme: nodeSu
     if (suffixedItemTheme.postfix) {
       prebuidedPostfix = prebuildPredefinableItemTheme(suffixedItemTheme.postfix) || undefined;
     }
+    if (suffixedItemTheme.postdelimiter) {
+      prebuidedPostdelimiter = prebuildPredefinableItemTheme(suffixedItemTheme.postdelimiter) || undefined;
+    }
+
     const style = suffixedItemTheme.style;
-    const prebuilded = { prefix: prebuidedPrefix, content: prebuidedContent, postfix: prebuidedPostfix, style };
+    const prebuilded = { predelimiter: prebuidedPredelimiter, prefix: prebuidedPrefix, content: prebuidedContent, postfix: prebuidedPostfix, postdelimiter: prebuidedPostdelimiter, style };
     return prebuilded;
   }
   return undefined;
 }
 
-function prebuildIconNodeTheme(nodeIconTheme: nodeThemeT['icon']): nodePrebuildedThemeT['icon'] | false | undefined {
-  if (nodeIconTheme) {
-    if (nodeIconTheme.visibility === false) {
+function prebuildNodeSuffixedPredefinableItemTheme(suffixedItemTheme: nodeSuffixedPredefinableItemThemeT): nodeSuffixedPredefinableItemPrebuildedThemeT | false | undefined {
+  if (suffixedItemTheme) {
+    if (suffixedItemTheme.visibility === false) {
       return false;
     }
-    const chars = [
-      nodeIconTheme.chars?.[0],
-      nodeIconTheme.chars?.[1],
-      nodeIconTheme.chars?.[2],
-    ];
-    const hasAnyChars = chars.some((char) => !!char);
-    if (hasAnyChars) {
-      const atomics =[];
-      if (chars[0]) {
-        atomics.push(new AtomicTextContainer(new StrictUnicodeLine(chars[0]), nodeIconTheme.prefix?.style));
-      }
-      if (chars[1]) {
-        atomics.push(new AtomicTextContainer(new StrictUnicodeLine(chars[1]), nodeIconTheme.content?.style));
-      }
-      if (chars[2]) {
-        atomics.push(new AtomicTextContainer(new StrictUnicodeLine(chars[2]), nodeIconTheme.postfix?.style));
-      }
-      const container = new NonatomicTextContainer(atomics, nodeIconTheme.style);
-      return { container };
+    let prebuidedPredelimiter;
+    let prebuidedPrefix;
+    let prebuidedContent;
+    let prebuidedPostfix;
+    let prebuidedPostdelimiter;
+    // TODO: deep fallback to prebuided-fallback subparts instead just not creating it if no theme for it
+    if (suffixedItemTheme.predelimiter) {
+      prebuidedPredelimiter = prebuildPredefinableItemTheme(suffixedItemTheme.predelimiter) || undefined;
+    }
+    if (suffixedItemTheme.prefix) {
+      prebuidedPrefix = prebuildPredefinableItemTheme(suffixedItemTheme.prefix) || undefined;
+    }
+    if (suffixedItemTheme.content) {
+      prebuidedContent = prebuildPredefinableItemTheme(suffixedItemTheme.content) || undefined;
+    }
+    if (suffixedItemTheme.postfix) {
+      prebuidedPostfix = prebuildPredefinableItemTheme(suffixedItemTheme.postfix) || undefined;
+    }
+    if (suffixedItemTheme.postdelimiter) {
+      prebuidedPostdelimiter = prebuildPredefinableItemTheme(suffixedItemTheme.postdelimiter) || undefined;
     }
 
+    const style = suffixedItemTheme.style;
+    const prebuilded = { predelimiter: prebuidedPredelimiter, prefix: prebuidedPrefix, content: prebuidedContent, postfix: prebuidedPostfix, postdelimiter: prebuidedPostdelimiter, style };
+    return prebuilded;
   }
   return undefined;
 }
@@ -225,14 +247,10 @@ export function prebuildNodeTheme(themeStack: nodeThemeT[], fallback: nodePrebui
   const prebuilded: nodePrebuildedThemeT = {
     // TODO strictly check for false & hide if it is (check root nodeTheme.visibility too)
     arm: prebuildArmNodeTheme(nodeTheme.arm) || fallback.arm,
-    icon: prebuildIconNodeTheme(nodeTheme.icon) || fallback.icon,
-    keyDelimiter: prebuildPredefinableItemTheme(nodeTheme.keyDelimiter) || fallback.keyDelimiter,
+    icon: prebuildNodeSuffixedPredefinableItemTheme(nodeTheme.icon) || fallback.icon,
     key: prebuildNodeSuffixedSemipredefinableItemTheme(nodeTheme.key) || fallback.key,
-    valueDelimiter: prebuildPredefinableItemTheme(nodeTheme.valueDelimiter) || fallback.valueDelimiter,
     value: prebuildNodeSuffixedSemipredefinableItemTheme(nodeTheme.value) || fallback.value,
-    infoDelimiter: prebuildPredefinableItemTheme(nodeTheme.infoDelimiter) || fallback.infoDelimiter,
     info: prebuildNodeSuffixedSemipredefinableItemTheme(nodeTheme.info) || fallback.info,
-    remarkDelimiter: prebuildPredefinableItemTheme(nodeTheme.remarkDelimiter) || fallback.remarkDelimiter,
     remark: prebuildNodeSuffixedSemipredefinableItemTheme(nodeTheme.remark) || fallback.remark,
     style: nodeTheme.style,
   };

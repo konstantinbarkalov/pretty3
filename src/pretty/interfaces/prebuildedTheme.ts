@@ -14,25 +14,31 @@ export type nodePredefinableItemPrebuildedThemeT = {
 
 export type nodeSuffixedSemipredefinableItemPrebuildedThemeT = {
   style?: Style;
+  predelimiter?: nodePredefinableItemPrebuildedThemeT;
   prefix?: nodePredefinableItemPrebuildedThemeT;
   content?: nodeItemPrebuildedThemeT;
   postfix?: nodePredefinableItemPrebuildedThemeT;
+  postdelimiter?: nodePredefinableItemPrebuildedThemeT;
 }
 
+export type nodeSuffixedPredefinableItemPrebuildedThemeT = {
+  style?: Style;
+  predelimiter?: nodePredefinableItemPrebuildedThemeT;
+  prefix?: nodePredefinableItemPrebuildedThemeT;
+  content?: nodePredefinableItemPrebuildedThemeT;
+  postfix?: nodePredefinableItemPrebuildedThemeT;
+  postdelimiter?: nodePredefinableItemPrebuildedThemeT;
+}
 export type nodePrebuildedThemeT = {
   arm: {
     armGenerator: ArmGeneratorI;
     armWidthGenerator: ArmWidthGeneratorI;
   };
   style?: Style;
-  icon?: nodePredefinableItemPrebuildedThemeT;
-  keyDelimiter?: nodePredefinableItemPrebuildedThemeT;
+  icon?: nodeSuffixedPredefinableItemPrebuildedThemeT;
   key?: nodeSuffixedSemipredefinableItemPrebuildedThemeT;
-  valueDelimiter?: nodePredefinableItemPrebuildedThemeT;
   value?: nodeSuffixedSemipredefinableItemPrebuildedThemeT;
-  infoDelimiter?: nodePredefinableItemPrebuildedThemeT;
   info?: nodeSuffixedSemipredefinableItemPrebuildedThemeT;
-  remarkDelimiter?: nodePredefinableItemPrebuildedThemeT;
   remark?: nodeSuffixedSemipredefinableItemPrebuildedThemeT;
 }
 

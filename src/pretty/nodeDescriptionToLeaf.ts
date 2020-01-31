@@ -4,56 +4,87 @@ import { StrictUnicodeText, StrictUnicodeLine } from '../text/strictUnicode';
 
 import { NodeBroadTypeEnum } from './interfaces/nodeType';
 import { nodePrebuildedThemeT } from './interfaces/prebuildedTheme';
+import { Style } from '../text/style';
 
 
 export function nodeDescriptionToLeaf(nodeDescription: nodeDescriptionT, nodeTheme: nodePrebuildedThemeT): NonatomicTextContainer<StrictUnicodeText> {
-  type preparedContainerT = {
-    icon?: AnyTextContainer;
-    keyDelimiter?: AnyTextContainer;
-    key?: AnyTextContainer;
-    valueDelimiter?: AnyTextContainer;
-    value?: AnyTextContainer;
-    infoDelimiter?: AnyTextContainer;
-    info?: AnyTextContainer;
-    remarkDelimiter?: AnyTextContainer;
-    remark?: AnyTextContainer;
-  }
-  const preparedContainer: preparedContainerT = { };
+  const preparedPack = prepareTextToPack(nodeDescription, nodeTheme);
+  const leaf = preparedPackToLeaf(preparedPack, nodeTheme.style);
+  return leaf;
+}
+
+// pretty hardcode :`)
+
+type preparedPackItemT = {
+  wholeItemWrapperStyle?: Style;
+  predelimiter?: AnyTextContainer;
+  prefix?: AnyTextContainer;
+  content?: AnyTextContainer;
+  postfix?: AnyTextContainer;
+  postdelimiter?: AnyTextContainer;
+}
+
+type preparedPackT = {
+  icon?: preparedPackItemT;
+  key?: preparedPackItemT;
+  value?: preparedPackItemT;
+  info?: preparedPackItemT;
+  remark?: preparedPackItemT;
+}
+
+function prepareTextToPack(nodeDescription: nodeDescriptionT, nodeTheme: nodePrebuildedThemeT): preparedPackT {
+
+  const preparedPack: preparedPackT = { };
 
   // icon
   if (nodeTheme.icon) {
-    preparedContainer.icon = nodeTheme.icon.container;
+    const preparedPackItem: preparedPackItemT = {
+      wholeItemWrapperStyle: nodeTheme.style,
+    };
+    if (nodeTheme.icon.predelimiter && nodeTheme.icon.predelimiter.container) {
+      preparedPackItem.predelimiter = nodeTheme.icon.predelimiter.container;
+    }
+    if (nodeTheme.icon.prefix && nodeTheme.icon.prefix.container) {
+      preparedPackItem.prefix = nodeTheme.icon.prefix.container;
+    }
+    if (nodeTheme.icon.content && nodeTheme.icon.content.container) {
+      preparedPackItem.content = nodeTheme.icon.content.container;
+    }
+    if (nodeTheme.icon.postfix && nodeTheme.icon.postfix.container) {
+      preparedPackItem.postfix = nodeTheme.icon.postfix.container;
+    }
+    if (nodeTheme.icon.postdelimiter && nodeTheme.icon.postdelimiter.container) {
+      preparedPackItem.postdelimiter = nodeTheme.icon.postdelimiter.container;
+    }
+    preparedPackItem.wholeItemWrapperStyle = nodeTheme.icon.style,
+    preparedPack.icon = preparedPackItem;
   }
 
-  // keyDelimiter
-  if (nodeTheme.keyDelimiter) {
-    if (nodeTheme.keyDelimiter && nodeTheme.keyDelimiter.container) {
-      preparedContainer.keyDelimiter = nodeTheme.keyDelimiter.container;
-    }
-  }
 
   // key
   if (nodeDescription.key !== undefined) {
     if (nodeTheme.key) {
-      const containers = [];
-      if (nodeTheme.key.prefix && nodeTheme.key.prefix.container) {
-        containers.push(nodeTheme.key.prefix.container);
+      const preparedPackItem: preparedPackItemT = {
+        wholeItemWrapperStyle: nodeTheme.style,
+      };
+      if (nodeTheme.key.predelimiter && nodeTheme.key.predelimiter.container) {
+        preparedPackItem.predelimiter = nodeTheme.key.predelimiter.container;
       }
-      if (nodeTheme.key.content) {
+      if (nodeTheme.key.prefix && nodeTheme.key.prefix.container) {
+        preparedPackItem.prefix = nodeTheme.key.prefix.container;
+      }
+      {
         const nodeKeyString = (nodeDescription.key.toString) ? nodeDescription.key.toString() : String(nodeDescription.key);
-        containers.push(new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), nodeTheme.key.content.style));
+        preparedPackItem.content = new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), nodeTheme.key.content?.style);
       }
       if (nodeTheme.key.postfix && nodeTheme.key.postfix.container) {
-        containers.push(nodeTheme.key.postfix.container);
+        preparedPackItem.postfix = nodeTheme.key.postfix.container;
       }
-      preparedContainer.key = new NonatomicTextContainer(containers, nodeTheme.key.style);
-    }
-  }
-
-  // valueDelimiter
-  if (nodeTheme.valueDelimiter) {
-    if (nodeTheme.valueDelimiter && nodeTheme.valueDelimiter.container) {
-      preparedContainer.valueDelimiter = nodeTheme.valueDelimiter.container;
+      if (nodeTheme.key.postdelimiter && nodeTheme.key.postdelimiter.container) {
+        preparedPackItem.postdelimiter = nodeTheme.key.postdelimiter.container;
+      }
+      preparedPackItem.wholeItemWrapperStyle = nodeTheme.key.style,
+      preparedPack.key = preparedPackItem;
     }
   }
 
@@ -61,115 +92,126 @@ export function nodeDescriptionToLeaf(nodeDescription: nodeDescriptionT, nodeThe
   if (!guardNodeDescription(NodeBroadTypeEnum.Dead, nodeDescription)) {
     if (nodeDescription.value !== undefined) {
       if (nodeTheme.value) {
-        const containers = [];
-        if (nodeTheme.value.prefix && nodeTheme.value.prefix.container) {
-          containers.push(nodeTheme.value.prefix.container);
+        const preparedPackItem: preparedPackItemT = {
+          wholeItemWrapperStyle: nodeTheme.style,
+        };
+        if (nodeTheme.value.predelimiter && nodeTheme.value.predelimiter.container) {
+          preparedPackItem.predelimiter = nodeTheme.value.predelimiter.container;
         }
-        if (nodeTheme.value.content) {
+        if (nodeTheme.value.prefix && nodeTheme.value.prefix.container) {
+          preparedPackItem.prefix = nodeTheme.value.prefix.container;
+        }
+        {
           const nodeKeyString = (nodeDescription.value.toString) ? nodeDescription.value.toString() : String(nodeDescription.value);
-          containers.push(new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), nodeTheme.value.content.style));
+          preparedPackItem.content = new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), nodeTheme.value.content?.style);
         }
         if (nodeTheme.value.postfix && nodeTheme.value.postfix.container) {
-          containers.push(nodeTheme.value.postfix.container);
+          preparedPackItem.postfix = nodeTheme.value.postfix.container;
         }
-        preparedContainer.value = new NonatomicTextContainer(containers, nodeTheme.value.style);
+        if (nodeTheme.value.postdelimiter && nodeTheme.value.postdelimiter.container) {
+          preparedPackItem.postdelimiter = nodeTheme.value.postdelimiter.container;
+        }
+        preparedPackItem.wholeItemWrapperStyle = nodeTheme.value.style,
+        preparedPack.value = preparedPackItem;
       }
-    }
-  }
-
-
-
-  // infoDelimiter
-  if (nodeTheme.infoDelimiter) {
-    if (nodeTheme.infoDelimiter && nodeTheme.infoDelimiter.container) {
-      preparedContainer.infoDelimiter = nodeTheme.infoDelimiter.container;
     }
   }
 
   // info
   if (nodeDescription.info !== undefined) {
     if (nodeTheme.info) {
-      const containers = [];
-      if (nodeTheme.info.prefix && nodeTheme.info.prefix.container) {
-        containers.push(nodeTheme.info.prefix.container);
+      const preparedPackItem: preparedPackItemT = {
+        wholeItemWrapperStyle: nodeTheme.style,
+      };
+      if (nodeTheme.info.predelimiter && nodeTheme.info.predelimiter.container) {
+        preparedPackItem.predelimiter = nodeTheme.info.predelimiter.container;
       }
-      if (nodeTheme.info.content) {
+      if (nodeTheme.info.prefix && nodeTheme.info.prefix.container) {
+        preparedPackItem.prefix = nodeTheme.info.prefix.container;
+      }
+      {
         const nodeKeyString = (nodeDescription.info.toString) ? nodeDescription.info.toString() : String(nodeDescription.info);
-        containers.push(new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), nodeTheme.info.content.style));
+        preparedPackItem.content = new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), nodeTheme.info.content?.style);
       }
       if (nodeTheme.info.postfix && nodeTheme.info.postfix.container) {
-        containers.push(nodeTheme.info.postfix.container);
+        preparedPackItem.postfix = nodeTheme.info.postfix.container;
       }
-      preparedContainer.info = new NonatomicTextContainer(containers, nodeTheme.info.style);
-    }
-  }
-
-
-  // remarkDelimiter
-  if (nodeTheme.remarkDelimiter) {
-    if (nodeTheme.remarkDelimiter && nodeTheme.remarkDelimiter.container) {
-      preparedContainer.remarkDelimiter = nodeTheme.remarkDelimiter.container;
+      if (nodeTheme.info.postdelimiter && nodeTheme.info.postdelimiter.container) {
+        preparedPackItem.postdelimiter = nodeTheme.info.postdelimiter.container;
+      }
+      preparedPackItem.wholeItemWrapperStyle = nodeTheme.info.style,
+      preparedPack.info = preparedPackItem;
     }
   }
 
   // remark
   if (nodeDescription.remark !== undefined) {
     if (nodeTheme.remark) {
-      const containers = [];
-      if (nodeTheme.remark.prefix && nodeTheme.remark.prefix.container) {
-        containers.push(nodeTheme.remark.prefix.container);
+      const preparedPackItem: preparedPackItemT = {
+        wholeItemWrapperStyle: nodeTheme.style,
+      };
+      if (nodeTheme.remark.predelimiter && nodeTheme.remark.predelimiter.container) {
+        preparedPackItem.predelimiter = nodeTheme.remark.predelimiter.container;
       }
-      if (nodeTheme.remark.content) {
+      if (nodeTheme.remark.prefix && nodeTheme.remark.prefix.container) {
+        preparedPackItem.prefix = nodeTheme.remark.prefix.container;
+      }
+      {
         const nodeKeyString = (nodeDescription.remark.toString) ? nodeDescription.remark.toString() : String(nodeDescription.remark);
-        containers.push(new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), nodeTheme.remark.content.style));
+        preparedPackItem.content = new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), nodeTheme.remark.content?.style);
       }
       if (nodeTheme.remark.postfix && nodeTheme.remark.postfix.container) {
-        containers.push(nodeTheme.remark.postfix.container);
+        preparedPackItem.postfix = nodeTheme.remark.postfix.container;
       }
-      preparedContainer.remark = new NonatomicTextContainer(containers, nodeTheme.remark.style);
+      if (nodeTheme.remark.postdelimiter && nodeTheme.remark.postdelimiter.container) {
+        preparedPackItem.postdelimiter = nodeTheme.remark.postdelimiter.container;
+      }
+      preparedPackItem.wholeItemWrapperStyle = nodeTheme.remark.style,
+      preparedPack.remark = preparedPackItem;
     }
   }
+  return preparedPack;
 
+}
 
-  // pretty hardcode :`)
-
+function preparedPackToLeaf(preparedPack: preparedPackT, wholeLeafStyle?: Style): NonatomicTextContainer<StrictUnicodeText> {
+  // render line parts to leaf with delimeters when needed
   const leafChildren: AnyTextContainer[] = [];
   let isDelimiterNeed = false;
-  if (preparedContainer.icon) {
-    leafChildren.push(preparedContainer.icon);
-    isDelimiterNeed = true;
+  const unorederedPreparedItems = Object.values(preparedPack); // TODO: custom order
+  for (let itemId = 0; itemId < unorederedPreparedItems.length; itemId++) {
+    const preparedPackItem = unorederedPreparedItems[itemId];
+    const isFirst = itemId === 0;
+    const isLast = itemId === unorederedPreparedItems.length - 1;
+    // in fact i really need a isLast, because isFirst is skipped anyway
+    // on first run because of isDelimiterNeed = false;
+    if (preparedPackItem) {
+      const itemChildren: AnyTextContainer[] = [];
+      if (preparedPackItem.predelimiter && isDelimiterNeed && !isFirst) {
+        itemChildren.push(preparedPackItem.predelimiter);
+        isDelimiterNeed = false;
+      }
+      if (preparedPackItem.prefix) {
+        itemChildren.push(preparedPackItem.prefix);
+        isDelimiterNeed = true;
+      }
+      if (preparedPackItem.content) {
+        itemChildren.push(preparedPackItem.content);
+        isDelimiterNeed = true;
+      }
+      if (preparedPackItem.postfix) {
+        itemChildren.push(preparedPackItem.postfix);
+        isDelimiterNeed = true;
+      }
+      if (preparedPackItem.postdelimiter && isDelimiterNeed && !isLast) {
+        itemChildren.push(preparedPackItem.postdelimiter);
+        isDelimiterNeed = false;
+      }
+      if (itemChildren.length > 0) {
+        const itemWrapper = new NonatomicTextContainer(itemChildren, preparedPackItem.wholeItemWrapperStyle);
+        leafChildren.push(itemWrapper);
+      }
+    }
   }
-  if (preparedContainer.keyDelimiter && preparedContainer.key && isDelimiterNeed) {
-    leafChildren.push(preparedContainer.keyDelimiter);
-    isDelimiterNeed = false;
-  }
-  if (preparedContainer.key) {
-    leafChildren.push(preparedContainer.key);
-    isDelimiterNeed = true;
-  }
-  if (preparedContainer.valueDelimiter && preparedContainer.value && isDelimiterNeed) {
-    leafChildren.push(preparedContainer.valueDelimiter);
-    isDelimiterNeed = false;
-  }
-  if (preparedContainer.value) {
-    leafChildren.push(preparedContainer.value);
-    isDelimiterNeed = true;
-  }
-  if (preparedContainer.infoDelimiter && preparedContainer.info && isDelimiterNeed) {
-    leafChildren.push(preparedContainer.infoDelimiter);
-    isDelimiterNeed = false;
-  }
-  if (preparedContainer.info) {
-    leafChildren.push(preparedContainer.info);
-    isDelimiterNeed = true;
-  }
-  if (preparedContainer.remarkDelimiter && preparedContainer.remark && isDelimiterNeed) {
-    leafChildren.push(preparedContainer.remarkDelimiter);
-    isDelimiterNeed = false;
-  }
-  if (preparedContainer.remark) {
-    leafChildren.push(preparedContainer.remark);
-    isDelimiterNeed = true;
-  }
-  return new NonatomicTextContainer(leafChildren, nodeTheme.style);
+  return new NonatomicTextContainer(leafChildren, wholeLeafStyle);
 }

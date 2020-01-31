@@ -40,19 +40,41 @@ const palette = {
 export const theme: themeT = {
   global: {
     visibility: true,
+    icon: {
+      postdelimiter: {
+        line: ' ',
+      }
+    },
+    key: {
+      postdelimiter: {
+        line: ': ',
+      }
+    },
     value: {
       style: new Style(palette.red),
-    }
+    },
+    info: {
+      predelimiter: {
+        line: ' / ',
+      }
+    },
+    remark: {
+      predelimiter: {
+        line: ' * ',
+      }
+    },
   },
   broad: {
     enumerable: {
       arm: {
         commonChars: ['├─╸', '│  ', '└─╸',],
-        width: 8,
+        width: 3,
         style: new Style(palette.enumerable.dim),
       },
       icon: {
-        chars: '{ }',
+        content: {
+          line: '{ }',
+        },
         style: new Style(palette.enumerable.bright),
       },
       key: {
@@ -62,11 +84,13 @@ export const theme: themeT = {
     iterable: {
       arm: {
         commonChars: ['├─╴', '│  ', '╰─╴',],
-        width: 4,
+        width: 3,
         style: new Style(palette.iterarable.dim),
       },
       icon: {
-        chars: '[ ]',
+        content: {
+          line: '[ ]',
+        },
         style: new Style(palette.iterarable.bright),
       },
       key: {
@@ -76,11 +100,13 @@ export const theme: themeT = {
     single: {
       arm: {
         commonChars: ['├─╴', '│  ', '└─╴',],
-        width: 4,
+        width: 3,
         style: new Style(palette.single.dim),
       },
       icon: {
-        chars: '< >',
+        content: {
+          line: '< >',
+        },
         style: new Style(palette.single.bright),
       },
       key: {
@@ -90,11 +116,13 @@ export const theme: themeT = {
     dead: {
       arm: {
         commonChars: ['├─╴', '│  ', '╰─╴',], // TODO
-        width: 4,
+        width: 3,
         style: new Style(palette.dead.dim),
       },
       icon: {
-        chars: '> <',
+        content: {
+          line: '> <',
+        },
         style: new Style(palette.dead.bright),
       },
       key: {

@@ -1,6 +1,6 @@
 import { Style } from '../../text/style';
 import { consumableArmCharsT } from '../../meta/interfaces/matrix/armPattern';
-import { consumableIconCharsT, consumableLineT } from './general';
+import { consumableLineT } from './general';
 import { typeDependentPartialDictionaryT, typeDependentBroadOnlyPartialDictionaryT } from '../typeDependentDictionary';
 export type nodeBasicItemThemeT = {
   visibility?: boolean;
@@ -12,16 +12,20 @@ export type nodePredefinableItemThemeT = nodeBasicItemThemeT & {
 } | undefined;
 
 
-export type nodeSuffixedItemThemeT = nodeBasicItemThemeT & {
-  prefix?: nodeBasicItemThemeT;
-  content?: nodeBasicItemThemeT;
-  postfix?: nodeBasicItemThemeT;
+export type nodeSuffixedPredefinableItemThemeT = nodeBasicItemThemeT & {
+  predelimiter?: nodePredefinableItemThemeT;
+  prefix?: nodePredefinableItemThemeT;
+  content?: nodePredefinableItemThemeT;
+  postfix?: nodePredefinableItemThemeT;
+  postdelimiter?: nodePredefinableItemThemeT;
 } | undefined;
 
 export type nodeSuffixedSemipredefinableItemThemeT = nodeBasicItemThemeT & {
+  predelimiter?: nodePredefinableItemThemeT;
   prefix?: nodePredefinableItemThemeT;
   content?: nodeBasicItemThemeT;
   postfix?: nodePredefinableItemThemeT;
+  postdelimiter?: nodePredefinableItemThemeT;
 } | undefined;
 
 
@@ -30,20 +34,13 @@ export type armItemThemeT = { // no nodeBasicItemThemeT &
   commonChars?: [consumableArmCharsT, consumableArmCharsT, consumableArmCharsT];
   style?: Style;
 }
-export type iconItemThemeT = nodeSuffixedItemThemeT & {
-  chars?: consumableIconCharsT;
-} | undefined;
 
 export type nodeThemeT = nodeBasicItemThemeT & {
   arm?: armItemThemeT;
-  icon?: iconItemThemeT;
-  keyDelimiter?: nodePredefinableItemThemeT;
+  icon?: nodeSuffixedPredefinableItemThemeT;
   key?: nodeSuffixedSemipredefinableItemThemeT;
-  valueDelimiter?: nodePredefinableItemThemeT;
   value?: nodeSuffixedSemipredefinableItemThemeT;
-  infoDelimiter?: nodePredefinableItemThemeT;
   info?: nodeSuffixedSemipredefinableItemThemeT;
-  remarkDelimiter?: nodePredefinableItemThemeT;
   remark?: nodeSuffixedSemipredefinableItemThemeT;
 }
 
