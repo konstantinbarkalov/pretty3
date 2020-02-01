@@ -61,15 +61,16 @@
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
 				<p><a href="https://www.npmjs.com/package/pretty3"><img src="https://img.shields.io/npm/v/pretty3" alt="Version"></a> <a href="https://codecov.io/github/konstantinbarkalov/pretty3"><img src="https://img.shields.io/codecov/c/github/konstantinbarkalov/pretty3" alt="Coverage"></a> <img src="https://img.shields.io/bundlephobia/minzip/pretty3" alt="Minified size"> <a href="https://github.com/konstantinbarkalov/pretty3"><img src="https://img.shields.io/github/last-commit/konstantinbarkalov/pretty3" alt="Last commit"></a> <a href="https://github.com/konstantinbarkalov/pretty3/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/pretty3" alt="License: MIT"></a></p>
-				<a href="#🌳-pretty3" id="🌳-pretty3" style="color: inherit; text-decoration: none;">
-					<h1>🌳 pretty3</h1>
+				<a href="#pretty3" id="pretty3" style="color: inherit; text-decoration: none;">
+					<h1>pretty3</h1>
 				</a>
 				<blockquote>
-					<p>Universal tree logger done right. With colors, unicode support and word-wrapping. Typesctipt friendly.</p>
+					<p>Ultimate javascript tree-data logger. With colors, unicode support and word-wrapping. Typesctipt friendly.</p>
 				</blockquote>
-				<a href="#warning-module-is-in-early-alpha-and-not-ready-for-use-yet-beta-release-is-planned-on-february-2020" id="warning-module-is-in-early-alpha-and-not-ready-for-use-yet-beta-release-is-planned-on-february-2020" style="color: inherit; text-decoration: none;">
-					<h1>Warning: module is in early alpha and not ready for use yet. Beta release is planned on February 2020</h1>
+				<a href="#🌳-a-hrefhttpskonstantinbarkalovgithubiopretty3live-demoa" id="🌳-a-hrefhttpskonstantinbarkalovgithubiopretty3live-demoa" style="color: inherit; text-decoration: none;">
+					<h2>🌳 <a href="https://konstantinbarkalov.github.io/pretty3/">Live demo</a></h2>
 				</a>
+				<p>Try in <a href="https://konstantinbarkalov.github.io/pretty3/">online</a>!</p>
 				<a href="#install" id="install" style="color: inherit; text-decoration: none;">
 					<h2>Install</h2>
 				</a>
@@ -77,77 +78,62 @@
 				<a href="#basic-usage" id="basic-usage" style="color: inherit; text-decoration: none;">
 					<h2>Basic usage</h2>
 				</a>
-				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> pretty <span class="hljs-keyword">from</span> <span class="hljs-string">'pretty3'</span>;
-pretty.printTree(data);</code></pre>
-				<a href="#features" id="features" style="color: inherit; text-decoration: none;">
-					<h2>Features</h2>
+				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> { Pretty } <span class="hljs-keyword">from</span> <span class="hljs-string">'pretty3'</span>;
+Pretty.print(data);</code></pre>
+				<a href="#features-roadmap" id="features-roadmap" style="color: inherit; text-decoration: none;">
+					<h2>Features roadmap</h2>
 				</a>
 				<ul>
-					<li>Rich support for <strong>all javasctipt types</strong>, including <code>TypedArray</code>, <code>Map</code>, <code>Proxy</code> and <code>Symbol</code></li>
-					<li>Gracefull fit and <strong>word-wrap</strong> long/multiline data into limited-width console. Tree stucture does not breaks.</li>
-					<li>Accurate <strong>Unicode</strong>  width calucating for proper word-wrap.</li>
-					<li>Colors support not only in terminal, but in a <strong>browser</strong> <code>console.log()</code> too. Render to html is also supported.</li>
+					<li><input checked="" disabled="" type="checkbox"> Rich support for <strong>all javasctipt types</strong>, including <code>TypedArray</code>, <code>Map</code>, <code>Symbol</code> and <code>Error</code>.</li>
+					<li><input checked="" disabled="" type="checkbox"> Colors support for <strong>ANSI</strong> terminal output.</li>
+					<li><input checked="" disabled="" type="checkbox"> Color support for <strong>HTML</strong> output.</li>
+					<li><input checked="" disabled="" type="checkbox"> Deeply customizable <strong>stackable themes</strong>.</li>
+					<li><input checked="" disabled="" type="checkbox"> Support for <strong>circular references</strong>.</li>
+					<li><input checked="" disabled="" type="checkbox"> <strong>Collapsable</strong> long lists with ellipsis.</li>
+					<li><input checked="" disabled="" type="checkbox"> Gracefull fit and <strong>wrap long/multiline data</strong> into limited-width console. Tree stucture does not breaks!</li>
+					<li><input disabled="" type="checkbox"> <strong>Word-wrap</strong>.</li>
+					<li><input disabled="" type="checkbox"> Accurate <strong>Unicode</strong>  width calucating for proper word-wrap.</li>
+					<li><input disabled="" type="checkbox"> Color support for <strong>browser console</strong> via <code>console.log()</code> styling.</li>
+					<li><input disabled="" type="checkbox"> Support for <strong>circular references</strong>.</li>
+					<li><input disabled="" type="checkbox"> Support for <strong>endless</strong> iterators.</li>
+					<li><input disabled="" type="checkbox"> <strong>Collapse long leaves</strong> with ellipsis.</li>
 				</ul>
 				<a href="#advanced-usage" id="advanced-usage" style="color: inherit; text-decoration: none;">
 					<h2>Advanced usage</h2>
 				</a>
-				<pre><code class="language-javascript">pretty.printTree(data, options);</code></pre>
+				<pre><code class="language-javascript">Pretty.print(data, options);</code></pre>
 				<a href="#javasctipt" id="javasctipt" style="color: inherit; text-decoration: none;">
-					<h5>javasctipt</h5>
+					<h4>javasctipt</h4>
 				</a>
 				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> options = {
   <span class="hljs-attr">renderer</span>: <span class="hljs-keyword">new</span> AutodetectRenderer(),
+  <span class="hljs-attr">logLineCallback</span>: <span class="hljs-function">(<span class="hljs-params">line</span>) =&gt;</span> { <span class="hljs-built_in">console</span>.log(line); },
   <span class="hljs-attr">maxLevel</span>: <span class="hljs-number">6</span>,
   <span class="hljs-attr">maxItemsPerLevel</span>: [<span class="hljs-number">30</span>, <span class="hljs-number">10</span>],
   <span class="hljs-attr">maxLineWidth</span>: <span class="hljs-number">80</span>,
-  <span class="hljs-attr">arrayItemTextPattern</span>: {
-    <span class="hljs-attr">other</span>: {
-      <span class="hljs-attr">first</span>: pretty.textPatternString(<span class="hljs-string">'├─╸'</span>),
-      <span class="hljs-attr">other</span>: pretty.textPatternString(<span class="hljs-string">'│  '</span>) },
-    <span class="hljs-attr">last</span>: {
-      <span class="hljs-attr">first</span>: pretty.textPatternString(<span class="hljs-string">'└─╸'</span>),
-      <span class="hljs-attr">other</span>: pretty.textPatternString(<span class="hljs-string">'   '</span>) }
-  },
-  <span class="hljs-attr">objectItemTextPattern</span>: {
-    <span class="hljs-attr">other</span>: {
-      <span class="hljs-attr">first</span>: pretty.textPatternString(<span class="hljs-string">'├─╴'</span>),
-      <span class="hljs-attr">other</span>: pretty.textPatternString(<span class="hljs-string">'│  '</span>) },
-    <span class="hljs-attr">last</span>: {
-      <span class="hljs-attr">first</span>: pretty.textPatternString(<span class="hljs-string">'╰─╴'</span>),
-      <span class="hljs-attr">other</span>: pretty.textPatternString(<span class="hljs-string">'   '</span>) }
-  },
-  <span class="hljs-attr">tabSize</span>: <span class="hljs-number">4</span>,
-  <span class="hljs-attr">paddingSpace</span>: <span class="hljs-number">0</span>,
-  <span class="hljs-attr">eol</span>: <span class="hljs-string">'\n'</span>,
-  <span class="hljs-attr">logLineCallback</span>: <span class="hljs-function">(<span class="hljs-params">line</span>) =&gt;</span> {
-    <span class="hljs-built_in">console</span>.log(line);
-  }
+  <span class="hljs-attr">themeStack</span>: [defaultTheme, noSimplestIcon],
 };</code></pre>
 				<a href="#typescript" id="typescript" style="color: inherit; text-decoration: none;">
-					<h5>typescript</h5>
+					<h4>typescript</h4>
 				</a>
-				<pre><code class="language-typescript"><span class="hljs-keyword">type</span> options = Partial&lt;{
-  renderer: Renderer;
-  maxLevel: <span class="hljs-built_in">number</span>;
-  maxItemsPerLevel: <span class="hljs-built_in">number</span>[] | <span class="hljs-built_in">number</span>;
-  maxLineWidth: <span class="hljs-built_in">number</span>;
-  arrayItemTextPattern: itemTextPatternT;
-  objectItemTextPattern: itemTextPatternT;
-  tabSize: <span class="hljs-built_in">number</span>;
-  paddingSpace: <span class="hljs-built_in">number</span>;
-  eol: <span class="hljs-built_in">string</span>;
-  logLineCallback: <span class="hljs-function">(<span class="hljs-params">line: <span class="hljs-built_in">string</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
-}&gt;;</code></pre>
+				<pre><code class="language-typescript"><span class="hljs-keyword">type</span> options = {
+  renderer?: Renderer;
+  logLineCallback?: logLineCallbackT,
+  maxLevel?: <span class="hljs-built_in">number</span>,
+  maxItemsPerLevel?: <span class="hljs-built_in">number</span> || <span class="hljs-built_in">number</span>[],
+  maxLineWidth?: <span class="hljs-built_in">number</span>,
+  themeStack?: themeT[],
+};</code></pre>
 				<a href="#api-documetation" id="api-documetation" style="color: inherit; text-decoration: none;">
 					<h2>API Documetation</h2>
 				</a>
-				<p>Poorly comented, but actual autogenerated docs (by tsdoc) are <a href="https://konstantinbarkalov.github.io/pretty3/">hosted here</a>.</p>
+				<p>Poorly comented, but actual autogenerated docs (by tsdoc) are <a href="https://konstantinbarkalov.github.io/pretty3/docs/">hosted here</a>.</p>
 				<p>Intense documentation with examples is <strong>planned after API stabilization</strong>.</p>
 				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
 					<h2>Contributing</h2>
 				</a>
 				<p>Contributions, issues and feature requests are welcome!</p>
-				<p>Feel free to check <a href="todo">issues page</a>.</p>
+				<p>Feel free to check <a href="https://github.com/konstantinbarkalov/pretty3/issues">issues page</a>.</p>
 				<a href="#author" id="author" style="color: inherit; text-decoration: none;">
 					<h2>Author</h2>
 				</a>
@@ -159,6 +145,153 @@ pretty.printTree(data);</code></pre>
 				<ul>
 					<li class="globals  ">
 						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_index_.html">&quot;index&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_interfaces_arm_arm_.html">&quot;meta/interfaces/arm/arm&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_interfaces_arm_armgenerator_.html">&quot;meta/interfaces/arm/arm<wbr>Generator&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_interfaces_arm_armwidth_.html">&quot;meta/interfaces/arm/arm<wbr>Width&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_interfaces_matrix_armpattern_.html">&quot;meta/interfaces/matrix/arm<wbr>Pattern&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_interfaces_matrix_armpatternmatrix_.html">&quot;meta/interfaces/matrix/arm<wbr>Pattern<wbr>Matrix&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_interfaces_matrix_armwidthmatrix_.html">&quot;meta/interfaces/matrix/arm<wbr>Width<wbr>Matrix&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_interfaces_matrix_matrix_.html">&quot;meta/interfaces/matrix/matrix&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_interfaces_node_.html">&quot;meta/interfaces/node&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_matrix_armpattern_.html">&quot;meta/matrix/arm<wbr>Pattern&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_matrix_armpatternmatrix_.html">&quot;meta/matrix/arm<wbr>Pattern<wbr>Matrix&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_matrix_armwidthmatrix_.html">&quot;meta/matrix/arm<wbr>Width<wbr>Matrix&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_matrix_matrixdrivenarmgenerator_.html">&quot;meta/matrix/matrix<wbr>Driven<wbr>Arm<wbr>Generator&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_matrix_matrixpicker_.html">&quot;meta/matrix/matrix<wbr>Picker&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_node_.html">&quot;meta/node&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_render_armgeneratorchain_.html">&quot;meta/render/arm<wbr>Generator<wbr>Chain&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_meta_render_render_.html">&quot;meta/render/render&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_buildmetatree_builddescriptiontree_.html">&quot;pretty/build<wbr>Meta<wbr>Tree/build<wbr>Description<wbr>Tree&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_buildmetatree_buildmetatree_.html">&quot;pretty/build<wbr>Meta<wbr>Tree/build<wbr>Meta<wbr>Tree&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_buildmetatree_nodedescriptiontoleaf_.html">&quot;pretty/build<wbr>Meta<wbr>Tree/node<wbr>Description<wbr>ToLeaf&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_defaultsettings_.html">&quot;pretty/default<wbr>Settings&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_interfaces_general_.html">&quot;pretty/interfaces/general&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_interfaces_icon_.html">&quot;pretty/interfaces/icon&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_interfaces_nodedescription_.html">&quot;pretty/interfaces/node<wbr>Description&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_interfaces_nodetype_.html">&quot;pretty/interfaces/node<wbr>Type&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_interfaces_prebuildedtheme_.html">&quot;pretty/interfaces/prebuilded<wbr>Theme&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_interfaces_theme_.html">&quot;pretty/interfaces/theme&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_interfaces_typedependentdictionary_.html">&quot;pretty/interfaces/type<wbr>Dependent<wbr>Dictionary&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_pretty_.html">&quot;pretty/pretty&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_theme_fallback_.html">&quot;pretty/theme/fallback&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_theme_prebuild_.html">&quot;pretty/theme/prebuild&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_theme_themes_defaulttheme_.html">&quot;pretty/theme/themes/default<wbr>Theme&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_theme_themes_index_.html">&quot;pretty/theme/themes/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_theme_themes_mods_index_.html">&quot;pretty/theme/themes/mods/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_theme_themes_mods_nosimpleicon_.html">&quot;pretty/theme/themes/mods/no<wbr>Simple<wbr>Icon&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_theme_themes_mods_nosimplesticon_.html">&quot;pretty/theme/themes/mods/no<wbr>Simplest<wbr>Icon&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_theme_themes_smart_.html">&quot;pretty/theme/themes/smart&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_pretty_typedependentdictionary_.html">&quot;pretty/type<wbr>Dependent<wbr>Dictionary&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_renderer_abstract_renderer_.html">&quot;text/renderer/abstract/renderer&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_renderer_abstract_simplerenderer_.html">&quot;text/renderer/abstract/simple<wbr>Renderer&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_renderer_implementation_ansi_.html">&quot;text/renderer/implementation/ansi&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_renderer_implementation_autodetect_.html">&quot;text/renderer/implementation/autodetect&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_renderer_implementation_html_.html">&quot;text/renderer/implementation/html&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_renderer_implementation_index_.html">&quot;text/renderer/implementation/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_renderer_implementation_plain_.html">&quot;text/renderer/implementation/plain&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_strictunicode_.html">&quot;text/strict<wbr>Unicode&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_style_.html">&quot;text/style&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_styletypes_.html">&quot;text/style<wbr>Types&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_text_textcontainer_.html">&quot;text/text<wbr>Container&quot;</a>
 					</li>
 				</ul>
 			</nav>
