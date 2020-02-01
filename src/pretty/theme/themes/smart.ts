@@ -43,7 +43,7 @@ type paletteT = {
     info?: styleSwitchesT;
   };
 };
-const standartPallete: paletteT = {
+const standartPalette: paletteT = {
   color: {
     info: {r: 96, g: 80, b: 96},
     remark: {r: 255, g: 128, b: 0},
@@ -80,7 +80,7 @@ const standartPallete: paletteT = {
     },
   },
 };
-const safeAnsiPallete: paletteT = {
+const safeAnsiPalette: paletteT = {
   color: {
     info: {r: 128, g: 64, b: 128},
     remark: {r: 255, g: 128, b: 0},
@@ -117,7 +117,7 @@ const safeAnsiPallete: paletteT = {
     },
   },
 };
-const richFontsPallete: paletteT = Object.assign({}, standartPallete, {
+const richFontsPalette: paletteT = Object.assign({}, standartPalette, {
   styleSwatches: {
     key: new StyleSwitches({ [StyleSwitchesEnum.Bold]: false}),
     info: new StyleSwitches({ [StyleSwitchesEnum.Italic]: true}),
@@ -507,7 +507,7 @@ function buildTheme(palette: paletteT): themeT {
 }
 
 export const smart = {
-  standart: buildTheme(standartPallete),
-  safeAnsi: buildTheme(safeAnsiPallete),
-  richFonts: buildTheme(richFontsPallete),
+  standart: buildTheme(standartPalette),
+  safeAnsi: buildTheme(safeAnsiPalette),
+  richFonts: buildTheme(richFontsPalette),
 };

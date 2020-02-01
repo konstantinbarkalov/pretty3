@@ -2,7 +2,7 @@ html, body {
   margin: 0;
 }
 .root {
-  background-color: #222;
+  background: radial-gradient(#00415a, black);
   color: #ccc;
   display: flex;
   flex-direction: column;
@@ -39,12 +39,15 @@ html, body {
 .dropdowns {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: center;
   padding: 32px 0;
+  margin: 0 -16px;
 }
 .dropdown {
   display: flex;
   flex-direction: column;
+  padding: 0 16px;
+  width: 180px;
 }
 .dropdown-select {
   font-size: 16px;
@@ -52,7 +55,7 @@ html, body {
   color: #fff;
   padding: 8px;
   border: none;
-
+  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.5);
 }
 .demo-screen-container {
   display: flex;
@@ -63,10 +66,12 @@ html, body {
 .demo-screen {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   min-height: 120px;
   max-height: 2000px;
   padding: 56px;
-  background-color: #333;
+  background-color: #181818;
   box-shadow: 0 16px 60px 0 rgba(0, 0, 0, 0.5);
 }
 .demo-screen-text {
@@ -77,16 +82,28 @@ html, body {
 .header, .footer {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
   padding: 32px;
   align-self: stretch;
 }
 .header {
-  background: #003144;
-  /* background: #3088aa; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   color: #fff;
 }
-
 .footer {
+  justify-content: space-evenly;
   background: #111;
 }
+.hero {
+  text-align: center;
+}
+
+.hero h1 {
+  font-family: serif;
+  font-weight: bold;
+  font-size: 42px;
+  line-height: 1.2;
+  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+}
+
