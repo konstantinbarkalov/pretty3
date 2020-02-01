@@ -106,7 +106,7 @@ const simpleTree = {
 };
 
 (async () => {
-  const pretty3Module = await import('https://dev.jspm.io/npm:pretty3@1.0.0-alpha.3');
+  const pretty3Module = await import('https://dev.jspm.io/npm:pretty3@1.0.0-alpha.4');
   const Pretty = pretty3Module.default.Pretty;
   const themes = pretty3Module.default.themes;
   const renderers = pretty3Module.default.renderers;
@@ -119,9 +119,6 @@ const simpleTree = {
     'rich': richTree,
   };
   const themeStack = {
-    'default': {
-      'standart': [themes.defaultTheme],
-    },
     'smart': {
       'standart': [themes.smart.standart],
       'safe ansi': [themes.smart.safeAnsi],
@@ -131,6 +128,24 @@ const simpleTree = {
       'standart': [themes.smart.standart, themes.mods.noSimpleIcon],
       'safe ansi': [themes.smart.safeAnsi, themes.mods.noSimpleIcon],
       'rich fonts': [themes.smart.richFonts, themes.mods.noSimpleIcon],
+    },
+    'legacy': {
+      'standart': [themes.legacy.standart],
+    },
+    'plating': {
+      'standart': [themes.plating.standart],
+      'cute': [themes.plating.cute],
+      'alternative': [themes.plating.alternative],
+    },
+    'plating with no simple icons': {
+      'standart': [themes.plating.standart, themes.mods.noSimpleIcon],
+      'cute': [themes.plating.cute, themes.mods.noSimpleIcon],
+      'alternative': [themes.plating.alternative, themes.mods.noSimpleIcon],
+    },
+    'plating with no icons': {
+      'standart': [themes.plating.standart, themes.mods.noIcon],
+      'cute': [themes.plating.cute, themes.mods.noIcon],
+      'alternative': [themes.plating.alternative, themes.mods.noIcon],
     },
   };
 

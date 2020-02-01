@@ -15,7 +15,7 @@ type paletteT = {
       key?: rgbT;
       keyDelimiter?: rgbT;
     };
-    iterarable?: {
+    iterable?: {
       arm?: rgbT;
       icon?: rgbT;
       iconAccent?: rgbT;
@@ -56,7 +56,7 @@ const standartPalette: paletteT = {
       key: {r: 100, g: 200, b: 100},
       keyDelimiter: {r: 60, g: 70, b: 60},
     },
-    iterarable: {
+    iterable: {
       arm: {r: 60, g: 60, b: 70},
       icon: {r: 55, g: 55, b: 105},
       iconAccent: {r: 100, g: 100, b: 200},
@@ -93,7 +93,7 @@ const safeAnsiPalette: paletteT = {
       key: {r: 64, g: 255, b: 64},
       keyDelimiter: {r: 0, g: 64, b: 0},
     },
-    iterarable: {
+    iterable: {
       arm: {r: 0, g: 0, b: 128},
       icon: {r: 64, g: 64, b: 128},
       iconAccent: {r: 64, g: 64, b: 255},
@@ -149,7 +149,7 @@ function buildTheme(palette: paletteT): themeT {
       },
       info: {
         predelimiter: {
-          line: ' / ',
+          line: ' · ',
         },
         style: styleIfNeed(palette.color?.info, undefined, palette.styleSwatches?.info),
       },
@@ -191,7 +191,7 @@ function buildTheme(palette: paletteT): themeT {
         arm: {
           commonChars: ['├─╸', '│  ', '└─╸',],
           width: 3,
-          style: styleIfNeed(palette.color?.iterarable?.arm),
+          style: styleIfNeed(palette.color?.iterable?.arm),
         },
         icon: {
           prefix: {
@@ -199,17 +199,17 @@ function buildTheme(palette: paletteT): themeT {
           },
           content: {
             line: ' ',
-            style: styleIfNeed(palette.color?.iterarable?.iconAccent),
+            style: styleIfNeed(palette.color?.iterable?.iconAccent),
           },
           postfix: {
             line: ']',
           },
-          style: styleIfNeed(palette.color?.iterarable?.icon),
+          style: styleIfNeed(palette.color?.iterable?.icon),
         },
         key: {
-          style: styleIfNeed(palette.color?.iterarable?.key, undefined, palette.styleSwatches?.key),
+          style: styleIfNeed(palette.color?.iterable?.key, undefined, palette.styleSwatches?.key),
           postdelimiter: {
-            style: styleIfNeed(palette.color?.iterarable?.keyDelimiter),
+            style: styleIfNeed(palette.color?.iterable?.keyDelimiter),
           }
         },
       },
@@ -462,9 +462,9 @@ function buildTheme(palette: paletteT): themeT {
           icon: {
             content: {
               line: ' ',
-              style: styleIfNeed(palette.color?.iterarable?.icon),
+              style: styleIfNeed(palette.color?.iterable?.icon),
             },
-            style: styleIfNeed(palette.color?.iterarable?.iconAccent),
+            style: styleIfNeed(palette.color?.iterable?.iconAccent),
           }
         },
 

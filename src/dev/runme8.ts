@@ -3,7 +3,8 @@ import { AnsiRenderer } from '../text/renderer/implementation/ansi';
 
 
 import tree from './input05';
-import { smart, mods } from '../pretty/theme/themes';
+//import { smart, plating, mods } from '../pretty/theme/themes';
+import { plating } from '../pretty/theme/themes';
 //import tree from './input06';
 //import tree from './example01';
 
@@ -12,5 +13,5 @@ const maxLevel = 5; // 2;
 const maxLineWidth = 80;
 const renderer = new AnsiRenderer();
 console.log('-----');
-const pretty = new Pretty([smart.richFonts, mods.noSimplestIcon]);
+const pretty = new Pretty([plating.alternative]); // mods.noSimplestIcon
 pretty.print(tree, {maxItemsPerLevel, maxLevel, maxLineWidth, renderer});

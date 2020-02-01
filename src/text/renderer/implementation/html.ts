@@ -2,6 +2,7 @@ import { Style } from '../../style';
 import { StyleSwitchesEnum } from '../../styleTypes';
 import { SimpleRenderer } from '../abstract/simpleRenderer';
 import { EOL } from 'os';
+import { strictRgb } from '../abstract/strictRgb';
 export class HtmlRenderer extends SimpleRenderer {
   public eol: string = '<br/>' + EOL;
   protected styleBegin(style: Style | undefined): string {
@@ -9,10 +10,12 @@ export class HtmlRenderer extends SimpleRenderer {
     if (style) {
       styleString += '<span style="';
       if (style.background) {
-        styleString += `background-color: rgb(${style.background.r}, ${style.background.g}, ${style.background.b}); `;
+        const strictBackground = strictRgb(style.background);
+        styleString += `background-color: rgb(${strictBackground.r}, ${strictBackground.g}, ${strictBackground.b}); `;
       }
       if (style.foreground) {
-        styleString += `color: rgb(${style.foreground.r}, ${style.foreground.g}, ${style.foreground.b}); `;
+        const strictForeground = strictRgb(style.foreground);
+        styleString += `color: rgb(${strictForeground.r}, ${strictForeground.g}, ${strictForeground.b}); `;
       }
       if (style.switches[StyleSwitchesEnum.Bold]) {
         styleString += 'font-weight: bold; ';

@@ -1,7 +1,8 @@
 import { Style } from '../../text/style';
 import { consumableArmCharsT } from '../../meta/interfaces/matrix/armPattern';
 import { consumableLineT } from './general';
-import { typeDependentPartialDictionaryT, typeDependentBroadOnlyPartialDictionaryT } from "./typeDependentDictionary";
+import { typeDependentPartialDictionaryT, typeDependentBroadOnlyPartialDictionaryT } from './typeDependentDictionary';
+import { armWidthT } from '../../meta/interfaces/arm/armWidth';
 export type nodeBasicItemThemeT = {
   visibility?: boolean;
   style?: Style;
@@ -30,7 +31,7 @@ export type nodeSuffixedSemipredefinableItemThemeT = nodeBasicItemThemeT & {
 
 
 export type armItemThemeT = { // no nodeBasicItemThemeT &
-  width?: number;
+  width?: armWidthT;
   commonChars?: [consumableArmCharsT, consumableArmCharsT, consumableArmCharsT];
   style?: Style;
 }

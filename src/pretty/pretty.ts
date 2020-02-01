@@ -1,5 +1,5 @@
 import { prebuildedThemeT } from './interfaces/prebuildedTheme';
-import { prebuildTheme } from './theme/prebuild';
+import { prebuildTheme } from './theme/prebuildTheme';
 import { themeT } from './interfaces/theme';
 import { fallback } from './theme/fallback';
 import { printTreeOptionsT, stringifyTreeOptionsT, oneshotPrintTreeOptionsT, oneshotStringifyTreeOptionsT } from './interfaces/general';

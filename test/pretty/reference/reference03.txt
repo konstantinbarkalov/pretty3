@@ -1,16 +1,16 @@
-[ ]  / 3 entries
- ├─╸ { } 0:  / 1 entries
- │    ╰─╴ [ ] a:  / 2 entries
- │         ├─╸ { } 0:  / 0 entries
- │         └─╸ { } 1:  / 1 entries
+[ ]  · 3 entries
+ ├─╸ { } 0:  · 1 entries
+ │    ╰─╴ [ ] a:  · 2 entries
+ │         ├─╸ { } 0:  · 0 entries
+ │         └─╸ { } 1:  · 1 entries
  │              ╰─╴ b: 1
- ├─╸ { } 1:  / 1 entries
- │    ╰─╴ [ ] a:  / 2 entries
- │         ├─╸ { } 0:  / 0 entries
- │         └─╸ { } 1:  / 1 entries
+ ├─╸ { } 1:  · 1 entries
+ │    ╰─╴ [ ] a:  · 2 entries
+ │         ├─╸ { } 0:  · 0 entries
+ │         └─╸ { } 1:  · 1 entries
  │              ╰─╴ b: 2
- └─╸ { } 2:  / 1 entries
-      ╰─╴ [ ] a:  / 2 entries
-           ├─╸ { } 0:  / 0 entries
-           └─╸ { } 1:  / 1 entries
+ └─╸ { } 2:  · 1 entries
+      ╰─╴ [ ] a:  · 2 entries
+           ├─╸ { } 0:  · 0 entries
+           └─╸ { } 1:  · 1 entries
                 ╰─╴ b: 3

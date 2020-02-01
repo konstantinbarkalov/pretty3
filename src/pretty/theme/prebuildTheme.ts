@@ -2,13 +2,13 @@ import { nodeThemeT, nodeBasicItemThemeT, nodePredefinableItemThemeT, nodeSuffix
 import { nodeItemPrebuildedThemeT, nodePredefinableItemPrebuildedThemeT, nodeSuffixedSemipredefinableItemPrebuildedThemeT, nodePrebuildedThemeT, nodeSuffixedPredefinableItemPrebuildedThemeT } from '../interfaces/prebuildedTheme';
 import { AtomicTextContainer } from '../../text/textContainer';
 import { StrictUnicodeLine } from '../../text/strictUnicode';
-import { spacedArmWidthT } from '../../meta/interfaces/arm/armWidth';
+import { spacedArmWidthT, armWidthT } from '../../meta/interfaces/arm/armWidth';
 import { MatrixDrivenArmGenerator, MatrixDrivenArmWidthGenerator } from '../../meta/matrix/matrixDrivenArmGenerator';
 import { ArmPatternMatrix } from '../../meta/matrix/armPatternMatrix';
 import { ArmWidthMatrix } from '../../meta/matrix/armWidthMatrix';
 import { NodeBroadTypeEnum, DeadNodeFineTypeEnum, NodeFineTypeEnumT, EnumerableNodeFineTypeEnum, IterableNodeFineTypeEnum, SingleNodeFineTypeEnum, nodeTypeTupleT } from '../interfaces/nodeType';
 import { getFromTypeDependentPartialDictionary, getFromTypeDependentBroadOnlyPartialDictionary } from '../typeDependentDictionary';
-import { typeDependentDictionaryT, typeDependentPartialDictionaryT, typeDependentPartialFineDictionaryT } from "../interfaces/typeDependentDictionary";
+import { typeDependentDictionaryT, typeDependentPartialDictionaryT, typeDependentPartialFineDictionaryT } from '../interfaces/typeDependentDictionary';
 
 // deep-assign and collapse
 type mapFilterCallbackfnT<TIn, TOut> = (input: TIn) => TOut | undefined;
@@ -223,14 +223,25 @@ function prebuildNodeSuffixedPredefinableItemTheme(suffixedItemTheme: nodeSuffix
   }
   return undefined;
 }
+function isSpacedArmWidth(armWidth: armWidthT): armWidth is spacedArmWidthT {
+  return (typeof armWidth === 'object');
 
+  //return armWidth.
+}
 function prebuildArmNodeTheme(nodeArmTheme: nodeThemeT['arm']): nodePrebuildedThemeT['arm'] | undefined {
   if (nodeArmTheme) {
     const armStyle = nodeArmTheme.style;
     if (nodeArmTheme.width !== undefined) {
       const armWidth = nodeArmTheme.width;
-      const spacedArmWidth: spacedArmWidthT = { preSpace: 1, arm: armWidth, postSpace: 1 };
-      const fertileLeafNonfirstLineSpacedArmWidth = { preSpace: 1, arm: 1, postSpace: 1 };
+
+      let spacedArmWidth: spacedArmWidthT;
+      if (isSpacedArmWidth(armWidth)) {
+        spacedArmWidth = armWidth;
+      } else {
+        spacedArmWidth = { preSpace: 1, arm: armWidth, postSpace: 1 };
+      }
+
+      const fertileLeafNonfirstLineSpacedArmWidth = { preSpace: spacedArmWidth.preSpace, arm: Math.sign(spacedArmWidth.arm), postSpace: spacedArmWidth.postSpace };
       const commonChars = nodeArmTheme.commonChars;
       if (commonChars) {
         return {

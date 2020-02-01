@@ -1,18 +1,23 @@
 import { Style } from '../../style';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const ansiStyleLib = require('ansi-styles');
 import { StyleSwitchesEnum } from '../../styleTypes';
 import { EOL } from 'os';
 import { SimpleRenderer } from '../abstract/simpleRenderer';
+import { strictRgb } from '../abstract/strictRgb';
 export class AnsiRenderer extends SimpleRenderer {
-  public eol:string = EOL;
-  protected styleBegin(style:Style | undefined) {
+  public eol: string = EOL;
+
+  protected styleBegin(style: Style | undefined): string {
     let styleString = '';
     if (style) {
       if (style.background) {
-        styleString += ansiStyleLib.bgColor.ansi16m.rgb(style.background.r, style.background.g, style.background.b);
+        const strictBackground = strictRgb(style.background);
+        styleString += ansiStyleLib.bgColor.ansi16m.rgb(strictBackground.r, strictBackground.g, strictBackground.b);
       }
       if (style.foreground) {
-        styleString += ansiStyleLib.color.ansi16m.rgb(style.foreground.r, style.foreground.g, style.foreground.b);
+        const strictForeground = strictRgb(style.foreground);
+        styleString += ansiStyleLib.color.ansi16m.rgb(strictForeground.r, strictForeground.g, strictForeground.b);
       }
       if (style.switches[StyleSwitchesEnum.Bold]) {
         styleString += ansiStyleLib.bold.open;
@@ -26,7 +31,7 @@ export class AnsiRenderer extends SimpleRenderer {
     }
     return styleString;
   }
-  protected styleEnd(style:Style | undefined) {
+  protected styleEnd(style: Style | undefined): string {
     let styleString = '';
     if (style) {
       if (style.background) {
@@ -47,7 +52,7 @@ export class AnsiRenderer extends SimpleRenderer {
     }
     return styleString;
   }
-  protected escapeText(text: string):string {
+  protected escapeText(text: string): string {
     return text;
   }
 }
