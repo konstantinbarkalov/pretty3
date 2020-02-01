@@ -1,0 +1,92 @@
+html, body {
+  margin: 0;
+}
+.root {
+  background-color: #222;
+  color: #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.root a {
+  color: rgb(130, 5, 161);
+  text-decoration: none;
+}
+.root a:hover, .root a:visited:hover {
+  color: rgb(220, 25, 238);
+}
+.root a:visited {
+  color: rgb(151, 56, 130);
+}
+.content {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  max-width: 1000px;
+  width: 80%;
+  min-width: 600px;
+  align-items: center;
+}
+.section {
+  display: flex;
+  flex-direction: column;
+}
+.section--links {
+  font-weight: 400;
+  font-size: 24px;
+  padding: 64px 0;
+}
+.dropdowns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding: 32px 0;
+}
+.dropdown {
+  display: flex;
+  flex-direction: column;
+}
+.dropdown-select {
+  font-size: 16px;
+  background: #3088aa;
+  color: #fff;
+  padding: 8px;
+  border: none;
+
+}
+.demo-screen-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.demo-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 120px;
+  max-height: 2000px;
+  padding: 56px;
+  background-color: #333;
+  box-shadow: 0 16px 60px 0 rgba(0, 0, 0, 0.5);
+}
+.demo-screen-text {
+  font-family: monospace;
+  color: #fff; /* TODO: remove when implement html renderer */
+  white-space: pre;
+}
+.header, .footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding: 32px;
+  align-self: stretch;
+}
+.header {
+  background: #003144;
+  /* background: #3088aa; */
+  color: #fff;
+}
+
+.footer {
+  background: #111;
+}

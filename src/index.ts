@@ -1,4 +1,6 @@
 
 import { Pretty } from './pretty/pretty';
-
-export { Pretty as Pretty };
+import * as themes from './pretty/theme/themes';
+import * as renderers from './text/renderer/implementation';
+import { defaultSettings } from './pretty/defaultSettings';
+export { Pretty, themes, renderers, defaultSettings };

@@ -163,7 +163,7 @@ function buildTheme(palette: paletteT): themeT {
     broad: {
       enumerable: {
         arm: {
-          commonChars: ['├─╸', '│  ', '└─╸',],
+          commonChars: ['├─╴', '│  ', '╰─╴',],
           width: 3,
           style: styleIfNeed(palette.color?.enumerable?.arm),
         },
@@ -189,7 +189,7 @@ function buildTheme(palette: paletteT): themeT {
       },
       iterable: {
         arm: {
-          commonChars: ['├─╴', '│  ', '╰─╴',],
+          commonChars: ['├─╸', '│  ', '└─╸',],
           width: 3,
           style: styleIfNeed(palette.color?.iterarable?.arm),
         },
