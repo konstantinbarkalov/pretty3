@@ -26,7 +26,6 @@ Pretty.print(data);
   - [x] Colors support for **ANSI** terminal output.
   - [x] Color support for **HTML** output.
   - [x] Deeply customizable **stackable themes**.
-  - [x] Support for **circular references**.
   - [x] **Collapsable** long lists with ellipsis.
   - [x] Gracefull fit and **wrap long/multiline data** into limited-width console. Tree stucture does not breaks!
   - [ ] **Word-wrap**.

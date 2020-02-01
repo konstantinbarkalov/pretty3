@@ -106,7 +106,7 @@ const simpleTree = {
 };
 
 (async () => {
-  const pretty3Module = await import('https://dev.jspm.io/npm:pretty3@1.0.0-alpha.1');
+  const pretty3Module = await import('https://dev.jspm.io/npm:pretty3@1.0.0-alpha.3');
   const Pretty = pretty3Module.default.Pretty;
   const themes = pretty3Module.default.themes;
   const renderers = pretty3Module.default.renderers;
