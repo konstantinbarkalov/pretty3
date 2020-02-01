@@ -1,6 +1,6 @@
 {
   "name": "pretty3",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "description": "Universal tree logger done right. With colors, unicode support and word-wrapping. Typesctipt friendly.",
   "main": "dist/index.js",
   "repository": "github:konstantinbarkalov/pretty3",
