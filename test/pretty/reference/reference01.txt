@@ -1,9 +1,9 @@
 { }  / 2 entries
- ├─╸ a: 12
- └─╸ [ ] b:  / 4 entries
-      ├─╴ 0: hello
-      ├─╴ 1: 12,345
-      ├─╴ <B> 2: false
-      ╰─╴ { } 3:  / 2 entries
-           ├─╸ <B> d: true
-           └─╸ e: end
+ ├─╴ a: 12
+ ╰─╴ [ ] b:  / 4 entries
+      ├─╸ 0: hello
+      ├─╸ 1: 12,345
+      ├─╸ <B> 2: false
+      └─╸ { } 3:  / 2 entries
+           ├─╴ <B> d: true
+           ╰─╴ e: end
