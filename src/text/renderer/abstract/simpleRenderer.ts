@@ -21,12 +21,12 @@ export abstract class SimpleRenderer extends Renderer {
   public renderFlatLines(flatLines: FlatNonatomicTextContainer<StrictUnicodeLine>[]): string {
     return flatLines.map((flatLine)=>{
       return this.renderFlatLine(flatLine);
-    }).join(this.eol);
+    }).join('');
   }
 
   public renderFlatLine(flatLineContainer: FlatNonatomicTextContainer<StrictUnicodeLine>): string {
     return flatLineContainer.children.map((child) => {
-      return this.styleBegin(child.style) + this.escapeText(child.toString()) + this.styleEnd(child.style);
+      return this.styleBegin(child.style) + this.escapeText(child.toString()) + this.styleEnd(child.style) + this.eol;
     }).join('');
   }
 

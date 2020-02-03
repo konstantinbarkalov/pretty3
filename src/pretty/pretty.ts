@@ -6,7 +6,6 @@ import { printTreeOptionsT, stringifyTreeOptionsT, oneshotPrintTreeOptionsT, one
 import { buildMetaTree } from './buildMetaTree/buildMetaTree';
 import { renderMetaNode } from '../meta/render/render';
 import { defaultSettings } from './defaultSettings';
-import { EOL } from 'os';
 
 export class Pretty {
   protected readonly theme: prebuildedThemeT;
@@ -64,7 +63,7 @@ export class Pretty {
   stringify(tree: any, options?: stringifyTreeOptionsT ): string {
     let stringBuffer = '';
     const printTreeOptions = Object.assign({}, options, {
-      logLineCallback(line: string) { stringBuffer += line + EOL; },
+      logLineCallback(line: string) { stringBuffer += line; },
     });
     this.print(tree, printTreeOptions);
     return stringBuffer;

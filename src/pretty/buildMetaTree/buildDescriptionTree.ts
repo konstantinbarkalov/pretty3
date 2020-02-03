@@ -133,6 +133,7 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
         subEntries: [],
       };
       unwrappedSubEntries = Object.entries(node);
+      unwrappedSubEntries.push(['stack', node.stack]); // TODO: whitelist\blacklist of special unenumerable props
     } else if (node instanceof Map) {
       nodeDescription = {
         key: nodeKey,

@@ -56,7 +56,7 @@ for (const [textContainerKey, textContainer] of Object.entries(textContainers)) 
         it('must render same as rejoined renderFlatLine ', () => {
           const renderedRejoinedFlatLine = textContainer.splitToFlatLines().map((flatLine) => {
             return renderer.renderFlatLine(flatLine);
-          }).join(renderer.eol);
+          }).join('');
           expect(rendered).to.be.equal(renderedRejoinedFlatLine);
         });
       });
