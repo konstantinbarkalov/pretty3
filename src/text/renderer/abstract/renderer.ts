@@ -6,9 +6,9 @@ export abstract class Renderer {
 
   public abstract renderFlat(flatTextContainer: FlatNonatomicTextContainer): string;
 
-  public abstract renderFlatLines(flatLines: FlatNonatomicTextContainer<StrictUnicodeLine>[]): string;
+  public abstract renderFlatFeedLines(flatFeedLines: FlatNonatomicTextContainer<StrictUnicodeLine>[]): string;
 
-  public abstract renderFlatLine(flatLineContainer: FlatNonatomicTextContainer<StrictUnicodeLine>): string;
+  public abstract renderFlatFeedLine(flatFeedLineContainer: FlatNonatomicTextContainer<StrictUnicodeLine>): string;
 
   public abstract eol: string;
 }

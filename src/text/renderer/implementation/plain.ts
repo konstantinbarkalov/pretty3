@@ -11,8 +11,8 @@ export class PlainRenderer extends SimpleRenderer {
     return '';
   }
   public eol: string = EOL;
-  public renderFlatLine(flatLineContainer: FlatNonatomicTextContainer<StrictUnicodeLine>): string {
-    return this.escapeText(flatLineContainer.toString()) +  + this.eol;
+  public renderFlatFeedLine(flatFeedLineContainer: FlatNonatomicTextContainer<StrictUnicodeLine>): string {
+    return this.escapeText(flatFeedLineContainer.toString()) +  + this.eol;
   }
   protected escapeText(text: string): string {
     return text;

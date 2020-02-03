@@ -49,10 +49,10 @@ export class AutodetectRenderer extends Renderer {
   public renderFlat(flatTextContainer: FlatNonatomicTextContainer<AnyStrictUnicodeT>): string {
     return this.renderer.renderFlat(flatTextContainer);
   }
-  public renderFlatLines(flatLines: FlatNonatomicTextContainer<StrictUnicodeLine>[]): string {
-    return this.renderer.renderFlatLines(flatLines);
+  public renderFlatFeedLines(flatFeedLines: FlatNonatomicTextContainer<StrictUnicodeLine>[]): string {
+    return this.renderer.renderFlatFeedLines(flatFeedLines);
   }
-  public renderFlatLine(flatLineContainer: FlatNonatomicTextContainer<StrictUnicodeLine>): string {
-    return this.renderer.renderFlatLine(flatLineContainer);
+  public renderFlatFeedLine(flatFeedLineContainer: FlatNonatomicTextContainer<StrictUnicodeLine>): string {
+    return this.renderer.renderFlatFeedLine(flatFeedLineContainer);
   }
 }

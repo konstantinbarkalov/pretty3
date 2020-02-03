@@ -11,23 +11,20 @@ export abstract class SimpleRenderer extends Renderer {
   }
 
   public renderFlat(flatTextContainer: FlatNonatomicTextContainer): string {
-    const rendered = flatTextContainer.children.map((atomicChild) => {
-      const flatLines = atomicChild.splitToFlatLines();
-      return this.renderFlatLines(flatLines);
-    }).join('');
-    return rendered;
+    const flatFeedLines = flatTextContainer.splitToFlatFeedLines();
+    return this.renderFlatFeedLines(flatFeedLines);
   }
 
-  public renderFlatLines(flatLines: FlatNonatomicTextContainer<StrictUnicodeLine>[]): string {
-    return flatLines.map((flatLine)=>{
-      return this.renderFlatLine(flatLine);
+  public renderFlatFeedLines(flatFeedLines: FlatNonatomicTextContainer<StrictUnicodeLine>[]): string {
+    return flatFeedLines.map((flatFeedLine)=>{
+      return this.renderFlatFeedLine(flatFeedLine);
     }).join('');
   }
 
-  public renderFlatLine(flatLineContainer: FlatNonatomicTextContainer<StrictUnicodeLine>): string {
-    return flatLineContainer.children.map((child) => {
-      return this.styleBegin(child.style) + this.escapeText(child.toString()) + this.styleEnd(child.style) + this.eol;
-    }).join('');
+  public renderFlatFeedLine(flatFeedLineContainer: FlatNonatomicTextContainer<StrictUnicodeLine>): string {
+    return flatFeedLineContainer.children.map((child) => {
+      return this.styleBegin(child.style) + this.escapeText(child.toString()) + this.styleEnd(child.style);
+    }).join('') + this.eol;
   }
 
   protected abstract escapeText(text: string): string;

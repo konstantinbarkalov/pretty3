@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { AnyStrictUnicodeT, StrictUnicodeLine, StrictUnicodeText } from './strictUnicode';
+import { AnyStrictUnicodeT, StrictUnicodeLine } from './strictUnicode';
 import { Style } from './style';
 
 type textContainerSizeT = {
@@ -16,7 +16,7 @@ export abstract class TextContainerBase<T extends AnyStrictUnicodeT = AnyStrictU
   public abstract calcSize(): textContainerSizeT;
   public abstract toString(): string;
   public abstract flatten(initialStyle?: Style): FlatNonatomicTextContainer<T>;
-  public abstract splitToFlatLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[];
+  public abstract splitToFlatFeedLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[];
 }
 export type AnyTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> = AtomicTextContainer<T> | NonatomicTextContainer<T> | FlatNonatomicTextContainer<T>;
 export class AtomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> extends TextContainerBase<T> {
@@ -26,12 +26,12 @@ export class AtomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT
     this.size = this.precalcSize();
   }
   precalcSize(): textContainerSizeT {
-    const lines = this.text.splitToLines();
-    const firstLine = lines[0];
-    const lastLine = lines[lines.length - 1];
+    const feedLines = this.text.splitToFeedLines();
+    const firstLine = feedLines[0];
+    const lastLine = feedLines[feedLines.length - 1];
     let otherLineMaxWidth = 0;
-    for (let lineId = 1; lineId < lines.length - 1; lineId++) {
-      const otherLine = lines[lineId];
+    for (let lineId = 1; lineId < feedLines.length - 1; lineId++) {
+      const otherLine = feedLines[lineId];
       const otherLineWidth = otherLine.calcWidth();
       otherLineMaxWidth = Math.max(otherLineMaxWidth, otherLineWidth);
     }
@@ -41,7 +41,7 @@ export class AtomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT
         last: lastLine.calcWidth(),
         other: otherLineMaxWidth,
       },
-      heigth: lines.length - 1,
+      heigth: feedLines.length - 1,
     };
     return size;
   }
@@ -56,8 +56,8 @@ export class AtomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT
     const style = this.style || initialStyle;
     return new FlatNonatomicTextContainer([new AtomicTextContainer(this.text, style)]);
   }
-  public splitToFlatLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[] {
-    return this.text.splitToLines().map((line) => {
+  public splitToFlatFeedLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[] {
+    return this.text.splitToFeedLines().map((line) => {
       return new FlatNonatomicTextContainer<StrictUnicodeLine>([new AtomicTextContainer<StrictUnicodeLine>(line, this.style)]);
     });
   }
@@ -124,8 +124,8 @@ export class NonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnico
     }, []);
     return new FlatNonatomicTextContainer(flatChildren);
   }
-  public splitToFlatLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[] {
-    return this.flatten().splitToFlatLines();
+  public splitToFlatFeedLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[] {
+    return this.flatten().splitToFlatFeedLines();
   }
 
 
@@ -178,32 +178,27 @@ export class FlatNonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictU
   constructor(public children: AtomicTextContainer<T>[]) {
     super(children, undefined);
   }
-  splitToFlatLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[] {
-    const linesAsFlat: FlatNonatomicTextContainer<StrictUnicodeLine>[] = [];
-    let currentLineAsAtomics: AtomicTextContainer<StrictUnicodeLine>[] = [];
+  splitToFlatFeedLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[] {
+    const flatFeedLines: FlatNonatomicTextContainer<StrictUnicodeLine>[] = [];
+    let currentFeedLineAsAtomics: AtomicTextContainer<StrictUnicodeLine>[] = [];
     this.children.forEach((child) => {
-      const childLines = child.text.splitToLines();
-      const childLinesAsAtomic = childLines.map((childLine) => {
+      const childFeedLines = child.text.splitToFeedLines();
+      const childFeedLinesAsAtomics = childFeedLines.map((childLine) => {
         const childLineAsAtomic = new AtomicTextContainer(childLine, child.style);
         return childLineAsAtomic;
       });
-      if (childLinesAsAtomic.length > 0) {
+      if (childFeedLinesAsAtomics.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        currentLineAsAtomics.push(childLinesAsAtomic.shift()!);
+        currentFeedLineAsAtomics.push(childFeedLinesAsAtomics.shift()!);
       }
-      if (childLinesAsAtomic.length > 0) {
-        linesAsFlat.push(new FlatNonatomicTextContainer(currentLineAsAtomics));
+      while (childFeedLinesAsAtomics.length > 0) {
+        flatFeedLines.push(new FlatNonatomicTextContainer(currentFeedLineAsAtomics));
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        currentLineAsAtomics = [childLinesAsAtomic.pop()!];
-      }
-      if (childLinesAsAtomic.length > 0) {
-        childLinesAsAtomic.forEach((childLineAsAtomic) => {
-          linesAsFlat.push(new FlatNonatomicTextContainer([childLineAsAtomic]));
-        });
+        currentFeedLineAsAtomics = [childFeedLinesAsAtomics.pop()!];
       }
     });
     // tail
-    linesAsFlat.push(new FlatNonatomicTextContainer(currentLineAsAtomics));
-    return linesAsFlat;
+    flatFeedLines.push(new FlatNonatomicTextContainer(currentFeedLineAsAtomics));
+    return flatFeedLines;
   }
 }

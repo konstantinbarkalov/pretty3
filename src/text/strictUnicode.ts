@@ -48,11 +48,11 @@ export class StrictUnicodeText extends NormalizedUnicodeText {
       }
     }
   }
-  public splitToLines(): StrictUnicodeLine[] {
-    const lines = this.valueOf().split(EOL).map((lineString: string) => {
+  public splitToFeedLines(): StrictUnicodeLine[] {
+    const feedLines = this.valueOf().split(EOL).map((lineString: string) => {
       return new StrictUnicodeLine(lineString, true);
     });
-    return lines;
+    return feedLines;
   }
 
   static combine(...items: StrictUnicodeText[]): StrictUnicodeText {
@@ -60,13 +60,13 @@ export class StrictUnicodeText extends NormalizedUnicodeText {
     return new StrictUnicodeText(combinedNormalized);
   }
   public *managedWrap(maxWidth: number): Generator<StrictUnicodeLine, StrictUnicodeLine, number> {
-    const lines = this.splitToLines();
+    const feedLines = this.splitToFeedLines();
     let wrappedLine: StrictUnicodeLine;
 
-    for (let lineId = 0; lineId < lines.length; lineId++) {
-      const line = lines[lineId];
-      const isLastLine = lineId === lines.length - 1;
-      const lineWrapGenerator = line.managedWrap(maxWidth);
+    for (let lineId = 0; lineId < feedLines.length; lineId++) {
+      const feelLine = feedLines[lineId];
+      const isLastLine = lineId === feedLines.length - 1;
+      const lineWrapGenerator = feelLine.managedWrap(maxWidth);
       let done: boolean;
       do {
         const generatorResult = lineWrapGenerator.next(maxWidth);
