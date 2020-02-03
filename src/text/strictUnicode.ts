@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
-import { EOL } from 'os';
+const eolRegexp = /[\n\r]/g;
 export class NormalizedUnicodeText extends String {
   constructor(text: string | String, isSkipChecks = false) {
     const isNormalizedInstance = NormalizedUnicodeText.isNormalizedInstance(text);
@@ -49,7 +49,7 @@ export class StrictUnicodeText extends NormalizedUnicodeText {
     }
   }
   public splitToFeedLines(): StrictUnicodeLine[] {
-    const feedLines = this.valueOf().split(EOL).map((lineString: string) => {
+    const feedLines = this.valueOf().split(eolRegexp).map((lineString: string) => {
       return new StrictUnicodeLine(lineString, true);
     });
     return feedLines;
@@ -85,7 +85,7 @@ export class StrictUnicodeText extends NormalizedUnicodeText {
 
 export class StrictUnicodeLine extends StrictUnicodeText {
   constructor(text: string | String, isSkipChecks = false) {
-    if (text.toString().includes(EOL)) {
+    if (eolRegexp.test(text.toString())) {
       console.log(text.toString());
     }
     super(text, isSkipChecks);
@@ -96,7 +96,7 @@ export class StrictUnicodeLine extends StrictUnicodeText {
   }
 
   public guardStringIsStrictUnicode(normalizedText: NormalizedUnicodeText): void {
-    if (normalizedText.includes(EOL)) { throw('No EOLs allowed in single StrictUnicodeLine, use StrictUnicodeText instead'); }
+    if (eolRegexp.test(normalizedText.toString())) { throw('No EOLs allowed in single StrictUnicodeLine, use StrictUnicodeText instead'); }
     super.guardStringIsStrictUnicode(normalizedText);
   }
   protected widthCache: number | undefined;

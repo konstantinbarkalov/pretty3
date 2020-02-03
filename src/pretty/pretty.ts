@@ -62,8 +62,8 @@ export class Pretty {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   stringify(tree: any, options?: stringifyTreeOptionsT ): string {
     let stringBuffer = '';
-    const printTreeOptions = Object.assign({}, options, {
-      logLineCallback(line: string) { stringBuffer += line; },
+    const printTreeOptions = Object.assign<printTreeOptionsT, printTreeOptionsT, printTreeOptionsT>({}, options || {}, {
+      logLineCallback(line: string, trailingEol: string) { stringBuffer += line + trailingEol; },
     });
     this.print(tree, printTreeOptions);
     return stringBuffer;

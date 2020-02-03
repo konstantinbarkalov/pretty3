@@ -69,7 +69,7 @@ function renderMetaNodeRecursive(node: MetaNodeI, parentChain: ArmGeneratorChain
     const wrappedLineContainer = generatorResult.value;
     const lineToRender = new NonatomicTextContainer<StrictUnicodeLine>([arm, wrappedLineContainer]);
     const rendered = renderer.render(lineToRender);
-    logLineCallback(rendered);
+    logLineCallback(rendered.rendered, rendered.trailingEol);
 
     parentChain.elements.forEach((parentElement) => {
       parentElement.parameters.lineNum++;

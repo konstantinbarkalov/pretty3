@@ -10,6 +10,7 @@ class ExpampleIterator implements Iterator<string> {
       value: undefined,
       done: true,
     } : {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       value: this.message.pop()!,
       done: false,
     };
@@ -30,6 +31,9 @@ const longArray = [];
 for (let i = 0; i < 1000; i++) {
   longArray[i] = i * 10;
 }
+const funError = new RangeError('Pizza size is too big');
+funError.stack = 'stack is cleared for test-passing repeatability';
+
 export default {
   simpleText: 'Hello my friend!',
   objectedText: new String('Friend of mine, hello.'),
@@ -44,7 +48,7 @@ export default {
   olympicIterable: new ExpampleIterable('Citius, Altius, Fortius!'),
   longArray: longArray,
   proxiedLongArray: new Proxy(longArray, {}),
-  funError: new RangeError('Pizza size is too big'),
+  funError: funError,
   longUnbreakebleText: 'yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaarrr!',
   silence: '',
   '': 'with no key',

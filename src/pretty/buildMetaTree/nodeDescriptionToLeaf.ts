@@ -103,7 +103,7 @@ function prepareTextToPack(nodeDescription: nodeDescriptionT, nodeTheme: nodePre
         }
         {
           const nodeKeyString = (nodeDescription.value.toString) ? nodeDescription.value.toString() : String(nodeDescription.value);
-          preparedPackItem.content = new AtomicTextContainer(new StrictUnicodeLine(nodeKeyString), nodeTheme.value.content?.style);
+          preparedPackItem.content = new AtomicTextContainer(new StrictUnicodeText(nodeKeyString), nodeTheme.value.content?.style);
         }
         if (nodeTheme.value.postfix && nodeTheme.value.postfix.container) {
           preparedPackItem.postfix = nodeTheme.value.postfix.container;

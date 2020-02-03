@@ -2,7 +2,7 @@ import { Renderer } from '../../text/renderer/abstract/renderer';
 import { StrictUnicodeChar, StrictUnicodeLine, StrictUnicodeText } from '../../text/strictUnicode';
 import { themeT } from './theme';
 
-export type logLineCallbackT = (line: string) => void;
+export type logLineCallbackT = (line: string, trailingEol: string) => void;
 
 export type buildMetaTreeSettingsT = {
   maxLevel: number;

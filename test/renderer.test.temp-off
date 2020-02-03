@@ -49,15 +49,15 @@ for (const [textContainerKey, textContainer] of Object.entries(textContainers)) 
           const renderedFlat = renderer.renderFlat(textContainer.flatten());
           expect(rendered).to.be.equal(renderedFlat);
         });
-        it('must render same as renderFlatLines ', () => {
-          const renderedFlatLines = renderer.renderFlatLines(textContainer.splitToFlatLines());
-          expect(rendered).to.be.equal(renderedFlatLines);
+        it('must render same as renderFlatFeedLines ', () => {
+          const renderedFlatFeedLines = renderer.renderFlatFeedLines(textContainer.splitToFlatFeedLines());
+          expect(rendered).to.be.equal(renderedFlatFeedLines);
         });
-        it('must render same as rejoined renderFlatLine ', () => {
-          const renderedRejoinedFlatLine = textContainer.splitToFlatLines().map((flatLine) => {
-            return renderer.renderFlatLine(flatLine);
+        it('must render same as rejoined renderFlatFeedLine ', () => {
+          const renderedRejoinedFlatFeedLine = textContainer.splitToFlatFeedLines().map((flatFeedLine) => {
+            return renderer.renderFlatFeedLine(flatFeedLine);
           }).join('');
-          expect(rendered).to.be.equal(renderedRejoinedFlatLine);
+          expect(rendered).to.be.equal(renderedRejoinedFlatFeedLine);
         });
       });
     }

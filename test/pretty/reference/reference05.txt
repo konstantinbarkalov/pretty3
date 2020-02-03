@@ -68,7 +68,8 @@
  │    ├─╸ 8: 80
  │    ├─╸ 9: 90
  │    └─╸ ...
- ├─╴ {E} funError: RangeError: Pizza size is too big · 0 entries
+ ├─╴ {E} funError: RangeError: Pizza size is too big · 1 entries
+ │    ╰─╴ stack: stack is cleared for test-passing repeatability
  ├─╴ longUnbreakebleText: yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
  │   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
  │   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

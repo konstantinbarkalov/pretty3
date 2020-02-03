@@ -1,6 +1,6 @@
 import { FlatNonatomicTextContainer, AnyTextContainer } from '../../textContainer';
 import { StrictUnicodeLine, AnyStrictUnicodeT } from '../../strictUnicode';
-import { Renderer } from '../abstract/renderer';
+import { Renderer, renderResultT } from '../abstract/renderer';
 import { PlainRenderer } from './plain';
 import { AnsiRenderer } from './ansi';
 import { HtmlRenderer } from './html';
@@ -43,16 +43,23 @@ export class AutodetectRenderer extends Renderer {
       }
     }
   }
-  public render(textContainer: AnyTextContainer<AnyStrictUnicodeT>): string {
+  public render(textContainer: AnyTextContainer<AnyStrictUnicodeT>): renderResultT {
     return this.renderer.render(textContainer);
   }
-  public renderFlat(flatTextContainer: FlatNonatomicTextContainer<AnyStrictUnicodeT>): string {
+  public renderFlat(flatTextContainer: FlatNonatomicTextContainer<AnyStrictUnicodeT>): renderResultT {
     return this.renderer.renderFlat(flatTextContainer);
   }
-  public renderFlatFeedLines(flatFeedLines: FlatNonatomicTextContainer<StrictUnicodeLine>[]): string {
+  public renderFlatFeedLines(flatFeedLines: FlatNonatomicTextContainer<StrictUnicodeLine>[]): renderResultT {
     return this.renderer.renderFlatFeedLines(flatFeedLines);
   }
-  public renderFlatFeedLine(flatFeedLineContainer: FlatNonatomicTextContainer<StrictUnicodeLine>): string {
+  public renderFlatFeedLine(flatFeedLineContainer: FlatNonatomicTextContainer<StrictUnicodeLine>): renderResultT {
     return this.renderer.renderFlatFeedLine(flatFeedLineContainer);
   }
+  public renderFlatLine(flatLineContainer: FlatNonatomicTextContainer<StrictUnicodeLine>): renderResultT {
+    return this.renderer.renderFlatLine(flatLineContainer);
+  }
+  public renderLine(lineContainer: AnyTextContainer<StrictUnicodeLine>): renderResultT {
+    return this.renderer.renderLine(lineContainer);
+  }
+
 }
