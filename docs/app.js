@@ -138,17 +138,28 @@ async function runSource(source) {
       renderer,
     };
     const data = await runSource(source);
-    debugger;
     demoScreenTextOutputDiv.innerHTML = Pretty.stringify(data, options);
   }
 
   initSelectsFromPredefinedInputData();
   updateScreenTextFromPredefinedInputData();
   function onSourceUpdateByUser(e) {
-    debugger;
     const source = e.target.innerText;
     updateScreenTextOutput(source);
   }
   demoScreenTextSourceDiv.addEventListener('input', onSourceUpdateByUser);
+  demoScreenTextSourceDiv.addEventListener('paste', (e) => {
+    // from: https://stackoverflow.com/questions/12027137/javascript-trick-for-paste-as-plain-text-in-execcommand
+
+    // cancel paste
+    e.preventDefault();
+
+    // get text representation of clipboard
+    const text = (e.originalEvent || e).clipboardData.getData('text/plain');
+
+    // insert text manually
+    document.execCommand('insertHTML', false, text);
+    return false;
+});
 
 })();
