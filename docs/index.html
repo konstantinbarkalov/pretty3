@@ -6,6 +6,7 @@
     </title>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="./index.css">
+
   </head>
   <body>
     <div class="root">
@@ -41,13 +42,27 @@
             </div>
 
           </div>
-          <div class="demo-screen-container">
-            <div class="demo-screen">
-              <div class="demo-screen-text" id="demo-screen-text">
-
+          <div class="demo-screen-block-cells">
+            <div class="demo-screen-block-cell demo-screen-block-cell--source">
+              <div class="demo-screen-block demo-screen-block--source">
+                <label>source:</label>
+                <div class="demo-screen demo-screen--source">
+                  <code contenteditable="true" class="demo-screen-text demo-screen-text--source" language="javascript" id="demo-screen-text--source">
+                  </code>
+                </div>
+              </div>
+            </div>
+            <div class="demo-screen-block-cell demo-screen-block-cell--output">
+              <div class="demo-screen-block demo-screen-block--output">
+                <label>output:</label>
+                <div class="demo-screen demo-screen--output">
+                  <div class="demo-screen-text demo-screen-text--output" id="demo-screen-text--output">
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+
 
         </div>
         <div class="section section--links">
@@ -64,7 +79,8 @@
       <div class="footer">
       </div>
     </div>
-    <script src="./index.js"></script>
+    <script src="./inputData.js"></script>
+    <script src="./app.js"></script>
   </body>
 
 
