@@ -54,21 +54,7 @@ export class StrictUnicodeText extends NormalizedUnicodeText {
     });
     return lines;
   }
-  public wrap(maxWidth: number, firstLinePadding = 0): {wrappedText: StrictUnicodeText; lastLinePadding: number} {
-    const lines = this.splitToLines();
-    const wrapResults = lines.map((line, lineId) => {
-      const isFirst = lineId === 0;
-      const currentLineFirstLinePadding = isFirst ? firstLinePadding : 0;
-      return line.wrap(maxWidth, currentLineFirstLinePadding);
-    });
-    const wrappedTextString = wrapResults.map(({wrappedText}) => {
-      return wrappedText;
-    }).join(EOL);
-    const lastWrappedText = wrapResults[wrapResults.length - 1];
-    const lastLinePadding = lastWrappedText.lastLinePadding;
-    const wrappedText = new StrictUnicodeText(wrappedTextString, true);
-    return {wrappedText, lastLinePadding };
-  }
+
   static combine(...items: StrictUnicodeText[]): StrictUnicodeText {
     const combinedNormalized = super.combine(...items);
     return new StrictUnicodeText(combinedNormalized);
@@ -127,30 +113,7 @@ export class StrictUnicodeLine extends StrictUnicodeText {
     }
     return this.widthCache;
   }
-  public wrap(maxWidth: number, firstLinePadding = 0): {wrappedText: StrictUnicodeText; lastLinePadding: number} {
-    const lineWidth = this.calcWidth();
-    if (lineWidth <= maxWidth - firstLinePadding) {
-      return {wrappedText: this, lastLinePadding: lineWidth};
-    }
-    let wrappedLineWidth: number = firstLinePadding;
-    let wrappedLine = '';
-    const wrappedLines = [];
-    for (const codePoint of this) {
-      const codePointWidth = 1; // TODO: support for full-width chars
-      if (wrappedLineWidth + codePointWidth > maxWidth) {
-        wrappedLines.push(wrappedLine);
-        wrappedLine = '';
-        wrappedLineWidth = 0;
-      }
-      wrappedLineWidth += codePointWidth;
-      wrappedLine += codePoint;
-    }
-    //tail
-    wrappedLines.push(wrappedLine); // TODO maybe i need to check for nonempty wrappedLine
 
-    const wrappedText = new StrictUnicodeText(wrappedLines.join(EOL), true);
-    return {wrappedText, lastLinePadding: wrappedLineWidth};
-  }
   static combine(...items: StrictUnicodeLine[]): StrictUnicodeLine {
     const combinedText = super.combine(...items);
     return new StrictUnicodeLine(combinedText);

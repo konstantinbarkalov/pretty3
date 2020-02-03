@@ -15,7 +15,6 @@ export abstract class TextContainerBase<T extends AnyStrictUnicodeT = AnyStrictU
   public style?: Style;
   public abstract calcSize(): textContainerSizeT;
   public abstract toString(): string;
-  public abstract wrap(maxWidth: number, firstLinePadding: number): {wrapped: AnyTextContainer<StrictUnicodeText>; lastLinePadding: number };
   public abstract flatten(initialStyle?: Style): FlatNonatomicTextContainer<T>;
   public abstract splitToFlatLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[];
 }
@@ -52,11 +51,7 @@ export class AtomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT
   public toString(): string {
     return this.text.toString();
   }
-  public wrap(maxWidth: number, firstLinePadding = 0): {wrapped: AtomicTextContainer<StrictUnicodeText>; lastLinePadding: number} {
-    const { wrappedText, lastLinePadding } = this.text.wrap(maxWidth, firstLinePadding);
-    const wrapped = new AtomicTextContainer(wrappedText, this.style);
-    return { wrapped, lastLinePadding };
-  }
+
   public flatten(initialStyle?: Style): FlatNonatomicTextContainer<T> {
     const style = this.style || initialStyle;
     return new FlatNonatomicTextContainer([new AtomicTextContainer(this.text, style)]);
@@ -120,23 +115,6 @@ export class NonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnico
   }
   public toString(): string {
     return this.children.reduce((text, child) => { return text + child.toString(); }, '');
-  }
-  public wrap(maxWidth: number, firstLinePadding = 0): {wrapped: NonatomicTextContainer<StrictUnicodeText>; lastLinePadding: number} {
-    type reduceStateT = {children: AnyTextContainer<StrictUnicodeText>[]; linePadding: number};
-    const reduceState = this.children.reduce<reduceStateT>((reduceState, child) => {
-      const wrapResult = child.wrap(maxWidth, reduceState.linePadding);
-      if (wrapResult.wrapped.calcSize().heigth === 0) {
-        reduceState.linePadding += wrapResult.lastLinePadding;
-      } else {
-        reduceState.linePadding = wrapResult.lastLinePadding;
-      }
-      reduceState.children.push(wrapResult.wrapped);
-      return reduceState;
-    }, {children: [], linePadding: firstLinePadding});
-
-    const wrapped = new NonatomicTextContainer(reduceState.children, this.style);
-    const lastLinePadding = reduceState.linePadding;
-    return {wrapped, lastLinePadding };
   }
   public flatten(initialStyle?: Style): FlatNonatomicTextContainer<T> {
     const style = this.style || initialStyle;

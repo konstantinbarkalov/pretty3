@@ -12,7 +12,7 @@ export class PlainRenderer extends SimpleRenderer {
   }
   public eol: string = EOL;
   public renderFlatLine(flatLineContainer: FlatNonatomicTextContainer<StrictUnicodeLine>): string {
-    return flatLineContainer.toString();
+    return this.escapeText(flatLineContainer.toString()) +  + this.eol;
   }
   protected escapeText(text: string): string {
     return text;
