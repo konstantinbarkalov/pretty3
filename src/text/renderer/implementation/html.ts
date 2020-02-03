@@ -41,9 +41,11 @@ export class HtmlRenderer extends SimpleRenderer {
     const tagsToEscape: {[key: string]: string | undefined} = {
       '&': '&amp;',
       '<': '&lt;',
-      '>': '&gt;'
+      '>': '&gt;',
+      ' ': '&nbsp;',
     };
-    return text.replace(/[&<>]/g, (tag: string) => {
+    // TODO: redo such uneffective crap
+    return text.replace(/[&<> ]/g, (tag: string) => {
       return tagsToEscape[tag] || tag;
     });
   }

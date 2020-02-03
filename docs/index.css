@@ -90,11 +90,13 @@ html, body {
 }
 .demo-screen-text {
   font-family: monospace;
-  /* color: #fff; /* TODO: remove when implement html renderer */
-
-  white-space: pre-wrap;
   word-break: break-all;
 }
+.demo-screen-text--source {
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+
 .header, .footer {
   display: flex;
   flex-direction: row;

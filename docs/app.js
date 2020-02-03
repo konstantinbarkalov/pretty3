@@ -26,7 +26,7 @@ async function runSource(source) {
 }
 
 (async () => {
-  const pretty3Module = await import('https://dev.jspm.io/npm:pretty3@1.1.0-alpha.0');
+  const pretty3Module = await import('https://dev.jspm.io/npm:pretty3@1.1.0-alpha.1');
   const Pretty = pretty3Module.default.Pretty;
   const themes = pretty3Module.default.themes;
   const renderers = pretty3Module.default.renderers;
@@ -138,6 +138,7 @@ async function runSource(source) {
       renderer,
     };
     const data = await runSource(source);
+    debugger;
     demoScreenTextOutputDiv.innerHTML = Pretty.stringify(data, options);
   }
 
