@@ -5,7 +5,7 @@
 
 ## 🌳 [Live demo](https://konstantinbarkalov.github.io/pretty3/)
 
-Try in [online](https://konstantinbarkalov.github.io/pretty3/)!
+Try it [online](https://konstantinbarkalov.github.io/pretty3/)!
 
 ## Install
 
