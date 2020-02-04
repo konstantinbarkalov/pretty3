@@ -74,7 +74,10 @@ async function runSource(source) {
     theme: undefined,
     palette: undefined,
   };
-
+  function startWelcomeAnimation() {
+    const appRoot = document.getElementById('app-root');
+    appRoot.classList.add('app-root--ready');
+  }
   function initSelect(selectKey, options) {
     const currentSelect = select[selectKey];
     while (currentSelect.firstChild) {
@@ -160,6 +163,8 @@ async function runSource(source) {
     // insert text manually
     document.execCommand('insertHTML', false, text);
     return false;
-});
+  });
 
+  // start here
+  startWelcomeAnimation();
 })();

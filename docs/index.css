@@ -2,22 +2,34 @@ html, body {
   margin: 0;
   height: 100%;
 }
-.root {
-  background: radial-gradient(#00415a, black);
+.app-root.app-root--ready {
+  /* background-color: #0d7eaa; */
+  background-color: #00415a;
+}
+.app-root {
+  background: radial-gradient(rgba(0, 162, 255, 0), #231e4644, #27000098);
+  /* background-color: #000000; */
+  background-color: #00161f;
+  background-position: 50%;
+  /* background: radial-gradient(rgba(0, 0, 0, 0), #3e0000);
+  background-color: #00415a;
+  background-color: #000; */
+  background-attachment: fixed;
   color: #ccc;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100%;
+  transition: background-color 8s;
 }
-.root a {
+.app-root a {
   color: rgb(130, 5, 161);
   text-decoration: none;
 }
-.root a:hover, .root a:visited:hover {
+.app-root a:hover, .app-root a:visited:hover {
   color: rgb(220, 25, 238);
 }
-.root a:visited {
+.app-root a:visited {
   color: rgb(151, 56, 130);
 }
 .content {
@@ -26,6 +38,13 @@ html, body {
   flex-grow: 1;
   flex-direction: column;
   align-items: center;
+}
+.app-root.app-root--ready .live-demo {
+  opacity: 1;
+}
+.live-demo {
+  opacity: 0;
+  transition: opacity 2s;
 }
 .section {
   display: flex;
@@ -39,14 +58,15 @@ html, body {
 .dropdowns {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
   padding: 32px 0;
-  margin: 0 -16px;
+  margin: -16px;
 }
 .dropdown {
   display: flex;
   flex-direction: column;
-  padding: 0 16px;
+  padding: 16px;
   width: 180px;
 }
 .dropdown-select {
@@ -117,6 +137,11 @@ html, body {
   text-align: center;
 }
 
+.hero p {
+  font-style: italic;
+  font-size: 20px;
+}
+
 .hero h1 {
   font-family: serif;
   font-weight: bold;
@@ -125,3 +150,6 @@ html, body {
   text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
 }
 
+.demo-screen-block label, .dropdown label {
+  margin-bottom: 6px;
+}
