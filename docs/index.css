@@ -8,12 +8,8 @@ html, body {
 }
 .app-root {
   background: radial-gradient(rgba(0, 162, 255, 0), #231e4644, #27000098);
-  /* background-color: #000000; */
   background-color: #00161f;
   background-position: 50%;
-  /* background: radial-gradient(rgba(0, 0, 0, 0), #3e0000);
-  background-color: #00415a;
-  background-color: #000; */
   background-attachment: fixed;
   color: #ccc;
   display: flex;
@@ -39,10 +35,15 @@ html, body {
   flex-direction: column;
   align-items: center;
 }
-.app-root.app-root--ready .live-demo {
+
+.content.content--fullwidth {
+  width: 100%;
+}
+
+.app-root.app-root--ready .content.content--live-demo {
   opacity: 1;
 }
-.live-demo {
+.content.content--live-demo {
   opacity: 0;
   transition: opacity 2s;
 }
@@ -83,16 +84,16 @@ html, body {
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: center;
+  width: 100%;
 }
 .demo-screen-block-cell {
   display: flex;
   flex-direction: column;
-  width: auto;
+  width: 50%;
 }
 .demo-screen-block {
   display: flex;
   flex-direction: column;
-  margin: 16px;
 }
 
 .demo-screen {
@@ -101,8 +102,7 @@ html, body {
   align-items: center;
   justify-content: center;
   min-width: 300px;
-  max-width: 500px;
-  min-height: 120px;
+  min-height: 25vh;
   max-height: 2000px;
   padding: 56px;
   background-color: #181818;
@@ -120,7 +120,6 @@ html, body {
 .header, .footer {
   display: flex;
   flex-direction: row;
-  padding: 32px;
   align-self: stretch;
 }
 .header {

@@ -1,0 +1,70 @@
+.grid {
+  display: flex;
+}
+.grid.col {
+  flex-direction: column;
+}
+
+.grid.row {
+  flex-direction: row;
+}
+
+.grid.full {
+  flex-basis: 100%;
+}
+.grid.half {
+  flex-basis: 50%;
+}
+.grid.third {
+  flex-basis: 33.333333333333333333%;
+}
+.grid.quater {
+  flex-basis: 25%;
+}
+.grid.self-stretch {
+  align-self: stretch;
+}
+.grid.items-center {
+  align-items: center;
+}
+
+.grid.cont.wh {
+  margin: -32px;
+}
+.grid.cont.h {
+  margin-top: -32px;
+  margin-bottom: -32px;
+}
+.grid.cont.w {
+  margin-left: -32px;
+  margin-right: -32px;
+}
+
+.grid.elem.wh {
+  margin: 32px;
+}
+
+.grid.elem.h {
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.grid.elem.w {
+  margin-left: 32px;
+  margin-right: 32px;
+}
+
+.grid.root.wh {
+  margin: 64px;
+}
+
+.grid.root.h {
+  margin-top: 64px;
+  margin-bottom: 64px;
+}
+
+.grid.root.w {
+  margin-left: 64px;
+  margin-right: 64px;
+}
+

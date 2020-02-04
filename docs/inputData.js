@@ -10,9 +10,9 @@ const richInputFn = function getData() {
         value: undefined,
         done: true,
       } : {
-          value: this.message.pop(),
-          done: false,
-        };
+        value: this.message.pop(),
+        done: false,
+      };
     }
   }
   class ExpampleIterable {
