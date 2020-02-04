@@ -1,6 +1,6 @@
 { }  · 4 entries
  ├─╴ a: 1
- ├─╴ [ ] b:  · 11 shown of 24 total
+ ├─╴ [ ] b:  · 10 shown of 24 total
  │    ├─╸ 0: Α
  │    ├─╸ 1: Β
  │    ├─╸ 2: Γ
@@ -12,7 +12,7 @@
  │    ├─╸ 8: Ι
  │    ├─╸ 9: Κ
  │    └─╸ ...
- ├─╴ { } c:  · 11 shown of 24 total
+ ├─╴ { } c:  · 10 shown of 24 total
  │    ├─╴ α: alpha
  │    ├─╴ β: beta
  │    ├─╴ γ: gamma

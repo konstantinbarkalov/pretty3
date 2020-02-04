@@ -44,7 +44,7 @@
  │    ├─╸ 0: Fortius!
  │    ├─╸ 1: Altius
  │    └─╸ 2: Citius
- ├─╴ [ ] longArray:  · 11 shown of 1000 total
+ ├─╴ [ ] longArray:  · 10 shown of 1000 total
  │    ├─╸ 0: 0
  │    ├─╸ 1: 10
  │    ├─╸ 2: 20
@@ -56,7 +56,7 @@
  │    ├─╸ 8: 80
  │    ├─╸ 9: 90
  │    └─╸ ...
- ├─╴ [ ] proxiedLongArray:  · 11 shown of 1000 total
+ ├─╴ [ ] proxiedLongArray:  · 10 shown of 1000 total
  │    ├─╸ 0: 0
  │    ├─╸ 1: 10
  │    ├─╸ 2: 20
@@ -86,7 +86,7 @@
  ├─╴ <B> rock: true
  ├─╴ <B> rap: false
  ├─╴ < > whyWeAreHere: undefined
- ╰─╴ { } arbitraryLib:  · 11 shown of 94 total
+ ╰─╴ { } arbitraryLib:  · 10 shown of 94 total
       ├─╴ <F> appendFile: appendFile
       ├─╴ <F> appendFileSync: appendFileSync
       ├─╴ <F> access: access
