@@ -8,7 +8,6 @@ type paletteT = {
     infoDelimiter?: rgbT;
     remark?: rgbT;
     value?: rgbT;
-    unvalue?: rgbT;
     key?: rgbT;
     keyDelimiter?: rgbT;
     enumerable?: {
@@ -38,7 +37,6 @@ const safeAnsiPalette: paletteT = {
     infoDelimiter: {r: 162 / 2, g: 138 / 2, b: 49 / 2},
     remark: {r: 255, g: 128, b: 0},
     value: {r: 225, g: 225, b: 225},
-    unvalue: {r: 225, g: 225, b: 128},
     keyDelimiter: {r: 64, g: 64, b: 64},
     key: {r: 128, g: 128, b: 128},
 

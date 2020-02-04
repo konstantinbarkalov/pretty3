@@ -63,7 +63,7 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
   else if (typeof node === 'boolean') {
     nodeDescription = {
       key: nodeKey,
-      typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.Boolean],
+      typeTuple: [NodeBroadTypeEnum.Single, node ? SingleNodeFineTypeEnum.BooleanTrue : SingleNodeFineTypeEnum.BooleanFalse],
       value: node.toLocaleString(),
     };
   }
@@ -104,7 +104,7 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
     } else if (node instanceof Boolean) {
       nodeDescription = {
         key: nodeKey,
-        typeTuple: [NodeBroadTypeEnum.Single, SingleNodeFineTypeEnum.BooleanObject],
+        typeTuple: [NodeBroadTypeEnum.Single, node ? SingleNodeFineTypeEnum.BooleanObjectTrue : SingleNodeFineTypeEnum.BooleanObjectFalse],
         value: node.toLocaleString(),
       };
     } else if (node instanceof Date) {
@@ -231,7 +231,15 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
       nodeDescription.subEntries.push(elipsisDescription);
     }
     if (nodeDescription.subEntries.length < unwrappedSubEntries.length) {
-      nodeDescription.info = `${nodeDescription.subEntries.length} shown of ${unwrappedSubEntries.length} total`;
+      // TODO: rework this patch when develop prevetive child filtering and counting (filtered) childs into a separate property
+      let shownCount = nodeDescription.subEntries.length;
+      const lastSubEntry = nodeDescription.subEntries[nodeDescription.subEntries.length - 1];
+      if (guardNodeDescription(NodeBroadTypeEnum.Dead, lastSubEntry)) {
+        if (lastSubEntry.typeTuple[1] === DeadNodeFineTypeEnum.Elipsis) {
+          shownCount--;
+        }
+      }
+      nodeDescription.info = `${shownCount} shown of ${unwrappedSubEntries.length} total`;
     }
     else {
       nodeDescription.info = `${nodeDescription.subEntries.length} entries`;

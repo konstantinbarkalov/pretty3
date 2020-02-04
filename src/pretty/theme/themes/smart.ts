@@ -8,6 +8,8 @@ type paletteT = {
     remark?: rgbT;
     value?: rgbT;
     unvalue?: rgbT;
+    valueTrue?: rgbT;
+    valueFalse?: rgbT;
     enumerable?: {
       arm?: rgbT;
       icon?: rgbT;
@@ -49,6 +51,8 @@ const standartPalette: paletteT = {
     remark: {r: 255, g: 128, b: 0},
     value: {r: 225, g: 225, b: 225},
     unvalue: {r: 180, g: 180, b: 120},
+    valueTrue: {r: 192, g: 225, b: 192},
+    valueFalse: {r: 225, g: 192, b: 192},
     enumerable: {
       arm: {r: 60, g: 70, b: 60},
       icon: {r: 55, g: 105, b: 55},
@@ -86,6 +90,8 @@ const safeAnsiPalette: paletteT = {
     remark: {r: 255, g: 128, b: 0},
     value: {r: 192, g: 192, b: 192},
     unvalue: {r: 192, g: 192, b: 128},
+    valueTrue: {r: 0, g: 128, b: 0},
+    valueFalse: {r: 128, g: 0, b: 0},
     enumerable: {
       arm: {r: 0, g: 128, b: 0},
       icon: {r: 64, g: 128, b: 64},
@@ -302,19 +308,48 @@ function buildTheme(palette: paletteT): themeT {
           }
         },
 
-        boolean: {
+
+        booleanTrue: {
           icon: {
             content: {
               line: 'B',
             }
+          },
+          value: {
+            style: styleIfNeed(palette.color?.valueTrue),
           }
         },
 
-        booleanObject: {
+        booleanFalse: {
           icon: {
             content: {
               line: 'B',
             }
+          },
+          value: {
+            style: styleIfNeed(palette.color?.valueFalse),
+          }
+        },
+
+        booleanObjectTrue: {
+          icon: {
+            content: {
+              line: 'B',
+            }
+          },
+          value: {
+            style: styleIfNeed(palette.color?.valueTrue),
+          }
+        },
+
+        booleanObjectFalse: {
+          icon: {
+            content: {
+              line: 'B',
+            }
+          },
+          value: {
+            style: styleIfNeed(palette.color?.valueFalse),
           }
         },
 
@@ -341,7 +376,7 @@ function buildTheme(palette: paletteT): themeT {
             }
           },
           value: {
-            style: styleIfNeed(palette.color?.unvalue)
+            style: styleIfNeed(palette.color?.unvalue),
           }
         },
 
@@ -392,7 +427,7 @@ function buildTheme(palette: paletteT): themeT {
             }
           },
           value: {
-            style: styleIfNeed(palette.color?.unvalue)
+            style: styleIfNeed(palette.color?.unvalue),
           }
         },
 
