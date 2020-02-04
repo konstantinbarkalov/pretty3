@@ -31,9 +31,9 @@ export class Pretty {
  * @param {printTreeOptionsT} [options]
  */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  print(tree: any, options?: printTreeOptionsT ): void {
+  print(tree: any, rootKey?: any, options?: printTreeOptionsT ): void {
     const settings = Object.assign({}, defaultSettings, options);
-    const metaTree = buildMetaTree(tree, this.theme, settings);
+    const metaTree = buildMetaTree(tree, rootKey, this.theme, settings);
     renderMetaNode(metaTree, settings.maxLineWidth, settings.renderer, settings.logLineCallback);
   }
 
@@ -60,27 +60,27 @@ export class Pretty {
  * @returns {string}
  */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  stringify(tree: any, options?: stringifyTreeOptionsT ): string {
+  stringify(tree: any, rootKey?: any, options?: stringifyTreeOptionsT ): string {
     let stringBuffer = '';
     const printTreeOptions = Object.assign<printTreeOptionsT, printTreeOptionsT, printTreeOptionsT>({}, options || {}, {
       logLineCallback(line: string, trailingEol: string) { stringBuffer += line + trailingEol; },
     });
-    this.print(tree, printTreeOptions);
+    this.print(tree, rootKey, printTreeOptions);
     return stringBuffer;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static print(tree: any, options?: oneshotPrintTreeOptionsT): void {
+  static print(tree: any, rootKey?: any, options?: oneshotPrintTreeOptionsT): void {
     const settings = Object.assign({}, defaultSettings, options);
     const oneshotPretty = new Pretty(settings.themeStack);
-    oneshotPretty.print(tree, settings);
+    oneshotPretty.print(tree, rootKey, settings);
 
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static stringify(tree: any, options?: oneshotStringifyTreeOptionsT ): string {
+  static stringify(tree: any, rootKey?: any, options?: oneshotStringifyTreeOptionsT ): string {
     const settings = Object.assign({}, defaultSettings, options);
     const oneshotPretty = new Pretty(settings.themeStack);
-    return oneshotPretty.stringify(tree, settings);
+    return oneshotPretty.stringify(tree, rootKey, settings);
 
   }
 }

@@ -13,11 +13,11 @@ const htmlRenderer = new HtmlRenderer();
 const ansiRenderer = new AnsiRenderer();
 for (let i = 1; i <= 4; i++) {
   const input = JSON.parse(fs.readFileSync(path.resolve(testcaseDataInputPath, `input0${i}.json`), 'utf8'));
-  const plainOutput = Pretty.stringify(input, {renderer: plainRenderer});
+  const plainOutput = Pretty.stringify(input, undefined, {renderer: plainRenderer});
   fs.writeFileSync(path.resolve(testcaseDataReferencePath, `reference0${i}.txt`), plainOutput, 'utf8');
-  const ansiOutput = Pretty.stringify(input, {renderer: ansiRenderer});
+  const ansiOutput = Pretty.stringify(input, undefined, {renderer: ansiRenderer});
   fs.writeFileSync(path.resolve(testcaseDataReferencePath, `reference0${i}.ansi`), ansiOutput, 'utf8');
-  const htmlOutput = Pretty.stringify(input, {renderer: htmlRenderer});
+  const htmlOutput = Pretty.stringify(input, undefined, {renderer: htmlRenderer});
   fs.writeFileSync(path.resolve(testcaseDataReferencePath, `reference0${i}.html`), htmlOutput, 'utf8');
   console.log(`[${i}]`);
   console.log(plainOutput);
@@ -26,11 +26,11 @@ import input05 from './input05';
 {
   const i = 5;
   const input = input05;
-  const plainOutput = Pretty.stringify(input, {renderer: plainRenderer});
+  const plainOutput = Pretty.stringify(input, undefined, {renderer: plainRenderer});
   fs.writeFileSync(path.resolve(testcaseDataReferencePath, `reference0${i}.txt`), plainOutput, 'utf8');
-  const ansiOutput = Pretty.stringify(input, {renderer: ansiRenderer});
+  const ansiOutput = Pretty.stringify(input, undefined, {renderer: ansiRenderer});
   fs.writeFileSync(path.resolve(testcaseDataReferencePath, `reference0${i}.ansi`), ansiOutput, 'utf8');
-  const htmlOutput = Pretty.stringify(input, {renderer: htmlRenderer});
+  const htmlOutput = Pretty.stringify(input, undefined, {renderer: htmlRenderer});
   fs.writeFileSync(path.resolve(testcaseDataReferencePath, `reference0${i}.html`), htmlOutput, 'utf8');
   console.log(`[${i}]`);
   console.log(plainOutput);
@@ -41,31 +41,31 @@ import input06 from './input06';
   const i = 6;
   const input = input06;
   {
-    const plainOutput = Pretty.stringify(input, {renderer: plainRenderer, maxLevel: 2, maxItemsPerLevel: 3});
+    const plainOutput = Pretty.stringify(input, undefined, {renderer: plainRenderer, maxLevel: 2, maxItemsPerLevel: 3});
     fs.writeFileSync(path.resolve(testcaseDataReferencePath, `reference0${i}-2-3.txt`), plainOutput, 'utf8');
-    const ansiOutput = Pretty.stringify(input, {renderer: ansiRenderer, maxLevel: 2, maxItemsPerLevel: 3});
+    const ansiOutput = Pretty.stringify(input, undefined, {renderer: ansiRenderer, maxLevel: 2, maxItemsPerLevel: 3});
     fs.writeFileSync(path.resolve(testcaseDataReferencePath, `reference0${i}-2-3.ansi`), ansiOutput, 'utf8');
-    const htmlOutput = Pretty.stringify(input, {renderer: htmlRenderer, maxLevel: 2, maxItemsPerLevel: 3});
+    const htmlOutput = Pretty.stringify(input, undefined, {renderer: htmlRenderer, maxLevel: 2, maxItemsPerLevel: 3});
     fs.writeFileSync(path.resolve(testcaseDataReferencePath, `reference0${i}-2-3.html`), htmlOutput, 'utf8');
     console.log(`[${i}]-2-3`);
     console.log(plainOutput);
   }
   {
-    const plainOutput = Pretty.stringify(input, {renderer: plainRenderer, maxLevel: 2, maxItemsPerLevel: Infinity});
+    const plainOutput = Pretty.stringify(input, undefined, {renderer: plainRenderer, maxLevel: 2, maxItemsPerLevel: Infinity});
     fs.writeFileSync(path.resolve(testcaseDataReferencePath, `reference0${i}-2-inf.txt`), plainOutput, 'utf8');
-    const ansiOutput = Pretty.stringify(input, {renderer: ansiRenderer, maxLevel: 2, maxItemsPerLevel: Infinity});
+    const ansiOutput = Pretty.stringify(input, undefined, {renderer: ansiRenderer, maxLevel: 2, maxItemsPerLevel: Infinity});
     fs.writeFileSync(path.resolve(testcaseDataReferencePath, `reference0${i}-2-inf.ansi`), ansiOutput, 'utf8');
-    const htmlOutput = Pretty.stringify(input, {renderer: htmlRenderer, maxLevel: 2, maxItemsPerLevel: Infinity});
+    const htmlOutput = Pretty.stringify(input, undefined, {renderer: htmlRenderer, maxLevel: 2, maxItemsPerLevel: Infinity});
     fs.writeFileSync(path.resolve(testcaseDataReferencePath, `reference0${i}-2-inf.html`), htmlOutput, 'utf8');
     console.log(`[${i}]-2-inf`);
     console.log(plainOutput);
   }
   {
-    const plainOutput = Pretty.stringify(input, {renderer: plainRenderer, maxLevel: Infinity, maxItemsPerLevel: 3});
+    const plainOutput = Pretty.stringify(input, undefined, {renderer: plainRenderer, maxLevel: Infinity, maxItemsPerLevel: 3});
     fs.writeFileSync(path.resolve(testcaseDataReferencePath, `reference0${i}-inf-3.txt`), plainOutput, 'utf8');
-    const ansiOutput = Pretty.stringify(input, {renderer: ansiRenderer, maxLevel: Infinity, maxItemsPerLevel: 3});
+    const ansiOutput = Pretty.stringify(input, undefined, {renderer: ansiRenderer, maxLevel: Infinity, maxItemsPerLevel: 3});
     fs.writeFileSync(path.resolve(testcaseDataReferencePath, `reference0${i}-inf-3.ansi`), ansiOutput, 'utf8');
-    const htmlOutput = Pretty.stringify(input, {renderer: htmlRenderer, maxLevel: Infinity, maxItemsPerLevel: 3});
+    const htmlOutput = Pretty.stringify(input, undefined, {renderer: htmlRenderer, maxLevel: Infinity, maxItemsPerLevel: 3});
     fs.writeFileSync(path.resolve(testcaseDataReferencePath, `reference0${i}-inf-3.html`), htmlOutput, 'utf8');
     console.log(`[${i}]-inf-3`);
     console.log(plainOutput);

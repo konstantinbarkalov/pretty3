@@ -9,8 +9,8 @@ import { getFromTypeDependentDictionary } from '../typeDependentDictionary';
 import { prebuildedThemeT, nodePrebuildedThemeT } from '../interfaces/prebuildedTheme';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function buildMetaTree(tree: any, theme: prebuildedThemeT, settings: buildMetaTreeSettingsT ): MetaNode {
-  const nodeDescriptionTree = buildDescriptionTree(undefined, tree, settings);
+export function buildMetaTree(tree: any, rootKey: any, theme: prebuildedThemeT, settings: buildMetaTreeSettingsT ): MetaNode {
+  const nodeDescriptionTree = buildDescriptionTree(rootKey, tree, settings);
   return nodeDescriptionTreeToMetaTreeRecursive(nodeDescriptionTree, theme, settings);
 }
 

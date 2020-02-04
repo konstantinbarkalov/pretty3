@@ -14,4 +14,4 @@ const maxLineWidth = 80;
 const renderer = new AnsiRenderer();
 console.log('-----');
 const pretty = new Pretty([plating.alternative]); // mods.noSimplestIcon
-pretty.print(tree, {maxItemsPerLevel, maxLevel, maxLineWidth, renderer});
+pretty.print(tree, 'root', {maxItemsPerLevel, maxLevel, maxLineWidth, renderer});
