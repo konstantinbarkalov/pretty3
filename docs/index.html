@@ -21,61 +21,63 @@
                 <div class="bracketed-tree">{🌳}</div>
                 <p>Ultimate javascript tree-data logger.</br>With colors, unicode support and word-wrapping.</br> Typesctipt friendly.</p>
                 <hr/>
-                <h3>try it live:</h3>
+                <h3 class ="only-when-lib-ready">try it live:</h3>
               </div>
             </div>
           </div>
         </div>
-
-        <div class="grid col cont wh">
-          <div class="grid col">
-            <div class="grid col elem wh">
-              <div class="control-panel">
-                <div class="dropdowns">
-                  <div class="dropdown dropdown--data">
-                    <label>data:</label>
-                    <select class="dropdown-select dropdown-select--data" id="dropdown-select--data">
-                      <option selected>wait for loading...</option>
-                    </select>
-                  </div>
-                  <div class="dropdown dropdown--theme">
-                    <label>theme:</label>
-                    <select class="dropdown-select dropdown-select--theme" id="dropdown-select--theme">
-                      <option selected>wait for loading...</option>
-                    </select>
-                  </div>
-                  <div class="dropdown dropdown--palette">
-                    <label>palette:</label>
-                    <select class="dropdown-select dropdown-select--palette" id="dropdown-select--palette">
-                      <option selected>wait for loading...</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid col cont wh">
-          <div class="grid col">
-            <div class="grid row full">
-              <div class="grid col half">
-                <div class="grid col elem wh">
-                  <div class="demo-screen-block demo-screen-block--source">
-                    <label>javascript source:</label>
-                    <div class="demo-screen demo-screen--source">
-                      <code contenteditable="true" class="demo-screen-text demo-screen-text--source" language="javascript" id="demo-screen-text--source">
-                      </code>
+        <div class="only-when-lib-ready">
+          <div class="grid col cont wh">
+            <div class="grid col">
+              <div class="grid col elem wh">
+                <div class="control-panel">
+                  <div class="dropdowns">
+                    <div class="dropdown dropdown--data">
+                      <label>data:</label>
+                      <select class="dropdown-select dropdown-select--data" id="dropdown-select--data">
+                        <option selected>wait for loading...</option>
+                      </select>
+                    </div>
+                    <div class="dropdown dropdown--theme">
+                      <label>theme:</label>
+                      <select class="dropdown-select dropdown-select--theme" id="dropdown-select--theme">
+                        <option selected>wait for loading...</option>
+                      </select>
+                    </div>
+                    <div class="dropdown dropdown--palette">
+                      <label>palette:</label>
+                      <select class="dropdown-select dropdown-select--palette" id="dropdown-select--palette">
+                        <option selected>wait for loading...</option>
+                      </select>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="grid col half">
-                <div class="grid col elem wh">
-                  <div class="demo-screen-block demo-screen-block--output">
-                    <label>terminal output:</label>
-                    <div class="demo-screen demo-screen--output">
-                      <div class="demo-screen-text demo-screen-text--output" id="demo-screen-text--output">
+            </div>
+          </div>
+
+          <div class="grid col cont wh">
+            <div class="grid col">
+              <div class="grid row full">
+                <div class="grid col half">
+                  <div class="grid col elem wh">
+                    <div class="demo-screen-block demo-screen-block--source">
+                      <label>javascript source:</label>
+                      <div class="demo-screen demo-screen--source">
+                        <code contenteditable="true" class="demo-screen-text demo-screen-text--source" language="javascript" id="demo-screen-text--source">
+                        </code>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="grid col half">
+                  <div class="grid col elem wh">
+                    <div class="demo-screen-block demo-screen-block--output">
+                      <label>terminal output:</label>
+                      <div class="demo-screen demo-screen--output">
+                        <div class="demo-screen-text demo-screen-text--output" id="demo-screen-text--output">
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -84,7 +86,6 @@
             </div>
           </div>
         </div>
-
         <div class="grid col cont wh">
           <div class="grid col">
             <div class="grid col elem wh">

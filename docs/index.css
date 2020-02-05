@@ -44,10 +44,10 @@ html, body {
   width: 100%;
 }
 
-.app-root.app-root--ready .content.content--live-demo {
+.app-root.app-root--ready .only-when-lib-ready {
   opacity: 1;
 }
-.content.content--live-demo {
+.only-when-lib-ready {
   opacity: 0;
   transition: opacity 2s;
 }
@@ -110,7 +110,6 @@ html, body {
   justify-content: center;
   min-width: 300px;
   min-height: 25vh;
-  max-height: 2000px;
   padding: 56px;
   background-color: #181818;
   box-shadow: 0 16px 60px 0 rgba(0, 0, 0, 0.5);
