@@ -3,31 +3,35 @@ html, body {
   height: 100%;
 }
 .app-root.app-root--ready {
-  /* background-color: #0d7eaa; */
+
   background-color: #00415a;
+  background-size: 100% 50%, 100% 100%;
+  background-position: 50% 100%, 50% 50%;
 }
 .app-root {
-  background: radial-gradient(rgba(0, 162, 255, 0), #231e4644, #27000098);
+  background: linear-gradient(180deg, #00415a00, #00415a), radial-gradient(rgba(0, 162, 255, 0), #231e4644, #27000098);
   background-color: #00161f;
-  background-position: 50%;
-  background-attachment: fixed;
+  background-position: 50% 200%, 50% 50%;
+  background-attachment: local, fixed;
+  background-size: 100% 50%, 200% 200%;
+  background-repeat: no-repeat;
   color: #ccc;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100%;
-  transition: background-color 8s;
+  transition: background-color 8s, background-size 8s, background-position 8s;
+  transition-delay: 0s, 4s, 4s;
 }
 .app-root a {
-  color: rgb(130, 5, 161);
+  /* color: rgb(130, 5, 161); */
+  color: rgb(241, 227, 157);
   text-decoration: none;
 }
-.app-root a:hover, .app-root a:visited:hover {
-  color: rgb(220, 25, 238);
+.app-root a:hover {
+  color: #fdffdd;
 }
-.app-root a:visited {
-  color: rgb(151, 56, 130);
-}
+
 .content {
   font-family: sans-serif;
   display: flex;
@@ -52,9 +56,12 @@ html, body {
   flex-direction: column;
 }
 .section--links {
-  font-weight: 400;
+  font-family: serif;
+  font-style: italic;
+  font-weight: normal;
   font-size: 24px;
-  padding: 64px 0;
+  padding-top: 96px;
+  padding-bottom: 64px;
 }
 .dropdowns {
   display: flex;
@@ -134,6 +141,7 @@ html, body {
 }
 .hero {
   text-align: center;
+  margin-top: 22px;
 }
 
 .hero p {
@@ -144,11 +152,34 @@ html, body {
 .hero h1 {
   font-family: serif;
   font-weight: bold;
-  font-size: 42px;
+  font-style: italic;
+  font-size: 91px;
   line-height: 1.2;
   text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+  margin: 0;
+}
+.hero h3 {
+  font-family: serif;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 28px;
+  margin: 24px;
+}
+.hero .bracketed-tree {
+  font-size: 46px;
+  margin: 52px;
+  margin-bottom: 72px;
+  padding: 0;
+  line-height: 1.2;
+  text-shadow: 0px 0px 50px #fff, 0px 0px 50px #fff, 0px 0px 50px #fff;
 }
 
+.hero hr {
+  border: none;
+  margin-top: 76px;
+  border-bottom: 1px solid #fff;
+  margin-bottom: 64px;
+}
 .demo-screen-block label, .dropdown label {
   margin-bottom: 6px;
 }
