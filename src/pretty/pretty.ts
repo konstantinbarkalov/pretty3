@@ -92,8 +92,8 @@ export class Pretty {
    *
    * @remarks
    *
-   * Options are populated with `themeStack` property, that is intended for
-   * `Pretty` constructor to create short-living `new Pretty(themeStack)`
+   * Options are `printTreeOptionsT` plus `themeStack` property. Which is intended for
+   * `Pretty` constructor to create short-living `new Pretty(themeStack)`.
    *
    * @remarks
    *
@@ -131,15 +131,15 @@ export class Pretty {
    *
    * @remarks
    *
-   * Options are populated with `themeStack` property, that is intended for
-   * `Pretty` constructor to create short-living `new Pretty(themeStack)`
+   * Options are `stringifyTreeOptionsT` plus `themeStack` property. Which is intended for
+   * `Pretty` constructor to create short-living `new Pretty(themeStack)`.
    *
    * @remarks
    *
    * Works same as `pretty.print`, but use predefined `logLineCallback`
    * for dumping output to `string`. Consider Using `pretty.print` if
    * you need a per-line callback API, or if you just want a simple oneliner
-   * with default `options.logLineCallback`
+   * with default `options.logLineCallback`.
    *
    * @remarks
    *
