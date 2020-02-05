@@ -3,6 +3,7 @@
   "version": "0.3.0",
   "description": "Universal tree logger done right. With colors, unicode support and word-wrapping. Typesctipt friendly.",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": "github:konstantinbarkalov/pretty3",
   "scripts": {
     "tsc": "tsc",
