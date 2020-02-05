@@ -25,7 +25,7 @@ async function runSource(source) {
   }
 }
 
-(async () => {
+async function startApp() {
   const pretty3Module = await import('https://dev.jspm.io/npm:pretty3@0');
   const Pretty = pretty3Module.default.Pretty;
   const themes = pretty3Module.default.themes;
@@ -164,7 +164,13 @@ async function runSource(source) {
     document.execCommand('insertHTML', false, text);
     return false;
   });
-
-  // start here
+  // start UI here
   startWelcomeAnimation();
-})();
+};
+
+
+
+window.addEventListener('load', (event) => {
+  // start app here
+  startApp();
+});
