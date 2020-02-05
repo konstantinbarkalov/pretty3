@@ -38,7 +38,8 @@ Pretty.print(data);
 ## Advanced usage
 
 ```javascript
-Pretty.print(data, options);
+const rootKey = 'My georgeous data';
+Pretty.print(data, rootKey, options);
 ```
 
 #### javasctipt
