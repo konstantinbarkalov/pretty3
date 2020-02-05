@@ -26,7 +26,7 @@ async function runSource(source) {
 }
 
 (async () => {
-  const pretty3Module = await import('https://dev.jspm.io/npm:pretty3@0.3.1');
+  const pretty3Module = await import('https://dev.jspm.io/npm:pretty3@0');
   const Pretty = pretty3Module.default.Pretty;
   const themes = pretty3Module.default.themes;
   const renderers = pretty3Module.default.renderers;

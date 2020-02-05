@@ -65,6 +65,25 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Utility to print pretty formatted tree-representation of any javacript data.</p>
+					</div>
+					<p>This class represens basic API and works both ways:</p>
+					<ul>
+						<li>as a constructable via <code>new Pretty(themeStack)</code> instance,</li>
+						<li>or as a static class with oneshot functions <code>Pretty.print</code> and <code>Pretty.stringify</code></li>
+					</ul>
+					<dl class="tsd-comment-tags">
+						<dt>export</dt>
+						<dd></dd>
+						<dt>class</dt>
+						<dd><p>Pretty</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -107,7 +126,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/e69511d/src/pretty/pretty.ts#L11">pretty/pretty.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/64c2358/src/pretty/pretty.ts#L20">pretty/pretty.ts:20</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -133,12 +152,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/e69511d/src/pretty/pretty.ts#L34">pretty/pretty.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/64c2358/src/pretty/pretty.ts#L43">pretty/pretty.ts:43</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Print formatted tree-representation of any javacript data. Use options
+									<p>Prints pretty formatted tree-representation of any javacript data. Use options
 									to customize output.</p>
 								</div>
 								<dl class="tsd-comment-tags">
@@ -150,14 +169,18 @@
 									<dd><p>Cycle-referencing is allowed, while capping output
 										with finite <code>options.maxLevel</code> and <code>options.maxItemsPerLevel</code>.</p>
 									</dd>
-									<dt>export</dt>
-									<dd></dd>
+									<dt>memberof</dt>
+									<dd><p>Pretty</p>
+									</dd>
 								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>tree: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Any javacript data</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> rootKey: <span class="tsd-signature-type">any</span></h5>
@@ -180,33 +203,37 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/e69511d/src/pretty/pretty.ts#L63">pretty/pretty.ts:63</a></li>
+									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/64c2358/src/pretty/pretty.ts#L72">pretty/pretty.ts:72</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Render formatted tree-representation of any javacript data to string.
+									<p>Renders pretty formatted tree-representation of any javacript data to string.
 									Use options to customize output.</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>remarks</dt>
 									<dd><p>Works same as <code>pretty.print</code>, but use predefined <code>logLineCallback</code>
 											for dumping output to <code>string</code>. Consider Using <code>pretty.print</code> if
-											you need a per-line callback model, or if you just want a simple oneliner
+											you need a per-line callback API, or if you just want a simple oneliner
 										with default <code>options.logLineCallback</code></p>
 									</dd>
 									<dt>remarks</dt>
 									<dd><p>Cycle-referencing is allowed, while capping output
 										with finite <code>options.maxLevel</code> and <code>options.maxItemsPerLevel</code>.</p>
 									</dd>
-									<dt>export</dt>
-									<dd></dd>
+									<dt>memberof</dt>
+									<dd><p>Pretty</p>
+									</dd>
 								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>tree: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Any javacript data</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> rootKey: <span class="tsd-signature-type">any</span></h5>
@@ -229,13 +256,48 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/e69511d/src/pretty/pretty.ts#L73">pretty/pretty.ts:73</a></li>
+									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/64c2358/src/pretty/pretty.ts#L114">pretty/pretty.ts:114</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Prints pretty formatted tree-representation of any javacript data. Use options
+									to customize output.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>remarks</dt>
+									<dd><p>Static &quot;oneshot&quot; version of <code>pretty.print</code>.
+											Easier to use, because no need to create <code>new Pretty()</code>,
+											but it prebuilds theme <strong>each time</strong> it starts,
+											while long-living <code>new Pretty()</code> keep prebuilded theme
+										and reused it.</p>
+									</dd>
+									<dt>remarks</dt>
+									<dd><p>Options are populated with <code>themeStack</code> property, that is intended for
+										<code>Pretty</code> constructor to create short-living <code>new Pretty(themeStack)</code></p>
+									</dd>
+									<dt>remarks</dt>
+									<dd><p>Use <code>options.logLineCallback</code> for custom <code>console.log</code> handler, or
+										<code>pretty.stringifyTree</code> to render tree to a <code>string</code>.</p>
+									</dd>
+									<dt>remarks</dt>
+									<dd><p>Cycle-referencing is allowed, while capping output
+										with finite <code>options.maxLevel</code> and <code>options.maxItemsPerLevel</code>.</p>
+									</dd>
+									<dt>static</dt>
+									<dd></dd>
+									<dt>memberof</dt>
+									<dd><p>Pretty</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>tree: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Any javacript data</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> rootKey: <span class="tsd-signature-type">any</span></h5>
@@ -258,13 +320,50 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/e69511d/src/pretty/pretty.ts#L80">pretty/pretty.ts:80</a></li>
+									<li>Defined in <a href="https://github.com/konstantinbarkalov/pretty3/blob/64c2358/src/pretty/pretty.ts#L157">pretty/pretty.ts:157</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Renders pretty formatted tree-representation of any javacript data to string.
+									Use options to customize output.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>remarks</dt>
+									<dd><p>Static &quot;oneshot&quot; version of <code>pretty.print</code>.
+											Easier to use, because no need to create <code>new Pretty()</code>,
+											but it prebuilds theme <strong>each time</strong> it starts,
+											while long-living <code>new Pretty()</code> keep prebuilded theme
+										and reused it.</p>
+									</dd>
+									<dt>remarks</dt>
+									<dd><p>Options are populated with <code>themeStack</code> property, that is intended for
+										<code>Pretty</code> constructor to create short-living <code>new Pretty(themeStack)</code></p>
+									</dd>
+									<dt>remarks</dt>
+									<dd><p>Works same as <code>pretty.print</code>, but use predefined <code>logLineCallback</code>
+											for dumping output to <code>string</code>. Consider Using <code>pretty.print</code> if
+											you need a per-line callback API, or if you just want a simple oneliner
+										with default <code>options.logLineCallback</code></p>
+									</dd>
+									<dt>remarks</dt>
+									<dd><p>Cycle-referencing is allowed, while capping output
+										with finite <code>options.maxLevel</code> and <code>options.maxItemsPerLevel</code>.</p>
+									</dd>
+									<dt>static</dt>
+									<dd></dd>
+									<dt>memberof</dt>
+									<dd><p>Pretty</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>tree: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Any javacript data</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> rootKey: <span class="tsd-signature-type">any</span></h5>
