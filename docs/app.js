@@ -141,7 +141,7 @@ async function runSource(source) {
       renderer,
     };
     const data = await runSource(source);
-    demoScreenTextOutputDiv.innerHTML = Pretty.stringify(data, options);
+    demoScreenTextOutputDiv.innerHTML = Pretty.stringify(data, 'getData() result', options);
   }
 
   initSelectsFromPredefinedInputData();
