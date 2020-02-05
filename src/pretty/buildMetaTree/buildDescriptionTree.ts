@@ -133,7 +133,14 @@ function buildDescriptionTreeRecursive(nodeKey: any, node: any, level: number, s
         subEntries: [],
       };
       unwrappedSubEntries = Object.entries(node);
-      unwrappedSubEntries.push(['stack', node.stack]); // TODO: whitelist\blacklist of special unenumerable props
+      if (node.stack) {
+        const stackEol = '\n'; // as far as i see - stack is breaked in linux manner on any platform
+        const stackLines = node.stack.split(stackEol);
+        const trimmedStackLines = stackLines.map(stackLine => stackLine.trim());
+        const trimmedStack = trimmedStackLines.join(stackEol);
+        unwrappedSubEntries.push(['stack', trimmedStack]); // TODO: whitelist\blacklist of special unenumerable props
+      }
+
     } else if (node instanceof Map) {
       nodeDescription = {
         key: nodeKey,

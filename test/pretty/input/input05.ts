@@ -32,7 +32,9 @@ for (let i = 0; i < 1000; i++) {
   longArray[i] = i * 10;
 }
 const funError = new RangeError('Pizza size is too big');
-funError.stack = 'stack is cleared for test-passing repeatability';
+funError.stack = '   stack is cleared for test-passing repeatability   \n';
+funError.stack += '    some pre- and post-spaced libes    \n';
+funError.stack += '  that are purposed to be trimmed by stack-prettifier   \n';
 
 export default {
   simpleText: 'Hello my friend!',
