@@ -38,7 +38,7 @@ Pretty.print(data);
 ## Advanced usage
 
 ```javascript
-const rootKey = 'My georgeous data';
+const rootKey = 'My gorgeous data';
 Pretty.print(data, rootKey, options);
 ```
 
