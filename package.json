@@ -1,6 +1,6 @@
 {
   "name": "pretty3",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Ultimate javascript tree-data logger. With colors, unicode support and word-wrapping. Typesctipt friendly.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
