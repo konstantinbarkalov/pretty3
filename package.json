@@ -8,11 +8,13 @@
   "scripts": {
     "tsc": "tsc",
     "build": "npm run tsc",
+    "typedoc": "typedoc ./src/",
     "test": "mocha -r ts-node/register test/**/*.test.ts",
     "coverage": "nyc -r lcov -e .ts -x test npm run test",
     "push": "npm run build && npm run coverage && git push",
     "prepare": "npm run build",
-    "prepublishOnly": "npm run coverage"
+    "prepublishOnly": "npm run coverage && npm run typedoc",
+    "preversion": "npm run coverage && npm run typedoc",
   },
   "author": "Konstantin Barkalov <mail@barkalov.ru>",
   "license": "MIT",

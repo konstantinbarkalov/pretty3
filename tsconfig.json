@@ -24,4 +24,13 @@
     "experimentalDecorators": true,
   },
   "exclude": ["./test", "./dist"],
+  "typedocOptions": {
+    "mode": "modules",
+    "out": "docs/docs",
+    "excludeExternals": true,
+    "excludeProtected": true,
+    "excludePrivate": true,
+    "excludeNotExported": true,
+    "exclude": "./src/dev/**/*.*",
+  },
 }
