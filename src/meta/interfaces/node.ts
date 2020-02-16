@@ -3,8 +3,9 @@ import { ArmGeneratorI, ArmWidthGeneratorI } from './arm/armGenerator';
 
 
 export interface MetaNodeI {
-  leaf: AnyTextContainer;
-  children: MetaNodeI[];
-  armGenerator: ArmGeneratorI<MetaNodeI>;
-  armWidthGenerator: ArmWidthGeneratorI<MetaNodeI>;
+  readonly rules: strictUnicodeRulesT;
+  readonly leaf: AnyTextContainer;
+  readonly children: MetaNodeI[];
+  readonly armGenerator: ArmGeneratorI<MetaNodeI>;
+  readonly armWidthGenerator: ArmWidthGeneratorI<MetaNodeI>;
 }

@@ -6,7 +6,7 @@ import { ArmPatternI, consumableArmCharsT } from '../interfaces/matrix/armPatter
 import { armWidthT, spacedArmWidthT } from '../interfaces/arm/armWidth';
 
 export class ArmPattern implements ArmPatternI {
-  constructor(public firstChar: StrictUnicodeChar, public otherChar: StrictUnicodeChar, public lastChar: StrictUnicodeChar, public style?: Style) { }
+  constructor(public readonly rules: strictUnicodeRulesT, public readonly firstChar: StrictUnicodeChar, public readonly otherChar: StrictUnicodeChar, public readonly lastChar: StrictUnicodeChar, public style?: Style) { }
   /**
    * Generates line with drawn armPlainLine like: `╰───╸`
    * with repeating `this.other` character to fit `this.armWidth`
@@ -29,7 +29,7 @@ export class ArmPattern implements ArmPatternI {
    *
    * @memberof BasicPattern
    */
-  generateArmPlainLine(armWidth: armWidthT): StrictUnicodeLine {
+  protected generateArmPlainLine(armWidth: armWidthT): StrictUnicodeLine {
     const spacedArmWidth: spacedArmWidthT = (typeof armWidth === 'number')
       ? {
         preSpace: 0,
@@ -53,15 +53,15 @@ export class ArmPattern implements ArmPatternI {
     if (spacedArmWidth.postSpace > 0) {
       generated += ' '.repeat(spacedArmWidth.postSpace);
     }
-    return new StrictUnicodeLine(generated, true);
+    return new StrictUnicodeLine(this.rules, generated, true);
   }
-  generateArm(armWidth: armWidthT): ArmT {
+  public generateArm(armWidth: armWidthT): ArmT {
     const plainLine = this.generateArmPlainLine(armWidth);
-    const arm: ArmT = new AtomicTextContainer<StrictUnicodeLine>(plainLine, this.style);
+    const arm: ArmT = new AtomicTextContainer<StrictUnicodeLine>(plainLine.rules, plainLine, this.style);
     return arm;
   }
-  static fromChars(chars: consumableArmCharsT, style?: Style): ArmPattern {
-    const armPlainLinePattern = new ArmPattern(new StrictUnicodeChar(chars[0]), new StrictUnicodeChar(chars[1]), new StrictUnicodeChar(chars[2]), style);
+  static fromChars(rules: strictUnicodeRulesT, chars: consumableArmCharsT, style?: Style): ArmPattern {
+    const armPlainLinePattern = new ArmPattern(rules, new StrictUnicodeChar(rules, chars[0]), new StrictUnicodeChar(rules, chars[1]), new StrictUnicodeChar(rules, chars[2]), style);
     return armPlainLinePattern;
   }
 }

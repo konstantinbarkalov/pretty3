@@ -12,6 +12,7 @@ type textContainerSizeT = {
 }
 
 export abstract class TextContainerBase<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> {
+  public abstract readonly rules: strictUnicodeRulesT;
   public style?: Style;
   public abstract calcSize(): textContainerSizeT;
   public abstract toString(): string;
@@ -21,8 +22,11 @@ export abstract class TextContainerBase<T extends AnyStrictUnicodeT = AnyStrictU
 export type AnyTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> = AtomicTextContainer<T> | NonatomicTextContainer<T> | FlatNonatomicTextContainer<T>;
 export class AtomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> extends TextContainerBase<T> {
   public readonly size: textContainerSizeT;
-  constructor(public readonly text: T, public style?: Style) {
+  constructor(public readonly rules: strictUnicodeRulesT, public readonly text: T, public style?: Style) {
     super();
+    if (this.text.rules !== this.rules) {
+      throw new Error('rules are not stricltly same');
+    }
     this.size = this.precalcSize();
   }
   precalcSize(): textContainerSizeT {
@@ -54,11 +58,11 @@ export class AtomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT
 
   public flatten(initialStyle?: Style): FlatNonatomicTextContainer<T> {
     const style = this.style || initialStyle;
-    return new FlatNonatomicTextContainer([new AtomicTextContainer(this.text, style)]);
+    return new FlatNonatomicTextContainer(this.rules, [new AtomicTextContainer(this.rules, this.text, style)]);
   }
   public splitToFlatFeedLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[] {
     return this.text.splitToFeedLines().map((line) => {
-      return new FlatNonatomicTextContainer<StrictUnicodeLine>([new AtomicTextContainer<StrictUnicodeLine>(line, this.style)]);
+      return new FlatNonatomicTextContainer<StrictUnicodeLine>(this.rules, [new AtomicTextContainer<StrictUnicodeLine>(this.rules, line, this.style)]);
     });
   }
   public *managedWrap(maxWidth: number): Generator<AtomicTextContainer<StrictUnicodeLine>, AtomicTextContainer<StrictUnicodeLine>, number>  {
@@ -68,7 +72,7 @@ export class AtomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT
       const generatorResult = lineWrapGenerator.next(maxWidth);
       done = generatorResult.done;
       const wrappedLine = generatorResult.value;
-      const wrappedLineContainer = new AtomicTextContainer<StrictUnicodeLine>(wrappedLine, this.style);
+      const wrappedLineContainer = new AtomicTextContainer<StrictUnicodeLine>(this.rules, wrappedLine, this.style);
       if (!done) {
         maxWidth = yield wrappedLineContainer;
       } else {
@@ -78,8 +82,13 @@ export class AtomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT
   }
 }
 export class NonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> extends TextContainerBase<T> {
-  constructor(public children: AnyTextContainer<T>[], public style?: Style) {
+  constructor(public readonly rules: strictUnicodeRulesT, public children: AnyTextContainer<T>[], public style?: Style) {
     super();
+    const childrenRules = children.map(child => child.rules);
+    const isAllsameRules = childrenRules.every((childrenRules) => childrenRules === rules);
+    if (!isAllsameRules) {
+      throw new Error('not all rules are strictly same');
+    }
   }
   calcSize(): textContainerSizeT {
     type reduceStateT = {size: textContainerSizeT; linePadding: number; isFirst: boolean};
@@ -122,23 +131,17 @@ export class NonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnico
       flatChildren = flatChildren.concat(child.flatten(style).children);
       return flatChildren;
     }, []);
-    return new FlatNonatomicTextContainer(flatChildren);
+    return new FlatNonatomicTextContainer(this.rules, flatChildren);
   }
   public splitToFlatFeedLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[] {
     return this.flatten().splitToFlatFeedLines();
   }
 
-
-
-
-
-
-
   public *managedWrap(maxWidth: number): Generator<AnyTextContainer<StrictUnicodeLine>, AnyTextContainer<StrictUnicodeLine>, number> {
     let remains: AnyTextContainer<StrictUnicodeLine>[] | undefined = undefined;
     let remainsWidth = 0;
     if (this.children.length === 0) {
-      return new NonatomicTextContainer<StrictUnicodeLine>([], this.style);
+      return new NonatomicTextContainer<StrictUnicodeLine>(this.rules, [], this.style);
     }
     for (const child of this.children) {
       const lineWrapGenerator = child.managedWrap(maxWidth - remainsWidth);
@@ -150,9 +153,9 @@ export class NonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnico
         if (!done) {
           if (remains) {
             const wrappedLineWithRemains = remains.concat([wrappedLine]);
-            maxWidth = yield new NonatomicTextContainer<StrictUnicodeLine>(wrappedLineWithRemains, this.style);
+            maxWidth = yield new NonatomicTextContainer<StrictUnicodeLine>(this.rules, wrappedLineWithRemains, this.style);
           } else {
-            maxWidth = yield new NonatomicTextContainer<StrictUnicodeLine>([wrappedLine], this.style);
+            maxWidth = yield new NonatomicTextContainer<StrictUnicodeLine>(this.rules, [wrappedLine], this.style);
           }
           remains = undefined;
           remainsWidth = 0;
@@ -170,13 +173,14 @@ export class NonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnico
     }
     // tail
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return new NonatomicTextContainer<StrictUnicodeLine>(remains!, this.style);
+    return new NonatomicTextContainer<StrictUnicodeLine>(this.rules, remains!, this.style);
   }
 }
 
 export class FlatNonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictUnicodeT> extends NonatomicTextContainer<T> {
-  constructor(public children: AtomicTextContainer<T>[]) {
-    super(children, undefined);
+  readonly style: undefined;
+  constructor(public readonly rules: strictUnicodeRulesT, public children: AtomicTextContainer<T>[]) {
+    super(rules, children, undefined);
   }
   splitToFlatFeedLines(): FlatNonatomicTextContainer<StrictUnicodeLine>[] {
     const flatFeedLines: FlatNonatomicTextContainer<StrictUnicodeLine>[] = [];
@@ -184,7 +188,7 @@ export class FlatNonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictU
     this.children.forEach((child) => {
       const childFeedLines = child.text.splitToFeedLines();
       const childFeedLinesAsAtomics = childFeedLines.map((childLine) => {
-        const childLineAsAtomic = new AtomicTextContainer(childLine, child.style);
+        const childLineAsAtomic = new AtomicTextContainer(this.rules, childLine, child.style);
         return childLineAsAtomic;
       });
       if (childFeedLinesAsAtomics.length > 0) {
@@ -192,13 +196,13 @@ export class FlatNonatomicTextContainer<T extends AnyStrictUnicodeT = AnyStrictU
         currentFeedLineAsAtomics.push(childFeedLinesAsAtomics.shift()!);
       }
       while (childFeedLinesAsAtomics.length > 0) {
-        flatFeedLines.push(new FlatNonatomicTextContainer(currentFeedLineAsAtomics));
+        flatFeedLines.push(new FlatNonatomicTextContainer(this.rules, currentFeedLineAsAtomics));
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         currentFeedLineAsAtomics = [childFeedLinesAsAtomics.pop()!];
       }
     });
     // tail
-    flatFeedLines.push(new FlatNonatomicTextContainer(currentFeedLineAsAtomics));
+    flatFeedLines.push(new FlatNonatomicTextContainer(this.rules, currentFeedLineAsAtomics));
     return flatFeedLines;
   }
 }

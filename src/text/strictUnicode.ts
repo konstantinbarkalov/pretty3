@@ -1,64 +1,59 @@
-/* eslint-disable @typescript-eslint/ban-types */
+export class StrictUnicodeText {
+  private readonly text: string;
+  constructor(public readonly rules: strictUnicodeRulesT, text: string | StrictUnicodeText, isSkipChecks = false) {
+    this.text = this.preprocessText(text, isSkipChecks);
+  }
 
-const eolRegexp = /[\n\r]/g;
-export class NormalizedUnicodeText extends String {
-  constructor(text: string | String, isSkipChecks = false) {
-    const isNormalizedInstance = NormalizedUnicodeText.isNormalizedInstance(text);
-    if (isSkipChecks || isNormalizedInstance) {
-      super(text);
+  protected preprocessText(text: string | StrictUnicodeText, isSkipChecks = false): string {
+    if (isSkipChecks || this.guardSafeInstance(text)) {
+      return text.toString();
     } else {
-      const normalizedText = text.normalize();
-      super(normalizedText);
-    }
-  }
-  public normalize(): string {
-    return this.valueOf();
-  }
-  static isNormalizedInstance(text: string | String): boolean {
-    return text instanceof NormalizedUnicodeText;
-  }
-  static combine(...items: NormalizedUnicodeText[]): NormalizedUnicodeText {
-    const combinedString = items.reduce((combinedString, item) => {
-      return combinedString + item.toString();
-    }, '');
-    return new NormalizedUnicodeText(combinedString);
-  }
-}
-
-export class StrictUnicodeText extends NormalizedUnicodeText {
-  constructor(text: string | String, isSkipChecks = false) {
-    super(text, isSkipChecks);
-    isSkipChecks = isSkipChecks || this.isPrecheckedInstance(text);
-    if (!isSkipChecks) {
-      this.guardStringIsStrictUnicode(this);
-    }
-  }
-
-  protected isPrecheckedInstance(text: string | String): boolean {
-    return text instanceof StrictUnicodeText;
-  }
-
-  public guardStringIsStrictUnicode(normalizedText: NormalizedUnicodeText): void {
-    for (const utf16Code of normalizedText) {
-      const utf16CodePoint = utf16Code.codePointAt(0);
-      if (utf16CodePoint === undefined || utf16CodePoint > 65536) {
-        // TODO: 1. ASAP check limits
-        // TODO: 2. later support compound multi utf16Code
-        throw new Error('String is nonstrict unicode, which is unsupported');
+      const normalizedText = this.normalize(text);
+      if (this.checkByRules(text)) {
+        return normalizedText;
+      } else {
+        throw new Error('text does not follow strictUnicodeRules');
       }
     }
   }
+  protected normalize(text: string): string {
+    const utf16Normalized = text.normalize('NFC');
+    const noTabs = utf16Normalized.replace('\t','').padEnd(this.rules.width.tab, ' ');
+    // TODO: consider natural alingned tab steps (via div/mod math)
+    const noIgnored = noTabs.replace(this.rules.ingore.matcher,this.rules.ingore.token);
+    return noIgnored;
+
+  }
+  protected checkByRules(text: string): boolean {
+    return true;
+  }
+  protected guardSafeInstance(text: string | StrictUnicodeText): text is StrictUnicodeText {
+    return text instanceof StrictUnicodeText;
+  }
+  public toString(): string {
+    return this.text;
+  }
+
+  static combine(rules: strictUnicodeRulesT, items: StrictUnicodeText[]): StrictUnicodeText {
+    const itemsRules = items.map(item => item.rules);
+    const isAllsameRules = itemsRules.every((itemsRules) => itemsRules === rules);
+    if (isAllsameRules) {
+      const combinedString = items.reduce((combinedString, item) => {
+        return combinedString + item.toString();
+      }, '');
+      return new StrictUnicodeText(rules, combinedString, false); // TODO: try true
+    } else {
+      throw new Error('not all rules are strictly same');
+    }
+  }
+
   public splitToFeedLines(): StrictUnicodeLine[] {
-    const feedLines = this.valueOf().split(eolRegexp).map((lineString: string) => {
-      return new StrictUnicodeLine(lineString, true);
+    const feedLines = this.toString().split(this.rules.eol.matcher).map((lineString: string) => {
+      return new StrictUnicodeLine(this.rules, lineString, true);
     });
     return feedLines;
   }
 
-  static combine(...items: StrictUnicodeText[]): StrictUnicodeText {
-    const combinedNormalized = super.combine(...items);
-    return new StrictUnicodeText(combinedNormalized);
-  }
   public *managedWrap(maxWidth: number): Generator<StrictUnicodeLine, StrictUnicodeLine, number> {
     const feedLines = this.splitToFeedLines();
     let wrappedLine: StrictUnicodeLine;
@@ -84,25 +79,23 @@ export class StrictUnicodeText extends NormalizedUnicodeText {
 }
 
 export class StrictUnicodeLine extends StrictUnicodeText {
-  constructor(text: string | String, isSkipChecks = false) {
-    if (eolRegexp.test(text.toString())) {
-      console.log(text.toString());
-    }
-    super(text, isSkipChecks);
-  }
 
-  protected isPrecheckedInstance(text: string | String): boolean {
+  protected checkByRules(text: string): boolean {
+    if (super.checkByRules(text)) {
+      if (this.rules.eol.matcher.test(text.toString())) { throw('No EOLs allowed in single StrictUnicodeLine, use StrictUnicodeText instead'); }
+      return true;
+    } else {
+      return false;
+    }
+  }
+  protected guardSafeInstance(text: string | StrictUnicodeText): text is StrictUnicodeLine {
     return text instanceof StrictUnicodeLine;
   }
 
-  public guardStringIsStrictUnicode(normalizedText: NormalizedUnicodeText): void {
-    if (eolRegexp.test(normalizedText.toString())) { throw('No EOLs allowed in single StrictUnicodeLine, use StrictUnicodeText instead'); }
-    super.guardStringIsStrictUnicode(normalizedText);
-  }
   protected widthCache: number | undefined;
   public calcWidth(): number {
     if (this.widthCache === undefined) {
-      const iterator = this[Symbol.iterator]();
+      const iterator = this.toString()[Symbol.iterator]();
       let width = 0;
       while (!iterator.next().done) { width++; }
       this.widthCache = width;
@@ -114,9 +107,9 @@ export class StrictUnicodeLine extends StrictUnicodeText {
     return this.widthCache;
   }
 
-  static combine(...items: StrictUnicodeLine[]): StrictUnicodeLine {
-    const combinedText = super.combine(...items);
-    return new StrictUnicodeLine(combinedText);
+  static combine(rules: strictUnicodeRulesT, items: StrictUnicodeLine[]): StrictUnicodeLine {
+    const combinedText = super.combine(rules, items);
+    return new StrictUnicodeLine(rules, combinedText, false); // TODO: try true
   }
   public *managedWrap(maxWidth: number): Generator<StrictUnicodeLine, StrictUnicodeLine, number> {
     const lineWidth = this.calcWidth();
@@ -125,10 +118,10 @@ export class StrictUnicodeLine extends StrictUnicodeText {
     }
     let wrappedLineWidth = 0;
     let wrappedLine = '';
-    for (const codePoint of this) {
+    for (const codePoint of this.toString()) {
       const codePointWidth = 1; // TODO: support for full-width chars
       if (wrappedLineWidth + codePointWidth > maxWidth) {
-        maxWidth = yield new StrictUnicodeLine(wrappedLine);
+        maxWidth = yield new StrictUnicodeLine(this.rules, wrappedLine, false); // TODO: try true
         wrappedLine = '';
         wrappedLineWidth = 0;
       }
@@ -136,29 +129,32 @@ export class StrictUnicodeLine extends StrictUnicodeText {
       wrappedLine += codePoint;
     }
     //tail
-    return new StrictUnicodeLine(wrappedLine);
+    return new StrictUnicodeLine(this.rules, wrappedLine, false); // TODO: try true
   }
 }
 
 export class StrictUnicodeChar extends StrictUnicodeLine {
 
-  protected isPrecheckedInstance(text: string | String): boolean {
+  protected checkByRules(text: string): boolean {
+    if (super.checkByRules(text)) {
+      if (this.toString().length > 1 ) { throw('No EOLs allowed in single StrictUnicodeLine, use StrictUnicodeText instead'); }
+      // TODO: use rules and accurate char width
+      return true;
+    } else {
+      return false;
+    }
+  }
+  protected guardSafeInstance(text: string | StrictUnicodeText): text is StrictUnicodeChar {
     return text instanceof StrictUnicodeChar;
   }
 
   protected widthCache = 1;
-  public guardStringIsStrictUnicode(normalizedText: StrictUnicodeLine): void {
-    if (normalizedText.calcWidth() !== 1) {
-      throw('char width must be strictly 1');
-    }
-    super.guardStringIsStrictUnicode(normalizedText);
-  }
   public calcWidth(): number {
     return 1;
   }
 
-  static combine(...items: StrictUnicodeChar[]): StrictUnicodeLine {
-    return super.combine(...items);
+  static combine(rules: strictUnicodeRulesT, items: StrictUnicodeChar[]): StrictUnicodeLine {
+    return super.combine(rules, items);
   }
 }
 
