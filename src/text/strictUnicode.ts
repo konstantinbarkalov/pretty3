@@ -1,8 +1,12 @@
+import { strictUnicodeRulesT, defaultStrictUnicodeRules } from './strictUnicodeRules';
+
+
 /* eslint-disable @typescript-eslint/ban-types */
 
 const eolRegexp = /[\n\r]/g;
-export class NormalizedUnicodeText extends String {
-  constructor(text: string | String, isSkipChecks = false) {
+export class NormalizedUnicodeText<TRules extends strictUnicodeRulesT> extends String {
+  public readonly rules: TRules;
+  constructor(text: string | String, isSkipChecks = false, rules: strictUnicodeRulesT = defaultStrictUnicodeRules) {
     const isNormalizedInstance = NormalizedUnicodeText.isNormalizedInstance(text);
     if (isSkipChecks || isNormalizedInstance) {
       super(text);
@@ -10,6 +14,7 @@ export class NormalizedUnicodeText extends String {
       const normalizedText = text.normalize();
       super(normalizedText);
     }
+    this.rules = rules as TRules;
   }
   public normalize(): string {
     return this.valueOf();
@@ -17,17 +22,17 @@ export class NormalizedUnicodeText extends String {
   static isNormalizedInstance(text: string | String): boolean {
     return text instanceof NormalizedUnicodeText;
   }
-  static combine(...items: NormalizedUnicodeText[]): NormalizedUnicodeText {
+  static combine<TRules extends strictUnicodeRulesT>(items: NormalizedUnicodeText<TRules>[], rules: TRules): NormalizedUnicodeText<TRules> {
     const combinedString = items.reduce((combinedString, item) => {
       return combinedString + item.toString();
     }, '');
-    return new NormalizedUnicodeText(combinedString);
+    return new NormalizedUnicodeText<TRules>(combinedString, false, rules);
   }
 }
 
-export class StrictUnicodeText extends NormalizedUnicodeText {
-  constructor(text: string | String, isSkipChecks = false) {
-    super(text, isSkipChecks);
+export class StrictUnicodeText<TRules extends strictUnicodeRulesT> extends NormalizedUnicodeText<TRules> {
+  constructor(text: string | String, isSkipChecks = false, rules: TRules) {
+    super(text, isSkipChecks, rules);
     isSkipChecks = isSkipChecks || this.isPrecheckedInstance(text);
     if (!isSkipChecks) {
       this.guardStringIsStrictUnicode(this);
@@ -38,7 +43,7 @@ export class StrictUnicodeText extends NormalizedUnicodeText {
     return text instanceof StrictUnicodeText;
   }
 
-  public guardStringIsStrictUnicode(normalizedText: NormalizedUnicodeText): void {
+  public guardStringIsStrictUnicode(normalizedText: NormalizedUnicodeText<TRules>): void {
     for (const utf16Code of normalizedText) {
       const utf16CodePoint = utf16Code.codePointAt(0);
       if (utf16CodePoint === undefined || utf16CodePoint > 65536) {
@@ -48,20 +53,20 @@ export class StrictUnicodeText extends NormalizedUnicodeText {
       }
     }
   }
-  public splitToFeedLines(): StrictUnicodeLine[] {
+  public splitToFeedLines(): StrictUnicodeLine<TRules>[] {
     const feedLines = this.valueOf().split(eolRegexp).map((lineString: string) => {
-      return new StrictUnicodeLine(lineString, true);
+      return new StrictUnicodeLine<TRules>(lineString, false, this.rules);
     });
     return feedLines;
   }
 
-  static combine(...items: StrictUnicodeText[]): StrictUnicodeText {
-    const combinedNormalized = super.combine(...items);
-    return new StrictUnicodeText(combinedNormalized);
+  static combine<TRules extends strictUnicodeRulesT>(items: StrictUnicodeText<TRules>[], rules: TRules): StrictUnicodeText<TRules> {
+    const combinedNormalized = super.combine(items, rules);
+    return new StrictUnicodeText<TRules>(combinedNormalized, false, rules);
   }
-  public *managedWrap(maxWidth: number): Generator<StrictUnicodeLine, StrictUnicodeLine, number> {
+  public *managedWrap(maxWidth: number): Generator<StrictUnicodeLine<TRules>, StrictUnicodeLine<TRules>, number> {
     const feedLines = this.splitToFeedLines();
-    let wrappedLine: StrictUnicodeLine;
+    let wrappedLine: StrictUnicodeLine<TRules>;
 
     for (let lineId = 0; lineId < feedLines.length; lineId++) {
       const feelLine = feedLines[lineId];
@@ -83,19 +88,19 @@ export class StrictUnicodeText extends NormalizedUnicodeText {
   }
 }
 
-export class StrictUnicodeLine extends StrictUnicodeText {
-  constructor(text: string | String, isSkipChecks = false) {
+export class StrictUnicodeLine<TRules extends strictUnicodeRulesT> extends StrictUnicodeText<TRules> {
+  constructor(text: string | String, isSkipChecks = false, rules: TRules) {
     if (eolRegexp.test(text.toString())) {
       console.log(text.toString());
     }
-    super(text, isSkipChecks);
+    super(text, isSkipChecks, rules);
   }
 
   protected isPrecheckedInstance(text: string | String): boolean {
     return text instanceof StrictUnicodeLine;
   }
 
-  public guardStringIsStrictUnicode(normalizedText: NormalizedUnicodeText): void {
+  public guardStringIsStrictUnicode(normalizedText: NormalizedUnicodeText<TRules>): void {
     if (eolRegexp.test(normalizedText.toString())) { throw('No EOLs allowed in single StrictUnicodeLine, use StrictUnicodeText instead'); }
     super.guardStringIsStrictUnicode(normalizedText);
   }
@@ -114,11 +119,11 @@ export class StrictUnicodeLine extends StrictUnicodeText {
     return this.widthCache;
   }
 
-  static combine(...items: StrictUnicodeLine[]): StrictUnicodeLine {
-    const combinedText = super.combine(...items);
-    return new StrictUnicodeLine(combinedText);
+  static combine<TRules extends strictUnicodeRulesT>(items: StrictUnicodeLine<TRules>[], rules: TRules): StrictUnicodeLine<TRules> {
+    const combinedText = super.combine(items, rules);
+    return new StrictUnicodeLine<TRules>(combinedText, false, rules);
   }
-  public *managedWrap(maxWidth: number): Generator<StrictUnicodeLine, StrictUnicodeLine, number> {
+  public *managedWrap(maxWidth: number): Generator<StrictUnicodeLine<TRules>, StrictUnicodeLine<TRules>, number> {
     const lineWidth = this.calcWidth();
     if (lineWidth <= maxWidth) {
       return this;
@@ -128,7 +133,7 @@ export class StrictUnicodeLine extends StrictUnicodeText {
     for (const codePoint of this) {
       const codePointWidth = 1; // TODO: support for full-width chars
       if (wrappedLineWidth + codePointWidth > maxWidth) {
-        maxWidth = yield new StrictUnicodeLine(wrappedLine);
+        maxWidth = yield new StrictUnicodeLine<TRules>(wrappedLine, false, this.rules);
         wrappedLine = '';
         wrappedLineWidth = 0;
       }
@@ -136,18 +141,18 @@ export class StrictUnicodeLine extends StrictUnicodeText {
       wrappedLine += codePoint;
     }
     //tail
-    return new StrictUnicodeLine(wrappedLine);
+    return new StrictUnicodeLine<TRules>(wrappedLine, false, this.rules);
   }
 }
 
-export class StrictUnicodeChar extends StrictUnicodeLine {
+export class StrictUnicodeChar<TRules extends strictUnicodeRulesT> extends StrictUnicodeLine<TRules> {
 
   protected isPrecheckedInstance(text: string | String): boolean {
     return text instanceof StrictUnicodeChar;
   }
 
   protected widthCache = 1;
-  public guardStringIsStrictUnicode(normalizedText: StrictUnicodeLine): void {
+  public guardStringIsStrictUnicode(normalizedText: StrictUnicodeLine<TRules>): void {
     if (normalizedText.calcWidth() !== 1) {
       throw('char width must be strictly 1');
     }
@@ -157,12 +162,12 @@ export class StrictUnicodeChar extends StrictUnicodeLine {
     return 1;
   }
 
-  static combine(...items: StrictUnicodeChar[]): StrictUnicodeLine {
-    return super.combine(...items);
+  static combine<TRules extends strictUnicodeRulesT>(items: StrictUnicodeChar<TRules>[], rules: TRules): StrictUnicodeLine<TRules> {
+    return super.combine(items, rules);
   }
 }
 
-export type AnyStrictUnicodeT = StrictUnicodeChar | StrictUnicodeLine | StrictUnicodeText;
+export type AnyStrictUnicodeT<TRules extends strictUnicodeRulesT> = StrictUnicodeChar<TRules> | StrictUnicodeLine<TRules> | StrictUnicodeText<TRules>;
 
 
 
